@@ -68,18 +68,18 @@ while                                   { return TOKEN_WHILE; }
 ({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*     { if (yyleng <= 255)
                                             return TOKEN_IDENTIFIER;
                                           else
-                                            return TOKEN_ERROR;
+                                            return TOKEN_IDENTIFIER_ERROR;
                                         }
 
-"'"(("\")?[^"'"]|("\""'"))"'"           { return TOKEN_CHARACTER_LITERAL; }
+\'((\\)?[^\']|(\\\'))\'                 { return TOKEN_CHARACTER_LITERAL; }
 
-\"(("\"[^n])|([^\""\"]))*\"             { if (yyleng <= 255)
-                                            return TOKEN_STRING;
+\"((\\[^n])|([^\"\\]))*\"             { if (yyleng <= 255)
+                                            return TOKEN_STRING_LITERAL;
                                           else
-                                            return TOKEN_ERROR;
+                                            return TOKEN_STRING_ERROR;
                                         }
 
-.                                       { return TOKEN_ERROR; }
+.                                       { return TOKEN_SCAN_ERROR; }
 
 %%
 

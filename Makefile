@@ -1,10 +1,11 @@
-all: exe_bminor
+all: bminor
+#all: exe_bminor
 
-exe_bminor: bminor
-	./bminor -scan test.bminor
+#exe_bminor: bminor
+#	./bminor -scan test.bminor
 
 bminor: scanner.o bminor.o token_map.o
-	gcc -o bminor scanner.o bminor.o
+	gcc -o bminor scanner.o bminor.o token_map.o
 
 scanner.o:	scanner.c
 	gcc -c scanner.c

@@ -1,6 +1,7 @@
 const char * token_map[] = 
 {
     "EOF",
+    "ARRAY",
     "AUTO",
     "BOOLEAN",
     "CHAR",
@@ -48,5 +49,8 @@ const char * token_map[] =
     "IDENTIFIER",
     "CHARACTER_LITERAL",
     "STRING_LITERAL",
+    "STRING ERROR",
+    "IDENTIFIER ERROR",
     "SCAN ERROR"
-}
+};
+const int token_map_len = sizeof(token_map) / sizeof(const char *);
