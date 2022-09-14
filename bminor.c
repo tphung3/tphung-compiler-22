@@ -1,4 +1,5 @@
 #include "token.h"
+#include "bminor.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
