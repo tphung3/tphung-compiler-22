@@ -1,0 +1,1 @@
+fat: string = "golden boot" + 3;

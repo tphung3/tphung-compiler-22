@@ -1,0 +1,11 @@
+// basic data types
+
+
+character:	 	char = 'c';
+character: char = '\n';
+character:	char = '\0';
+character = '\6';
+character = '\c'
+character = '\t'
+
+"\"\'\'\'s\s'd'd\d'd's'df'a\a'sf"

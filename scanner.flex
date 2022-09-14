@@ -14,7 +14,7 @@ ALPHA   [a-zA-Z]
 %%
 
 ("\t"|" "|"\n"|"\r")                    /* whitespace chars, do nothing */
-\/\*(\*[^\/]|[^\*])*\*\/                /* long comments */
+\/\*(\*[^\/]|[^\*])*(\*\/|\*\*\/)      /* long comments */
 \/\/[^"\n"]*"\n"                        /* line comments */
 
 array                                   { return TOKEN_ARRAY; }
