@@ -1,19 +1,17 @@
 #include "token.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 extern FILE *yyin;
 extern int yylex();
 extern char *yytext;
 
-int open_file(FILE *yyin, char *fname)
-{
-    
-}
+extern const char * token_map[];
 
 int parse_cmd(int argc, char **argv)
 {
-    if ( strncmp(*(argv + 1), "-scan") && argc == 3)
+    if (!strncmp(*(argv + 1), "-scan", 5) && argc == 3)
     {
         scan(*(argv + 2));
         return 0;
@@ -27,7 +25,7 @@ int parse_cmd(int argc, char **argv)
 
 int scan(char *fname)
 {   
-    yyin = fopen(fname, 'r');
+    yyin = fopen(fname, "r");
     if (yyin == NULL)
     {
         fprintf(stderr, "Cannot open %s.\n", fname);
@@ -38,7 +36,7 @@ int scan(char *fname)
     {
         token_t t = yylex();
         if (t == TOKEN_EOF) break;
-        printf("token: %d text: %s\n", t, yytext);
+        printf("token: %s text: %s\n", token_map[t], yytext);
     }
     return 0;
 }
