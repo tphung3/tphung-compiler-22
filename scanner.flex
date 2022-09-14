@@ -1,8 +1,8 @@
 /* regular expressions matching tokens in bminor language */
 
 %{
-#include "token.h"
-}%
+    #include "token.h"
+%}
 
 /* shorthands */
 DIGIT   [0-9]
@@ -11,9 +11,9 @@ ALPHA   [a-zA-Z]
 
 /* rules */
 %%
-(\t|" "|\n|\r)  /* whitespace chars, do nothing */
-array                           { return TOKEN_ARRAY; }
-({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*   { return TOKEN_IDENTIFIER; }
+("\t"|" "|"\n"|"\r")  /* whitespace chars, do nothing */
+array                                   { return TOKEN_ARRAY; }
+({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*     { return TOKEN_IDENTIFIER; }
 %%
 
 /* end of scanner */
