@@ -20,7 +20,7 @@ int parse_cmd(int argc, char **argv)
     else
     {
         fprintf(stderr, "Invalid command-line arguments.\n");
-        return 1;
+        exit(1);
     }
 }
 
@@ -70,7 +70,10 @@ int print_character_literal()
         else if (yytext[1] == '\\')
             printf("%c", yytext[2]);
         else
+        {
             fprintf(stderr, "Scanner detects invalid format of a character %s. Please report back to tphung@nd.edu, or else.\n", yytext);
+            exit(1);
+        }
     }
     printf("\n");
     return 0;
@@ -83,7 +86,7 @@ int scan(char *fname)
     if (yyin == NULL)
     {
         fprintf(stderr, "Cannot open %s.\n", fname);
-        return 1;
+        exit(1);
     }
 
     while(1)
@@ -106,24 +109,24 @@ int scan(char *fname)
         else if (t == TOKEN_STRING_ERROR)
         {
             fprintf(stderr, "%s: %s is above the 255 character limit.\n", token_map[t], yytext);
-            return 1;
+            exit(1);
         }   
         else if (t == TOKEN_IDENTIFIER_ERROR)
         {
             fprintf(stderr, "%s: %s is above the 255 character limit.\n", token_map[t], yytext);
-            return 1;
+            exit(1);
         }
         else if (t == TOKEN_SCAN_ERROR)
         {
             fprintf(stderr, "%s: %s is not a valid character.\n", token_map[t], yytext);
-            return 1;
+            exit(1);
         }
         else if (t < token_map_len)
             printf("%s\n", token_map[t]);
         else
         {
             fprintf(stderr, "The scanner detects unrecognizable token code: %d. Please report back to tphung@nd.edu, or else.\n", t);
-            return 2;
+            exit(2);
         }
     }
     return 0;

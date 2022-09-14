@@ -34,7 +34,7 @@ true                                    { return TOKEN_TRUE; }
 void                                    { return TOKEN_VOID; }
 while                                   { return TOKEN_WHILE; }
 
-("-"|"+")?{NOZERO}{DIGIT}*              { return TOKEN_INTEGER_LITERAL; }
+("-"|"+")?{DIGIT}+                      { return TOKEN_INTEGER_LITERAL; }
 
 "("                                     { return TOKEN_OPEN_PARENTHESIS; }
 ")"                                     { return TOKEN_CLOSE_PARENTHESIS; }
@@ -71,9 +71,10 @@ while                                   { return TOKEN_WHILE; }
                                             return TOKEN_IDENTIFIER_ERROR;
                                         }
 
-\'((\\)?[^\']|(\\\'))\'                 { return TOKEN_CHARACTER_LITERAL; }
 
-\"((\\[^n])|([^\"\\]))*\"             { if (yyleng <= 255)
+\'(([^\\])|(\\.))\'                     { return TOKEN_CHARACTER_LITERAL; }
+
+\"((\\[^\n])|([^\n\\\"]))*\"        { if (yyleng <= 255)
                                             return TOKEN_STRING_LITERAL;
                                           else
                                             return TOKEN_STRING_ERROR;
