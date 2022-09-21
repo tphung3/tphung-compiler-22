@@ -1,0 +1,2578 @@
+=====STUDENT TESTS=====
+====Good Tests====
+===[good0.bminor Input]===
+fat: string = "golden boot" + 3;
+
+===[good0.bminor Output]===
+IDENTIFIER fat
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL golden boot
+ADD
+INTEGER_LITERAL 3
+SEMICOLON
+
+
+
+
+===[good1.bminor Input]===
+// just runs all basic tokens
+//
+/* comment */
+a/3/d/d/f/g/c/c/a/a/2/2/3/3/4/4/5/5/5/6/7/8/8//asdfasdfafwefqe
+
+
+111*222**33^2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+array 
+boolean 
+char 
+else 
+false 
+for 
+function 
+if 
+integer 
+print 
+return 
+string 
+true
+void
+while
+:
+;
+,
+[
+]
+{
+}
+(
+)
+=
+^
++
+-
+++
+--
+*
+/
+%
+==
+>=
+<=
+<
+>
+!=
+a
+ab
+ab3
+ab3a
+12314
+1
+12
+123
+'A'
+""
+"a"
+"aa"
+
+===[good1.bminor Output]===
+IDENTIFIER a
+DIV
+INTEGER_LITERAL 3
+DIV
+IDENTIFIER d
+DIV
+IDENTIFIER d
+DIV
+IDENTIFIER f
+DIV
+IDENTIFIER g
+DIV
+IDENTIFIER c
+DIV
+IDENTIFIER c
+DIV
+IDENTIFIER a
+DIV
+IDENTIFIER a
+DIV
+INTEGER_LITERAL 2
+DIV
+INTEGER_LITERAL 2
+DIV
+INTEGER_LITERAL 3
+DIV
+INTEGER_LITERAL 3
+DIV
+INTEGER_LITERAL 4
+DIV
+INTEGER_LITERAL 4
+DIV
+INTEGER_LITERAL 5
+DIV
+INTEGER_LITERAL 5
+DIV
+INTEGER_LITERAL 5
+DIV
+INTEGER_LITERAL 6
+DIV
+INTEGER_LITERAL 7
+DIV
+INTEGER_LITERAL 8
+DIV
+INTEGER_LITERAL 8
+INTEGER_LITERAL 111
+MULT
+INTEGER_LITERAL 222
+MULT
+MULT
+INTEGER_LITERAL 33
+EXP
+INTEGER_LITERAL 2
+ARRAY
+BOOLEAN
+CHAR
+ELSE
+FALSE
+FOR
+FUNCTION
+IF
+INTEGER
+PRINT
+RETURN
+STRING
+TRUE
+VOID
+WHILE
+COLON
+SEMICOLON
+COMMA
+OPEN_BRACKET
+CLOSE_BRACKET
+OPEN_BRACE
+CLOSE_BRACE
+OPEN_PARENTHESIS
+CLOSE_PARENTHESIS
+ASSIGNMENT
+EXP
+ADD
+SUB
+POST_INC
+POST_DEC
+MULT
+DIV
+REMAINDER
+EQ
+GE
+LE
+LT
+GT
+NE
+IDENTIFIER a
+IDENTIFIER ab
+IDENTIFIER ab3
+IDENTIFIER ab3a
+INTEGER_LITERAL 12314
+INTEGER_LITERAL 1
+INTEGER_LITERAL 12
+INTEGER_LITERAL 123
+CHARACTER_LITERAL A
+STRING_LITERAL 
+STRING_LITERAL a
+STRING_LITERAL aa
+
+
+
+
+===[good2.bminor Input]===
+"\~" "\#" || "\@"
+
+// basic data types
+number: integer;
+number = 56;
+number = -56;
+number = +56;
+number = 0005006;
+number = +0005006;
+number = -000050006;
+
+
+
+
+
+
+
+
+
+===[good2.bminor Output]===
+STRING_LITERAL ~
+STRING_LITERAL #
+LOGICAL_OR
+STRING_LITERAL @
+IDENTIFIER number
+COLON
+INTEGER
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL 56
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL -56
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL +56
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL 0005006
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL +0005006
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL -000050006
+SEMICOLON
+
+
+
+
+===[good3.bminor Input]===
+//test some boolean types
+bool:boolean = true;
+bool:boolean = false;
+bool = 5 > 4;
+true false eslaf eurt
+3+ 4 -- 5 <><>><<>><
+
+===[good3.bminor Output]===
+IDENTIFIER bool
+COLON
+BOOLEAN
+ASSIGNMENT
+TRUE
+SEMICOLON
+IDENTIFIER bool
+COLON
+BOOLEAN
+ASSIGNMENT
+FALSE
+SEMICOLON
+IDENTIFIER bool
+ASSIGNMENT
+INTEGER_LITERAL 5
+GT
+INTEGER_LITERAL 4
+SEMICOLON
+TRUE
+FALSE
+IDENTIFIER eslaf
+IDENTIFIER eurt
+INTEGER_LITERAL 3
+ADD
+INTEGER_LITERAL 4
+POST_DEC
+INTEGER_LITERAL 5
+LT
+GT
+LT
+GT
+GT
+LT
+LT
+GT
+GT
+LT
+
+
+
+
+===[good4.bminor Input]===
+// basic data types
+
+
+character:	 	char = 'c';
+character: char = '\n';
+character:	char = '\0';
+character = '\6';
+character = '\c'
+character = '\t'
+
+"\"\'\'\'s\s'd'd\d'd's'df'a\a'sf"
+
+===[good4.bminor Output]===
+IDENTIFIER character
+COLON
+CHAR
+ASSIGNMENT
+CHARACTER_LITERAL c
+SEMICOLON
+IDENTIFIER character
+COLON
+CHAR
+ASSIGNMENT
+CHARACTER_LITERAL 
+
+SEMICOLON
+IDENTIFIER character
+COLON
+CHAR
+ASSIGNMENT
+CHARACTER_LITERAL 
+SEMICOLON
+IDENTIFIER character
+ASSIGNMENT
+CHARACTER_LITERAL 6
+SEMICOLON
+IDENTIFIER character
+ASSIGNMENT
+CHARACTER_LITERAL c
+IDENTIFIER character
+ASSIGNMENT
+CHARACTER_LITERAL t
+STRING_LITERAL "'''ss'd'dd'd's'df'aa'sf
+
+
+
+
+===[good5.bminor Input]===
+'\T''\h''\i''\s''\w''\a''\s''\p''\a''\i''\n''\!'
+"This is a string"
+"Notre \n Dame"
+" "
+" string with numbers 3213"
+"String with @@ works in the program"
+""
+
+===[good5.bminor Output]===
+CHARACTER_LITERAL T
+CHARACTER_LITERAL h
+CHARACTER_LITERAL i
+CHARACTER_LITERAL s
+CHARACTER_LITERAL w
+CHARACTER_LITERAL a
+CHARACTER_LITERAL s
+CHARACTER_LITERAL p
+CHARACTER_LITERAL a
+CHARACTER_LITERAL i
+CHARACTER_LITERAL 
+
+CHARACTER_LITERAL !
+STRING_LITERAL This is a string
+STRING_LITERAL Notre 
+ Dame
+STRING_LITERAL  
+STRING_LITERAL  string with numbers 3213
+STRING_LITERAL String with @@ works in the program
+STRING_LITERAL 
+
+
+
+
+===[good6.bminor Input]===
+// strings
+str:string = "";
+
+str:string = "we can write an escaped backslash \\";
+" \"this is a unique test case \" ";
+" \n \t \0"
+"\e \r \y"
+str:string = "single qoute ' or \' ";
+str:string = " double qoute \" ";
+
+"\E\S|C|A|P\E\P\I\N\G"
+
+
+===[good6.bminor Output]===
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL 
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL we can write an escaped backslash \
+SEMICOLON
+STRING_LITERAL  "this is a unique test case " 
+SEMICOLON
+STRING_LITERAL  
+ t 
+STRING_LITERAL e r y
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL single qoute ' or ' 
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL  double qoute " 
+SEMICOLON
+STRING_LITERAL ES|C|A|PEPING
+
+
+
+
+===[good7.bminor Input]===
+// strings
+str:string = "";
+
+str:string = "hello this is a string!";
+str:string = "hello this is \1 a string!";
+
+str:string = "11234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567"// less then 160 character 
+sdldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglgllglglglglgllglglglglgllglglglglglgllglglglglgllglglglg//exactly 255 characters
+
+===[good7.bminor Output]===
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL 
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL hello this is a string!
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL hello this is 1 a string!
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL 11234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567
+IDENTIFIER sdldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglglsldldlflglglglglglgllglglglglgllglglglglgllglglglglglgllglglglglgllglglglg
+
+
+
+
+===[good8.bminor Input]===
+//test arrays
+
+array[x+3] = {3-2};
+
+f:array [5]integer = { 1, 2, 3, 4, 5};
+f:array[5]char = {'a', 'b', 'c', 'd', 'e'};
+f:array[5] boolean = {false, false, true, true, true};
+f:array [] 	string = {"this", "i", "s", "a,", "test", "."};
+
+===[good8.bminor Output]===
+ARRAY
+OPEN_BRACKET
+IDENTIFIER x
+INTEGER_LITERAL +3
+CLOSE_BRACKET
+ASSIGNMENT
+OPEN_BRACE
+INTEGER_LITERAL 3
+INTEGER_LITERAL -2
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+INTEGER_LITERAL 5
+CLOSE_BRACKET
+INTEGER
+ASSIGNMENT
+OPEN_BRACE
+INTEGER_LITERAL 1
+COMMA
+INTEGER_LITERAL 2
+COMMA
+INTEGER_LITERAL 3
+COMMA
+INTEGER_LITERAL 4
+COMMA
+INTEGER_LITERAL 5
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+INTEGER_LITERAL 5
+CLOSE_BRACKET
+CHAR
+ASSIGNMENT
+OPEN_BRACE
+CHARACTER_LITERAL a
+COMMA
+CHARACTER_LITERAL b
+COMMA
+CHARACTER_LITERAL c
+COMMA
+CHARACTER_LITERAL d
+COMMA
+CHARACTER_LITERAL e
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+INTEGER_LITERAL 5
+CLOSE_BRACKET
+BOOLEAN
+ASSIGNMENT
+OPEN_BRACE
+FALSE
+COMMA
+FALSE
+COMMA
+TRUE
+COMMA
+TRUE
+COMMA
+TRUE
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+CLOSE_BRACKET
+STRING
+ASSIGNMENT
+OPEN_BRACE
+STRING_LITERAL this
+COMMA
+STRING_LITERAL i
+COMMA
+STRING_LITERAL s
+COMMA
+STRING_LITERAL a,
+COMMA
+STRING_LITERAL test
+COMMA
+STRING_LITERAL .
+CLOSE_BRACE
+SEMICOLON
+
+
+
+
+===[good9.bminor Input]===
+// test comparotors and boolean logic
+if (x) then (b) else if (x) then (b) else if (x) then (b) else ee 
+
+
+if ( a >= 5 )
+{
+	print "a >= 5";
+}
+if( a > 5 )
+{
+	print "a > 5";
+}
+if( a <= 5 )
+{
+	print "a <= 5";
+}
+if( a < 5 )
+{
+	print "a < 5";
+}
+if( a == 5 )
+{
+	print "a == 5";
+}
+if( a != 5 )
+{
+	print "a != 5";
+}
+a = 5; // test assigment
+if (a || b)
+{
+	print " a || b is true";
+}
+if (a && b)
+{
+	print " a && b is true";
+}
+
+===[good9.bminor Output]===
+IF
+OPEN_PARENTHESIS
+IDENTIFIER x
+CLOSE_PARENTHESIS
+IDENTIFIER then
+OPEN_PARENTHESIS
+IDENTIFIER b
+CLOSE_PARENTHESIS
+ELSE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER x
+CLOSE_PARENTHESIS
+IDENTIFIER then
+OPEN_PARENTHESIS
+IDENTIFIER b
+CLOSE_PARENTHESIS
+ELSE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER x
+CLOSE_PARENTHESIS
+IDENTIFIER then
+OPEN_PARENTHESIS
+IDENTIFIER b
+CLOSE_PARENTHESIS
+ELSE
+IDENTIFIER ee
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+GE
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a >= 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+GT
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a > 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LE
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a <= 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LT
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a < 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+EQ
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a == 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+NE
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a != 5
+SEMICOLON
+CLOSE_BRACE
+IDENTIFIER a
+ASSIGNMENT
+INTEGER_LITERAL 5
+SEMICOLON
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LOGICAL_OR
+IDENTIFIER b
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL  a || b is true
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LOGICAL_AND
+IDENTIFIER b
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL  a && b is true
+SEMICOLON
+CLOSE_BRACE
+
+
+
+
+====Bad Tests====
+===[bad0.bminor Input]===
+())(()\?
+
+===[bad0.bminor Output]===
+OPEN_PARENTHESIS
+CLOSE_PARENTHESIS
+CLOSE_PARENTHESIS
+OPEN_PARENTHESIS
+OPEN_PARENTHESIS
+CLOSE_PARENTHESIS
+
+SCAN ERROR: \ is not a valid character.
+
+
+
+===[bad1.bminor Input]===
+"@"""""""""""""""""""""""""""""""
+"\\\\\\\\\\\\\#"
+safwef &
+|
+\
+
+===[bad1.bminor Output]===
+STRING_LITERAL @
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL 
+STRING_LITERAL \\\\\\#
+IDENTIFIER safwef
+
+SCAN ERROR: & is not a valid character.
+
+
+
+===[bad2.bminor Input]===
+// unmatched comment throws error 
+
+*/ hahaodgnwogfnwe asofd 21349u 3434er __fjao04_ _______________
+/* This is a comment.
+
+
+
+
+
+/* */ /* */ >= :?:?:??
+
+
+===[bad2.bminor Output]===
+MULT
+DIV
+IDENTIFIER hahaodgnwogfnwe
+IDENTIFIER asofd
+INTEGER_LITERAL 21349
+IDENTIFIER u
+INTEGER_LITERAL 3434
+IDENTIFIER er
+IDENTIFIER __fjao04_
+IDENTIFIER _______________
+GE
+TERNARY
+TERNARY
+TERNARY
+
+SCAN ERROR: ? is not a valid character.
+
+
+
+===[bad3.bminor Input]===
+// basic data types
+"" the quote is unmatched
+
+
+
+
++_+213_++++__<3<399-+pp"
+notre 
+dame"
+
+
+===[bad3.bminor Output]===
+STRING_LITERAL 
+IDENTIFIER the
+IDENTIFIER quote
+IDENTIFIER is
+IDENTIFIER unmatched
+ADD
+IDENTIFIER _
+INTEGER_LITERAL +213
+IDENTIFIER _
+POST_INC
+POST_INC
+IDENTIFIER __
+LT
+INTEGER_LITERAL 3
+LT
+INTEGER_LITERAL 399
+SUB
+ADD
+IDENTIFIER pp
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad4.bminor Input]===
+/* doesn't support floating point
+-50006.0050;
+**************************************/
+/*?/
+
+===[bad4.bminor Output]===
+DIV
+MULT
+
+SCAN ERROR: ? is not a valid character.
+
+
+
+===[bad5.bminor Input]===
+// test comparotors and boolean logic
+/***/
+if (a || b)
+{
+	print " a || b is true";
+}
+if (a & b)// must had 2 &&
+{
+	print " a || b is true";
+}
+
+===[bad5.bminor Output]===
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LOGICAL_OR
+IDENTIFIER b
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL  a || b is true
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+
+SCAN ERROR: & is not a valid character.
+
+
+
+===[bad6.bminor Input]===
+piuewhruhgrpewiuhgrwieugrhwpoiehgriewrhgpoiewrhgpoewihgrpoewirhgpoiewrhgoewihgrpoewirghpoewhrgpoewhgpoewrighwpoegrhwpoeihgrwoeirghpwoeigrhpewoigrhpoiewhgrpwoeihgrpwoeihgrpoewihgroiewhgoerwihgpoierwhgpoiewhgpoierwhgoiewhgpoewhgrpoewhgpwoegrhpowqjgpoierwjgpowehgpwehgwpoiegrhewpgrhpewoigrh
+
+===[bad6.bminor Output]===
+
+IDENTIFIER ERROR: piuewhruhgrpewiuhgrwieugrhwpoiehgriewrhgpoiewrhgpoewihgrpoewirhgpoiewrhgoewihgrpoewirghpoewhrgpoewhgpoewrighwpoegrhwpoeihgrwoeirghpwoeigrhpewoigrhpoiewhgrpwoeihgrpwoeihgrpoewihgroiewhgoerwihgpoierwhgpoiewhgpoierwhgoiewhgpoewhgrpoewhgpwoegrhpowqjgpoierwjgpowehgpwehgwpoiegrhewpgrhpewoigrh is above the 255 character limit.
+
+
+
+===[bad7.bminor Input]===
+//123123
+"It's too hot gas bum ast trrrerettt\"""?""'
+
+===[bad7.bminor Output]===
+STRING_LITERAL It's too hot gas bum ast trrrerettt"
+STRING_LITERAL ?
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad8.bminor Input]===
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+===[bad8.bminor Output]===
+
+SCAN ERROR: ~ is not a valid character.
+
+
+
+===[bad9.bminor Input]===
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&:??
+
+===[bad9.bminor Output]===
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+LOGICAL_AND
+
+SCAN ERROR: & is not a valid character.
+
+
+
+=====HIDDEN TESTS=====
+====Good Tests====
+===[good1.bminor Input]===
+// Easy comment
+/* Easy comment */
+
+===[good1.bminor Output]===
+
+
+
+
+===[good10.bminor Input]===
+// Modulus operator
+15%3
+
+// Exponentiation operator
+2^6
+
+// Negation
+-value
+
+// Postincrement and postdecrement
+number++;
+
+number--;
+
+===[good10.bminor Output]===
+INTEGER_LITERAL 15
+REMAINDER
+INTEGER_LITERAL 3
+INTEGER_LITERAL 2
+EXP
+INTEGER_LITERAL 6
+SUB
+IDENTIFIER value
+IDENTIFIER number
+POST_INC
+SEMICOLON
+IDENTIFIER number
+POST_DEC
+SEMICOLON
+
+
+
+
+===[good3.bminor Input]===
+// Identifiers
+CamelCase
+lower_case
+skiddo23
+B4UFLY
+i
+x15
+
+
+===[good3.bminor Output]===
+IDENTIFIER CamelCase
+IDENTIFIER lower_case
+IDENTIFIER skiddo23
+IDENTIFIER B4UFLY
+IDENTIFIER i
+IDENTIFIER x15
+
+
+
+
+===[good5.bminor Input]===
+// Various bits of punctuation
+, : ; ( ) [ ] { }
+
+
+===[good5.bminor Output]===
+COMMA
+COLON
+SEMICOLON
+OPEN_PARENTHESIS
+CLOSE_PARENTHESIS
+OPEN_BRACKET
+CLOSE_BRACKET
+OPEN_BRACE
+CLOSE_BRACE
+
+
+
+
+===[good6.bminor Input]===
+// Complete function prototype
+main: function integer ( argc: integer, argv: array [] string );
+
+
+===[good6.bminor Output]===
+IDENTIFIER main
+COLON
+FUNCTION
+INTEGER
+OPEN_PARENTHESIS
+IDENTIFIER argc
+COLON
+INTEGER
+COMMA
+IDENTIFIER argv
+COLON
+ARRAY
+OPEN_BRACKET
+CLOSE_BRACKET
+STRING
+CLOSE_PARENTHESIS
+SEMICOLON
+
+
+
+
+===[good7.bminor Input]===
+// Nested statements
+if( x<15 ) {
+    print "small";
+} else {
+    print "large!";
+}
+
+
+===[good7.bminor Output]===
+IF
+OPEN_PARENTHESIS
+IDENTIFIER x
+LT
+INTEGER_LITERAL 15
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL small
+SEMICOLON
+CLOSE_BRACE
+ELSE
+OPEN_BRACE
+PRINT
+STRING_LITERAL large!
+SEMICOLON
+CLOSE_BRACE
+
+
+
+
+===[good8.bminor Input]===
+// Valid integers
+0
+1024
+-512
++256
+
+
+===[good8.bminor Output]===
+INTEGER_LITERAL 0
+INTEGER_LITERAL 1024
+INTEGER_LITERAL -512
+INTEGER_LITERAL +256
+
+
+
+
+===[good2.bminor Input]===
+////* Harder comment ***/
+/******************/
+/*
+This one works too.
+*/
+/***************
+Also a good comment.
+****************/
+// comment // comment // comment
+
+
+===[good2.bminor Output]===
+
+
+
+
+===[good4.bminor Input]===
+// Equality Operators
+== != <= < > >=
+// Ternary Tokens
+? :
+
+===[good4.bminor Output]===
+EQ
+NE
+LE
+LT
+GT
+GE
+
+SCAN ERROR: ? is not a valid character.
+
+
+
+===[good9.bminor Input]===
+// Type Keywords
+array
+boolean
+char
+string
+void
+integer
+auto
+
+===[good9.bminor Output]===
+ARRAY
+BOOLEAN
+CHAR
+STRING
+VOID
+INTEGER
+AUTO
+
+
+
+
+====Bad Tests====
+===[bad1.bminor Input]===
+"unmatched string""
+
+===[bad1.bminor Output]===
+STRING_LITERAL unmatched string
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad10.bminor Input]===
+#compilers // No hashtags in B-minor
+
+===[bad10.bminor Output]===
+
+SCAN ERROR: # is not a valid character.
+
+
+
+===[bad2.bminor Input]===
+"unterminated \"
+
+
+===[bad2.bminor Output]===
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad3.bminor Input]===
+never started"
+
+
+
+
+
+
+===[bad3.bminor Output]===
+IDENTIFIER never
+IDENTIFIER started
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad4.bminor Input]===
+'character?' // Character too long.
+
+===[bad4.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad5.bminor Input]===
+'' // Empty character not allowed.
+
+===[bad5.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad8.bminor Input]===
+'' // Empty character not allowed.
+
+===[bad8.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad9.bminor Input]===
+3.141592654 // No floating point
+
+===[bad9.bminor Output]===
+INTEGER_LITERAL 3
+
+SCAN ERROR: . is not a valid character.
+
+
+
+===[bad6.bminor Input]===
+~tilde // Invalid symbol
+
+===[bad6.bminor Output]===
+
+SCAN ERROR: ~ is not a valid character.
+
+
+
+===[bad7.bminor Input]===
+/* Is this a valid comment */ @ */
+
+
+===[bad7.bminor Output]===
+
+SCAN ERROR: @ is not a valid character.
+
+
+
+=====COMMON TESTS=====
+====Good Tests====
+===[good1.bminor Input]===
+// just runs all basic tokens
+//
+/* comment */
+array 
+boolean 
+char 
+else 
+false 
+for 
+function 
+if 
+integer 
+print 
+return 
+string 
+true
+void
+while
+:
+;
+,
+[
+]
+{
+}
+(
+)
+=
+^
++
+-
+++
+--
+*
+/
+%
+==
+>=
+<=
+<
+>
+!=
+a
+ab
+ab3
+ab3a
+12314
+1
+12
+123
+'A'
+""
+"a"
+"aa"
+
+===[good1.bminor Output]===
+ARRAY
+BOOLEAN
+CHAR
+ELSE
+FALSE
+FOR
+FUNCTION
+IF
+INTEGER
+PRINT
+RETURN
+STRING
+TRUE
+VOID
+WHILE
+COLON
+SEMICOLON
+COMMA
+OPEN_BRACKET
+CLOSE_BRACKET
+OPEN_BRACE
+CLOSE_BRACE
+OPEN_PARENTHESIS
+CLOSE_PARENTHESIS
+ASSIGNMENT
+EXP
+ADD
+SUB
+POST_INC
+POST_DEC
+MULT
+DIV
+REMAINDER
+EQ
+GE
+LE
+LT
+GT
+NE
+IDENTIFIER a
+IDENTIFIER ab
+IDENTIFIER ab3
+IDENTIFIER ab3a
+INTEGER_LITERAL 12314
+INTEGER_LITERAL 1
+INTEGER_LITERAL 12
+INTEGER_LITERAL 123
+CHARACTER_LITERAL A
+STRING_LITERAL 
+STRING_LITERAL a
+STRING_LITERAL aa
+
+
+
+
+===[good10.bminor Input]===
+/* tests some more constructs in bminor */
+z = -x; // unary negation
+x^2; //exponantiotion
+//simple test cases
+x ^ 2
+z != x % 2
+z = 5 + 6;
+z = 5 * 6;
+z = 5 - 6;
+z = 5 / 6;
+q++;
+z--;
+z = 7 + 7 - z;
+
+
+===[good10.bminor Output]===
+IDENTIFIER z
+ASSIGNMENT
+SUB
+IDENTIFIER x
+SEMICOLON
+IDENTIFIER x
+EXP
+INTEGER_LITERAL 2
+SEMICOLON
+IDENTIFIER x
+EXP
+INTEGER_LITERAL 2
+IDENTIFIER z
+NE
+IDENTIFIER x
+REMAINDER
+INTEGER_LITERAL 2
+IDENTIFIER z
+ASSIGNMENT
+INTEGER_LITERAL 5
+ADD
+INTEGER_LITERAL 6
+SEMICOLON
+IDENTIFIER z
+ASSIGNMENT
+INTEGER_LITERAL 5
+MULT
+INTEGER_LITERAL 6
+SEMICOLON
+IDENTIFIER z
+ASSIGNMENT
+INTEGER_LITERAL 5
+SUB
+INTEGER_LITERAL 6
+SEMICOLON
+IDENTIFIER z
+ASSIGNMENT
+INTEGER_LITERAL 5
+DIV
+INTEGER_LITERAL 6
+SEMICOLON
+IDENTIFIER q
+POST_INC
+SEMICOLON
+IDENTIFIER z
+POST_DEC
+SEMICOLON
+IDENTIFIER z
+ASSIGNMENT
+INTEGER_LITERAL 7
+ADD
+INTEGER_LITERAL 7
+SUB
+IDENTIFIER z
+SEMICOLON
+
+
+
+
+===[good11.bminor Input]===
+// some more complicated corner cases
+z = -(5 * 4);
+z = 15 + 5 - 4*3/7;
+z = x + (y * 5 - (4 + 20/v) - 15) % 6 + z; //long integer expr
+z+++; // these will cause parsing errors
+w---;
+
+
+===[good11.bminor Output]===
+IDENTIFIER z
+ASSIGNMENT
+SUB
+OPEN_PARENTHESIS
+INTEGER_LITERAL 5
+MULT
+INTEGER_LITERAL 4
+CLOSE_PARENTHESIS
+SEMICOLON
+IDENTIFIER z
+ASSIGNMENT
+INTEGER_LITERAL 15
+ADD
+INTEGER_LITERAL 5
+SUB
+INTEGER_LITERAL 4
+MULT
+INTEGER_LITERAL 3
+DIV
+INTEGER_LITERAL 7
+SEMICOLON
+IDENTIFIER z
+ASSIGNMENT
+IDENTIFIER x
+ADD
+OPEN_PARENTHESIS
+IDENTIFIER y
+MULT
+INTEGER_LITERAL 5
+SUB
+OPEN_PARENTHESIS
+INTEGER_LITERAL 4
+ADD
+INTEGER_LITERAL 20
+DIV
+IDENTIFIER v
+CLOSE_PARENTHESIS
+SUB
+INTEGER_LITERAL 15
+CLOSE_PARENTHESIS
+REMAINDER
+INTEGER_LITERAL 6
+ADD
+IDENTIFIER z
+SEMICOLON
+IDENTIFIER z
+POST_INC
+ADD
+SEMICOLON
+IDENTIFIER w
+POST_DEC
+SUB
+SEMICOLON
+
+
+
+
+===[good12.bminor Input]===
+//tests the for/print keyword and while keyword
+x:integer;
+for(x = 0; x < 5; x++)
+{
+	print "counting: ", x;
+}
+a:integer = 0;
+while(a > 0)
+{
+	a--;
+}
+
+
+
+===[good12.bminor Output]===
+IDENTIFIER x
+COLON
+INTEGER
+SEMICOLON
+FOR
+OPEN_PARENTHESIS
+IDENTIFIER x
+ASSIGNMENT
+INTEGER_LITERAL 0
+SEMICOLON
+IDENTIFIER x
+LT
+INTEGER_LITERAL 5
+SEMICOLON
+IDENTIFIER x
+POST_INC
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL counting: 
+COMMA
+IDENTIFIER x
+SEMICOLON
+CLOSE_BRACE
+IDENTIFIER a
+COLON
+INTEGER
+ASSIGNMENT
+INTEGER_LITERAL 0
+SEMICOLON
+WHILE
+OPEN_PARENTHESIS
+IDENTIFIER a
+GT
+INTEGER_LITERAL 0
+CLOSE_PARENTHESIS
+OPEN_BRACE
+IDENTIFIER a
+POST_DEC
+SEMICOLON
+CLOSE_BRACE
+
+
+
+
+===[good13.bminor Input]===
+//test some odd identifier names
+ident55
+ident55_
+ident__55__
+thisIsAReallyReallyLongIdentifierNameThatHasTonsOfLettersInIt = 7
+variable_names_may_contain_underscores_
+_variables_can_start_with_an_underscore_67
+7minus5 
+
+===[good13.bminor Output]===
+IDENTIFIER ident55
+IDENTIFIER ident55_
+IDENTIFIER ident__55__
+IDENTIFIER thisIsAReallyReallyLongIdentifierNameThatHasTonsOfLettersInIt
+ASSIGNMENT
+INTEGER_LITERAL 7
+IDENTIFIER variable_names_may_contain_underscores_
+IDENTIFIER _variables_can_start_with_an_underscore_67
+INTEGER_LITERAL 7
+IDENTIFIER minus5
+
+
+
+
+===[good14.bminor Input]===
+main: function integer ( argc: integer, argv: array [] string ) =
+{
+}
+boolFunction: function boolean(intVar:integer) =
+{
+	return intVar > 5;
+}
+intFunction: function integer(integer n) =
+{
+	total:integer = 0;
+	int count;
+	for(count = 0; count < n+1; count++)
+	{
+		total = total + count;
+	
+}
+
+
+===[good14.bminor Output]===
+IDENTIFIER main
+COLON
+FUNCTION
+INTEGER
+OPEN_PARENTHESIS
+IDENTIFIER argc
+COLON
+INTEGER
+COMMA
+IDENTIFIER argv
+COLON
+ARRAY
+OPEN_BRACKET
+CLOSE_BRACKET
+STRING
+CLOSE_PARENTHESIS
+ASSIGNMENT
+OPEN_BRACE
+CLOSE_BRACE
+IDENTIFIER boolFunction
+COLON
+FUNCTION
+BOOLEAN
+OPEN_PARENTHESIS
+IDENTIFIER intVar
+COLON
+INTEGER
+CLOSE_PARENTHESIS
+ASSIGNMENT
+OPEN_BRACE
+RETURN
+IDENTIFIER intVar
+GT
+INTEGER_LITERAL 5
+SEMICOLON
+CLOSE_BRACE
+IDENTIFIER intFunction
+COLON
+FUNCTION
+INTEGER
+OPEN_PARENTHESIS
+INTEGER
+IDENTIFIER n
+CLOSE_PARENTHESIS
+ASSIGNMENT
+OPEN_BRACE
+IDENTIFIER total
+COLON
+INTEGER
+ASSIGNMENT
+INTEGER_LITERAL 0
+SEMICOLON
+IDENTIFIER int
+IDENTIFIER count
+SEMICOLON
+FOR
+OPEN_PARENTHESIS
+IDENTIFIER count
+ASSIGNMENT
+INTEGER_LITERAL 0
+SEMICOLON
+IDENTIFIER count
+LT
+IDENTIFIER n
+INTEGER_LITERAL +1
+SEMICOLON
+IDENTIFIER count
+POST_INC
+CLOSE_PARENTHESIS
+OPEN_BRACE
+IDENTIFIER total
+ASSIGNMENT
+IDENTIFIER total
+ADD
+IDENTIFIER count
+SEMICOLON
+CLOSE_BRACE
+
+
+
+
+===[good15.bminor Input]===
+intFunction: function integer(intVar:integer, boolVar: boolean)
+{
+	if(boolVar)
+	{
+		intVar = intVar * 2;
+	}
+	return intVar;
+}
+// finds the largest value in the array
+getLargest: function integer(intArrVar:array [] integer, int len) =
+{
+	largest:integer = 0;
+	x:integer;
+	for(x = 0; x < len; x++)
+	{
+		if(intArrVar[x] > largest)
+		{
+			largest = intArrVar[x];
+		}
+	}
+	return largest;
+		
+}
+
+main: function integer ( argc: integer, argv: array [] string ) =
+{
+	b:array [10] integer = {0,1,2,3,4,5};
+	b[4] = 6;
+	i:integer;
+	z:integer = intFunction(i, true);
+	print intArrFunction(v, z);
+}
+
+===[good15.bminor Output]===
+IDENTIFIER intFunction
+COLON
+FUNCTION
+INTEGER
+OPEN_PARENTHESIS
+IDENTIFIER intVar
+COLON
+INTEGER
+COMMA
+IDENTIFIER boolVar
+COLON
+BOOLEAN
+CLOSE_PARENTHESIS
+OPEN_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER boolVar
+CLOSE_PARENTHESIS
+OPEN_BRACE
+IDENTIFIER intVar
+ASSIGNMENT
+IDENTIFIER intVar
+MULT
+INTEGER_LITERAL 2
+SEMICOLON
+CLOSE_BRACE
+RETURN
+IDENTIFIER intVar
+SEMICOLON
+CLOSE_BRACE
+IDENTIFIER getLargest
+COLON
+FUNCTION
+INTEGER
+OPEN_PARENTHESIS
+IDENTIFIER intArrVar
+COLON
+ARRAY
+OPEN_BRACKET
+CLOSE_BRACKET
+INTEGER
+COMMA
+IDENTIFIER int
+IDENTIFIER len
+CLOSE_PARENTHESIS
+ASSIGNMENT
+OPEN_BRACE
+IDENTIFIER largest
+COLON
+INTEGER
+ASSIGNMENT
+INTEGER_LITERAL 0
+SEMICOLON
+IDENTIFIER x
+COLON
+INTEGER
+SEMICOLON
+FOR
+OPEN_PARENTHESIS
+IDENTIFIER x
+ASSIGNMENT
+INTEGER_LITERAL 0
+SEMICOLON
+IDENTIFIER x
+LT
+IDENTIFIER len
+SEMICOLON
+IDENTIFIER x
+POST_INC
+CLOSE_PARENTHESIS
+OPEN_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER intArrVar
+OPEN_BRACKET
+IDENTIFIER x
+CLOSE_BRACKET
+GT
+IDENTIFIER largest
+CLOSE_PARENTHESIS
+OPEN_BRACE
+IDENTIFIER largest
+ASSIGNMENT
+IDENTIFIER intArrVar
+OPEN_BRACKET
+IDENTIFIER x
+CLOSE_BRACKET
+SEMICOLON
+CLOSE_BRACE
+CLOSE_BRACE
+RETURN
+IDENTIFIER largest
+SEMICOLON
+CLOSE_BRACE
+IDENTIFIER main
+COLON
+FUNCTION
+INTEGER
+OPEN_PARENTHESIS
+IDENTIFIER argc
+COLON
+INTEGER
+COMMA
+IDENTIFIER argv
+COLON
+ARRAY
+OPEN_BRACKET
+CLOSE_BRACKET
+STRING
+CLOSE_PARENTHESIS
+ASSIGNMENT
+OPEN_BRACE
+IDENTIFIER b
+COLON
+ARRAY
+OPEN_BRACKET
+INTEGER_LITERAL 10
+CLOSE_BRACKET
+INTEGER
+ASSIGNMENT
+OPEN_BRACE
+INTEGER_LITERAL 0
+COMMA
+INTEGER_LITERAL 1
+COMMA
+INTEGER_LITERAL 2
+COMMA
+INTEGER_LITERAL 3
+COMMA
+INTEGER_LITERAL 4
+COMMA
+INTEGER_LITERAL 5
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER b
+OPEN_BRACKET
+INTEGER_LITERAL 4
+CLOSE_BRACKET
+ASSIGNMENT
+INTEGER_LITERAL 6
+SEMICOLON
+IDENTIFIER i
+COLON
+INTEGER
+SEMICOLON
+IDENTIFIER z
+COLON
+INTEGER
+ASSIGNMENT
+IDENTIFIER intFunction
+OPEN_PARENTHESIS
+IDENTIFIER i
+COMMA
+TRUE
+CLOSE_PARENTHESIS
+SEMICOLON
+PRINT
+IDENTIFIER intArrFunction
+OPEN_PARENTHESIS
+IDENTIFIER v
+COMMA
+IDENTIFIER z
+CLOSE_PARENTHESIS
+SEMICOLON
+CLOSE_BRACE
+
+
+
+
+===[good2.bminor Input]===
+// basic data types
+number: integer;
+number = 56;
+number = -56;
+number = +56;
+number = 0005006;
+number = +0005006;
+number = -000050006;
+
+
+
+
+
+
+
+
+
+===[good2.bminor Output]===
+IDENTIFIER number
+COLON
+INTEGER
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL 56
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL -56
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL +56
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL 0005006
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL +0005006
+SEMICOLON
+IDENTIFIER number
+ASSIGNMENT
+INTEGER_LITERAL -000050006
+SEMICOLON
+
+
+
+
+===[good3.bminor Input]===
+//test some boolean types
+bool:boolean = true;
+bool:boolean = false;
+bool = 5 > 4;
+
+
+===[good3.bminor Output]===
+IDENTIFIER bool
+COLON
+BOOLEAN
+ASSIGNMENT
+TRUE
+SEMICOLON
+IDENTIFIER bool
+COLON
+BOOLEAN
+ASSIGNMENT
+FALSE
+SEMICOLON
+IDENTIFIER bool
+ASSIGNMENT
+INTEGER_LITERAL 5
+GT
+INTEGER_LITERAL 4
+SEMICOLON
+
+
+
+
+===[good4.bminor Input]===
+// basic data types
+
+
+character:	 	char = 'c';
+character: char = '\n';
+character:	char = '\0';
+character = '\6';
+character = '\c'
+character = '\t'
+
+
+===[good4.bminor Output]===
+IDENTIFIER character
+COLON
+CHAR
+ASSIGNMENT
+CHARACTER_LITERAL c
+SEMICOLON
+IDENTIFIER character
+COLON
+CHAR
+ASSIGNMENT
+CHARACTER_LITERAL 
+
+SEMICOLON
+IDENTIFIER character
+COLON
+CHAR
+ASSIGNMENT
+CHARACTER_LITERAL 
+SEMICOLON
+IDENTIFIER character
+ASSIGNMENT
+CHARACTER_LITERAL 6
+SEMICOLON
+IDENTIFIER character
+ASSIGNMENT
+CHARACTER_LITERAL c
+IDENTIFIER character
+ASSIGNMENT
+CHARACTER_LITERAL t
+
+
+
+
+===[good5.bminor Input]===
+"This is a string"
+"Notre \n Dame"
+" "
+" string with numbers 3213"
+"String with @@ works in the program"
+""
+
+===[good5.bminor Output]===
+STRING_LITERAL This is a string
+STRING_LITERAL Notre 
+ Dame
+STRING_LITERAL  
+STRING_LITERAL  string with numbers 3213
+STRING_LITERAL String with @@ works in the program
+STRING_LITERAL 
+
+
+
+
+===[good6.bminor Input]===
+// strings
+str:string = "";
+
+str:string = "we can write an escaped backslash \\";
+" \"this is a unique test case \" ";
+" \n \t \0"
+"\e \r \y"
+str:string = "single qoute ' or \' ";
+str:string = " double qoute \" ";
+
+
+===[good6.bminor Output]===
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL 
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL we can write an escaped backslash \
+SEMICOLON
+STRING_LITERAL  "this is a unique test case " 
+SEMICOLON
+STRING_LITERAL  
+ t 
+STRING_LITERAL e r y
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL single qoute ' or ' 
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL  double qoute " 
+SEMICOLON
+
+
+
+
+===[good7.bminor Input]===
+// strings
+str:string = "";
+
+str:string = "hello this is a string!";
+str:string = "hello this is \1 a string!";
+
+str:string = "11234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567"// less then 160 characters 
+
+
+
+===[good7.bminor Output]===
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL 
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL hello this is a string!
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL hello this is 1 a string!
+SEMICOLON
+IDENTIFIER str
+COLON
+STRING
+ASSIGNMENT
+STRING_LITERAL 11234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567891123456789112345678911234567
+
+
+
+
+===[good8.bminor Input]===
+//test arrays
+f:array [5]integer = { 1, 2, 3, 4, 5};
+f:array[5]char = {'a', 'b', 'c', 'd', 'e'};
+f:array[5] boolean = {false, false, true, true, true};
+f:array [] 	string = {"this", "i", "s", "a,", "test", "."};
+
+===[good8.bminor Output]===
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+INTEGER_LITERAL 5
+CLOSE_BRACKET
+INTEGER
+ASSIGNMENT
+OPEN_BRACE
+INTEGER_LITERAL 1
+COMMA
+INTEGER_LITERAL 2
+COMMA
+INTEGER_LITERAL 3
+COMMA
+INTEGER_LITERAL 4
+COMMA
+INTEGER_LITERAL 5
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+INTEGER_LITERAL 5
+CLOSE_BRACKET
+CHAR
+ASSIGNMENT
+OPEN_BRACE
+CHARACTER_LITERAL a
+COMMA
+CHARACTER_LITERAL b
+COMMA
+CHARACTER_LITERAL c
+COMMA
+CHARACTER_LITERAL d
+COMMA
+CHARACTER_LITERAL e
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+INTEGER_LITERAL 5
+CLOSE_BRACKET
+BOOLEAN
+ASSIGNMENT
+OPEN_BRACE
+FALSE
+COMMA
+FALSE
+COMMA
+TRUE
+COMMA
+TRUE
+COMMA
+TRUE
+CLOSE_BRACE
+SEMICOLON
+IDENTIFIER f
+COLON
+ARRAY
+OPEN_BRACKET
+CLOSE_BRACKET
+STRING
+ASSIGNMENT
+OPEN_BRACE
+STRING_LITERAL this
+COMMA
+STRING_LITERAL i
+COMMA
+STRING_LITERAL s
+COMMA
+STRING_LITERAL a,
+COMMA
+STRING_LITERAL test
+COMMA
+STRING_LITERAL .
+CLOSE_BRACE
+SEMICOLON
+
+
+
+
+===[good9.bminor Input]===
+// test comparotors and boolean logic
+if ( a >= 5 )
+{
+	print "a >= 5";
+}
+if( a > 5 )
+{
+	print "a > 5";
+}
+if( a <= 5 )
+{
+	print "a <= 5";
+}
+if( a < 5 )
+{
+	print "a < 5";
+}
+if( a == 5 )
+{
+	print "a == 5";
+}
+if( a != 5 )
+{
+	print "a != 5";
+}
+a = 5; // test assigment
+if (a || b)
+{
+	print " a || b is true";
+}
+if (a && b)
+{
+	print " a && b is true";
+}
+
+===[good9.bminor Output]===
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+GE
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a >= 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+GT
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a > 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LE
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a <= 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LT
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a < 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+EQ
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a == 5
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+NE
+INTEGER_LITERAL 5
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL a != 5
+SEMICOLON
+CLOSE_BRACE
+IDENTIFIER a
+ASSIGNMENT
+INTEGER_LITERAL 5
+SEMICOLON
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LOGICAL_OR
+IDENTIFIER b
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL  a || b is true
+SEMICOLON
+CLOSE_BRACE
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+LOGICAL_AND
+IDENTIFIER b
+CLOSE_PARENTHESIS
+OPEN_BRACE
+PRINT
+STRING_LITERAL  a && b is true
+SEMICOLON
+CLOSE_BRACE
+
+
+
+
+====Bad Tests====
+===[bad1.bminor Input]===
+@
+#
+&
+|
+\
+
+===[bad1.bminor Output]===
+
+SCAN ERROR: @ is not a valid character.
+
+
+
+===[bad10.bminor Input]===
+// invalid character
+'\'
+
+===[bad10.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad11.bminor Input]===
+/*
+A string should not contain a literal newline,
+but use backslash-n instead.
+*/
+
+"invalid
+
+string"
+
+===[bad11.bminor Output]===
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad12.bminor Input]===
+'ca'
+
+===[bad12.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad13.bminor Input]===
+''
+
+===[bad13.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad14.bminor Input]===
+'\ac'
+
+===[bad14.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad15.bminor Input]===
+'
+
+===[bad15.bminor Output]===
+
+SCAN ERROR: ' is not a valid character.
+
+
+
+===[bad2.bminor Input]===
+// unmatched comment throws error 
+/* This is a comment.
+
+
+
+
+
+
+
+
+===[bad2.bminor Output]===
+DIV
+MULT
+IDENTIFIER This
+IDENTIFIER is
+IDENTIFIER a
+IDENTIFIER comment
+
+SCAN ERROR: . is not a valid character.
+
+
+
+===[bad3.bminor Input]===
+// basic data types
+" the quote is unmatched
+
+
+
+
+
+
+
+===[bad3.bminor Output]===
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad4.bminor Input]===
+// doesn't support floating point
+50006.0050;
+
+===[bad4.bminor Output]===
+INTEGER_LITERAL 50006
+
+SCAN ERROR: . is not a valid character.
+
+
+
+===[bad5.bminor Input]===
+// test comparotors and boolean logic
+if (a | b)
+{
+	print " a || b is true";
+}
+if (a & b)// must had 2 &&
+{
+	print " a || b is true";
+}
+
+===[bad5.bminor Output]===
+IF
+OPEN_PARENTHESIS
+IDENTIFIER a
+
+SCAN ERROR: | is not a valid character.
+
+
+
+===[bad6.bminor Input]===
+
+"""
+
+
+===[bad6.bminor Output]===
+STRING_LITERAL 
+
+SCAN ERROR: " is not a valid character.
+
+
+
+===[bad7.bminor Input]===
+"012345678901234567890101234567890123456789010123456789012345678901012345678901234567890101234567890123456789010123456789012345678901012345678901234567890101234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
+
+
+===[bad7.bminor Output]===
+
+STRING ERROR: "012345678901234567890101234567890123456789010123456789012345678901012345678901234567890101234567890123456789010123456789012345678901012345678901234567890101234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" is above the 255 character limit.
+
+
+
+===[bad8.bminor Input]===
+$minus
+
+===[bad8.bminor Output]===
+
+SCAN ERROR: $ is not a valid character.
+
+
+
+===[bad9.bminor Input]===
+minus#44
+
+===[bad9.bminor Output]===
+IDENTIFIER minus
+
+SCAN ERROR: # is not a valid character.
+
+
+
