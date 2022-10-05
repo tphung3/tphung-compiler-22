@@ -42,7 +42,7 @@ const char * token_map[] =
     "LOGICAL_OR",
     "LOGICAL_AND",
     "COMMA",
-    "TERNARY",
+    "QUESTION",
     "COLON",
     "SEMICOLON",
     "INTEGER_LITERAL",

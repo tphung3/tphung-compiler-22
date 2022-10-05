@@ -52,7 +52,7 @@ typedef enum {
     TOKEN_LOGICAL_OR,
     TOKEN_LOGICAL_AND,
     TOKEN_COMMA,
-    TOKEN_TERNARY,
+    TOKEN_QUESTION,
     TOKEN_COLON,
     TOKEN_SEMICOLON,
     /* End of symbols */

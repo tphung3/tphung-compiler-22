@@ -61,7 +61,7 @@ while                                   { return TOKEN_WHILE; }
 "|""|"                                  { return TOKEN_LOGICAL_OR; }
 "&""&"                                  { return TOKEN_LOGICAL_AND; }
 ","                                     { return TOKEN_COMMA; }
-":""?"                                  { return TOKEN_TERNARY; }
+"?"                                     { return TOKEN_QUESTION; }
 ":"                                     { return TOKEN_COLON; }
 ";"                                     { return TOKEN_SEMICOLON; }
 

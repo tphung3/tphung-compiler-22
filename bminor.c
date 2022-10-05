@@ -21,7 +21,7 @@ int parse_cmd(int argc, char **argv)
     else
     {
         fprintf(stderr, "Invalid command-line arguments.\n");
-        exit(1);
+        return 1;
     }
 }
 
@@ -135,6 +135,5 @@ int scan(char *fname)
 
 int main(int argc, char **argv)
 {
-    FILE *fp;
     return parse_cmd(argc, argv);    
 }
