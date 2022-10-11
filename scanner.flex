@@ -34,7 +34,7 @@ true                                    { return TOKEN_TRUE; }
 void                                    { return TOKEN_VOID; }
 while                                   { return TOKEN_WHILE; }
 
-("-"|"+")?{DIGIT}+                      { return TOKEN_INTEGER_LITERAL; }
+{DIGIT}+                                { return TOKEN_INTEGER_LITERAL; }
 
 "("                                     { return TOKEN_OPEN_PARENTHESIS; }
 ")"                                     { return TOKEN_CLOSE_PARENTHESIS; }

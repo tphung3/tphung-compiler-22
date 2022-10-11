@@ -1,11 +1,11 @@
 #!/bin/sh
 
-for bad in bad*.bminor
+for bad in scanner-tests/bad*.bminor
 do
     if ./bminor -scan $bad
     then 
         echo "Wrong"
-        break
+        exit 1
     else
         echo "Bad but this is good"
     fi
@@ -16,7 +16,7 @@ do
     if ./bminor -scan $bad
     then 
         echo "Wrong"
-        break
+        exit 1
     else
         echo "Bad but this is good"
     fi

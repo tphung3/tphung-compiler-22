@@ -8,6 +8,8 @@ extern FILE *yyin;
 extern int yylex();
 extern char *yytext;
 
+extern int yyparse();
+
 extern const char * token_map[];
 extern const int token_map_len;
 
@@ -18,10 +20,28 @@ int parse_cmd(int argc, char **argv)
     {
         return scan(*(argv + 2));
     }
+    else if (!strncmp(*(argv + 1), "-parse", 6) && argc == 3)
+    {   
+        return parse(*(argv + 2));
+    }
     else
     {
         fprintf(stderr, "Invalid command-line arguments.\n");
         return 1;
+    }
+}
+
+int parse(char *fname)
+{
+    yyin = fopen(fname, "r");
+    if (yyparse() == 0)
+    {
+        printf("parse successful\n");
+        return 0;   
+    }
+    else
+    {
+        return 1;   
     }
 }
 
@@ -72,7 +92,7 @@ int print_character_literal()
             printf("%c", yytext[2]);
         else
         {
-            fprintf(stderr, "Scanner detects invalid format of a character %s. Please report back to tphung@nd.edu, or else.\n", yytext);
+            fprintf(stderr, "scan error: Scanner detects invalid format of a character %s. Please report back to tphung@nd.edu, or else.\n", yytext);
             exit(1);
         }
     }
@@ -86,13 +106,13 @@ int scan(char *fname)
     yyin = fopen(fname, "r");
     if (yyin == NULL)
     {
-        fprintf(stderr, "Cannot open %s.\n", fname);
+        fprintf(stderr, "scan error: Cannot open %s.\n", fname);
         exit(1);
     }
 
     while(1)
     {
-        token_t t = yylex();
+        enum yytokentype t = yylex();
         if (t == TOKEN_EOF) break;
         
         if (t == TOKEN_INTEGER_LITERAL || t == TOKEN_IDENTIFIER)
@@ -109,25 +129,25 @@ int scan(char *fname)
         }
         else if (t == TOKEN_STRING_ERROR)
         {
-            fprintf(stderr, "%s: %s is above the 255 character limit.\n", token_map[t], yytext);
+            fprintf(stderr, "scan error: %s: %s is above the 255 character limit.\n", token_map[t], yytext);
             exit(1);
         }   
         else if (t == TOKEN_IDENTIFIER_ERROR)
         {
-            fprintf(stderr, "%s: %s is above the 255 character limit.\n", token_map[t], yytext);
+            fprintf(stderr, "scan error: %s: %s is above the 255 character limit.\n", token_map[t], yytext);
             exit(1);
         }
         else if (t == TOKEN_SCAN_ERROR)
         {
-            fprintf(stderr, "%s: %s is not a valid character.\n", token_map[t], yytext);
+            fprintf(stderr, "scan error: %s: %s is not a valid character.\n", token_map[t], yytext);
             exit(1);
         }
         else if (t < token_map_len)
             printf("%s\n", token_map[t]);
         else
         {
-            fprintf(stderr, "The scanner detects unrecognizable token code: %d. Please report back to tphung@nd.edu, or else.\n", t);
-            exit(2);
+            fprintf(stderr, "scan error: The scanner detects unrecognizable token code: %d. Please report back to tphung@nd.edu, or else.\n", t);
+            exit(1);
         }
     }
     return 0;
