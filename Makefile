@@ -12,7 +12,7 @@ parser.o: parser.c
 	gcc -c parser.c
 
 parser.c: parser.bison
-	bison -v --defines=token.h --output=parser.c parser.bison
+	bison -v -t --defines=token.h --output=parser.c parser.bison
 
 scanner.o:	scanner.c
 	gcc -c scanner.c
@@ -30,10 +30,10 @@ clean:
 	rm bminor bminor.o scanner.c scanner.o token_map.o parser.c token.h parser.output parser.o
 
 sgood:
-	./bminor -scanner good_test.bminor
+	./bminor -scan good_test.bminor
 
 good:
-	./bminor -parser good_test.bminor
+	./bminor -parse good_test.bminor
 
 bad:
-	./bminor -parser bad_test.bminor
+	./bminor -parse bad_test.bminor

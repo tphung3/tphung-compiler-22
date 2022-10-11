@@ -1,0 +1,6 @@
+main: function void () = {
+    a = -3;
+    b = a^2 + 1;
+    c = a^3 - 2;
+    return a*b-c;
+}

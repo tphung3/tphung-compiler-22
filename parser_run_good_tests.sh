@@ -1,8 +1,9 @@
 #!/bin/sh
 
-for good in scanner-tests/good*.bminor
+for good in parser-book-tests/good*.bminor
 do
-    if ./bminor -scan $good
+    echo $good
+    if ./bminor -parse $good
     then 
         echo "Good"
     else
@@ -11,9 +12,10 @@ do
     fi
 done
 
-for good in scanner-book-tests/good*.bminor
+for good in good*.bminor
 do
-    if ./bminor -scan $good
+    echo $good
+    if ./bminor -parse $good
     then 
         echo "Good"
     else

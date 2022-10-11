@@ -1,8 +1,8 @@
 #!/bin/sh
 
-for bad in scanner-tests/bad*.bminor
+for bad in parser-book-tests/bad*.bminor
 do
-    if ./bminor -scan $bad
+    if ./bminor -parser $bad
     then 
         echo "Wrong"
         exit 1
@@ -11,9 +11,9 @@ do
     fi
 done
 
-for bad in scanner-book-tests/bad*.bminor
+for bad in bad*.bminor
 do
-    if ./bminor -scan $bad
+    if ./bminor -parser $bad
     then 
         echo "Wrong"
         exit 1
@@ -21,3 +21,4 @@ do
         echo "Bad but this is good"
     fi
 done
+

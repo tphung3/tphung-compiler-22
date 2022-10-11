@@ -3,10 +3,9 @@
 void yyerror(char const *);
 extern char *yytext;
 %}
-
+%verbose
 %define parse.error verbose
 %define parse.lac none
-%define parse.trace
 
 %token TOKEN_EOF 0
 
@@ -77,12 +76,23 @@ program: global_decl_list
 global_decl_list: global_decl global_decl_list
     | global_decl;
 
-global_decl: var_decl | array_decl | func_decl; 
+global_decl: global_var_decl | global_array_decl | global_func_decl; 
 
-var_decl: TOKEN_IDENTIFIER TOKEN_COLON atomic_type var_decl_optional;
+/* GLOBAL VARIABLE DECLARATIONS */
+global_var_decl: TOKEN_IDENTIFIER TOKEN_COLON global_var_type global_var_decl_optional;
 
-var_decl_optional: TOKEN_ASSIGNMENT literal TOKEN_SEMICOLON
+global_var_type: atomic_type
+    | TOKEN_AUTO;
+
+atomic_type: TOKEN_INTEGER 
+    | TOKEN_STRING 
+    | TOKEN_CHAR
+    | TOKEN_BOOLEAN;
+
+global_var_decl_optional: TOKEN_ASSIGNMENT global_var_initializer TOKEN_SEMICOLON
     | TOKEN_SEMICOLON;
+
+global_var_initializer: expr;
 
 literal: TOKEN_INTEGER_LITERAL 
     | TOKEN_STRING_LITERAL 
@@ -90,49 +100,47 @@ literal: TOKEN_INTEGER_LITERAL
     | TOKEN_FALSE;
     | TOKEN_TRUE;
 
-atomic_type: TOKEN_INTEGER 
-    | TOKEN_STRING 
-    | TOKEN_CHAR
-    | TOKEN_BOOLEAN;
+/* GLOBAL ARRAY DECLARATIONS */
+global_array_decl: TOKEN_IDENTIFIER TOKEN_COLON expr_array_type_list global_var_type global_array_decl_optional;
 
-array_decl: TOKEN_IDENTIFIER TOKEN_COLON array_type_list atomic_type array_decl_optional;
+/*fixed_array_type_list: fixed_array_type fixed_array_type_list
+    | fixed_array_type;
 
-array_type_list: array_type array_type_list
-    | array_type;
+fixed_array_type: TOKEN_ARRAY TOKEN_OPEN_BRACKET expr TOKEN_CLOSE_BRACKET;*/
 
-array_type: TOKEN_ARRAY TOKEN_OPEN_BRACKET TOKEN_INTEGER_LITERAL TOKEN_CLOSE_BRACKET;
-
-array_decl_optional: TOKEN_ASSIGNMENT TOKEN_OPEN_BRACE array_element_list TOKEN_CLOSE_BRACE TOKEN_SEMICOLON
+global_array_decl_optional: TOKEN_ASSIGNMENT TOKEN_OPEN_BRACE expr_array_element_list TOKEN_CLOSE_BRACE TOKEN_SEMICOLON
     | TOKEN_SEMICOLON;
 
-array_element_list: array_element TOKEN_COMMA array_element_list
-    | array_element;
+/* GLOBAL FUNCTION DECLARATIONS */
+global_func_decl: TOKEN_IDENTIFIER TOKEN_COLON global_function_type global_func_decl_optional;
 
-array_element: TOKEN_OPEN_BRACE array_element_list TOKEN_CLOSE_BRACE
-    | literal;
+global_function_type: TOKEN_FUNCTION function_return_type TOKEN_OPEN_PARENTHESIS global_function_argument_list_w_empty TOKEN_CLOSE_PARENTHESIS;
 
 function_return_type: atomic_type
     | TOKEN_VOID;
 
-array_type: TOKEN_ARRAY TOKEN_OPEN_BRACKET TOKEN_CLOSE_BRACKET;
-
-function_type: TOKEN_FUNCTION function_return_type TOKEN_OPEN_PARENTHESIS function_argument_list_w_empty TOKEN_CLOSE_PARENTHESIS;
-
-compound_type: atomic_type
-    | array_type compound_type
-    | function_type;
-
-function_argument_list_w_empty: function_argument_list
+global_function_argument_list_w_empty: global_function_argument_list
     | /* Nothing */;
 
-function_argument_list: function_argument TOKEN_COMMA function_argument_list
-    | function_argument;
+global_function_argument_list: global_function_argument TOKEN_COMMA global_function_argument_list
+    | global_function_argument;
 
-function_argument: TOKEN_IDENTIFIER TOKEN_COLON compound_type;
+global_function_argument: TOKEN_IDENTIFIER TOKEN_COLON global_argument_type;
 
-local_decl: var_decl
-    | array_decl;
-    
+global_argument_type: global_argument_optional_array_type atomic_type;
+
+global_argument_optional_array_type: loose_array_type_list
+    | /* Nothing */;
+
+loose_array_type_list: loose_array_type loose_array_type_list
+    | loose_array_type;
+
+loose_array_type: TOKEN_ARRAY TOKEN_OPEN_BRACKET TOKEN_CLOSE_BRACKET;
+
+global_func_decl_optional: TOKEN_ASSIGNMENT block
+    | TOKEN_SEMICOLON;
+
+/* EXPRESSIONS */
 expr: expr_lv0_0;
 
 expr_lv0_0: assignment_expr expr_lv0_0
@@ -236,36 +244,21 @@ post_decre_expr: TOKEN_POST_DEC;
 
 expr_lv_9_0: grouping_expr;
 
-grouping_expr: TOKEN_OPEN_PARENTHESIS grouping_expr TOKEN_CLOSE_PARENTHESIS
+grouping_expr: TOKEN_OPEN_PARENTHESIS expr TOKEN_CLOSE_PARENTHESIS
     | expr_lv_9_1;
 
 expr_lv_9_1: arr_sub_expr;
 
-arr_sub_expr: TOKEN_OPEN_BRACKET arr_sub_expr TOKEN_CLOSE_BRACKET
+arr_sub_expr: TOKEN_IDENTIFIER arr_index_list
     | expr_lv_9_2;
+
+arr_index_list: TOKEN_OPEN_BRACKET expr TOKEN_CLOSE_BRACKET arr_index_list
+    | TOKEN_OPEN_BRACKET expr TOKEN_CLOSE_BRACKET;
 
 expr_lv_9_2: func_call_expr;
 
-func_call_expr: TOKEN_IDENTIFIER TOKEN_OPEN_PARENTHESIS func_call_expr TOKEN_CLOSE_PARENTHESIS
+func_call_expr: TOKEN_IDENTIFIER TOKEN_OPEN_PARENTHESIS expr_list_empty TOKEN_CLOSE_PARENTHESIS
     | expr_lv_10_0;
-
-expr_lv_10_0: literal
-    | TOKEN_IDENTIFIER;
-
-if_else: TOKEN_IF if_else_condition body_if
-    | TOKEN_IF if_else_condition stmt_w_full_if_else TOKEN_ELSE body_else;
-
-if_else_condition: TOKEN_OPEN_PARENTHESIS expr TOKEN_CLOSE_PARENTHESIS;
-
-body_if: stmt;
-
-full_if_else: TOKEN_IF if_else_condition stmt_w_full_if_else TOKEN_ELSE stmt_w_full_if_else;
-
-body_else: stmt;
-
-for: TOKEN_FOR TOKEN_OPEN_PARENTHESIS expr TOKEN_SEMICOLON expr TOKEN_SEMICOLON expr TOKEN_CLOSE_PARENTHESIS block; 
-
-print: TOKEN_PRINT expr_list_empty TOKEN_SEMICOLON;
 
 expr_list_empty: expr_list
     | /* Nothing */;
@@ -273,55 +266,80 @@ expr_list_empty: expr_list
 expr_list: expr TOKEN_COMMA expr_list
     | expr;
 
-/***************** DONE *****************/
+expr_lv_10_0: literal
+    | TOKEN_IDENTIFIER;
 
-func_decl: TOKEN_IDENTIFIER TOKEN_COLON function_type func_decl_optional;
+/* STATEMENTS */
+stmt: if_only
+    | others;
 
-func_decl_optional: block
-    | TOKEN_SEMICOLON;
+/* BLOCK */
+block: TOKEN_OPEN_BRACE stmt_list TOKEN_CLOSE_BRACE
+    | TOKEN_OPEN_BRACE TOKEN_CLOSE_BRACE;
 
-block: TOKEN_OPEN_BRACE stmt_list TOKEN_CLOSE_BRACE;
-
-stmt_list: stmt_list stmt
+stmt_list: stmt stmt_list
     | stmt;
 
-/* LOOK TO IF ELSE AND CHANGE ACCORDINGLY */
-stmt: local_decl
+/* LOCAL DECLARATIONS */
+local_decl: local_var_decl 
+    | local_array_decl;
+
+local_var_decl: TOKEN_IDENTIFIER TOKEN_COLON global_var_type local_var_decl_optional;
+
+local_var_decl_optional: TOKEN_ASSIGNMENT local_var_initializer TOKEN_SEMICOLON
+    | TOKEN_SEMICOLON;
+
+local_var_initializer: expr;
+
+local_array_decl: TOKEN_IDENTIFIER TOKEN_COLON expr_array_type_list global_var_type local_array_decl_optional;
+
+expr_array_type_list: expr_array_type expr_array_type_list
+    | expr_array_type;
+
+expr_array_type: TOKEN_ARRAY TOKEN_OPEN_BRACKET expr TOKEN_CLOSE_BRACKET;
+
+local_array_decl_optional: TOKEN_ASSIGNMENT TOKEN_OPEN_BRACE expr_array_element_list TOKEN_CLOSE_BRACE TOKEN_SEMICOLON
+    | TOKEN_SEMICOLON;
+
+expr_array_element_list: expr_array_element TOKEN_COMMA expr_array_element_list
+    | expr_array_element;
+
+expr_array_element: TOKEN_OPEN_BRACE expr_array_element_list TOKEN_CLOSE_BRACE
+    | expr;
+
+/* IF ELSE */
+if_only: TOKEN_IF if_else_condition stmt
+    | TOKEN_IF if_else_condition others TOKEN_ELSE if_only
+    | for_header if_only;
+
+others: TOKEN_IF if_else_condition others TOKEN_ELSE others
     | expr TOKEN_SEMICOLON
     | block
-    | for
     | print
     | return
-    | if_else;
+    | for_header others
+    | local_decl;
 
-/*stmt: local_decl
-    | expr
-    | if_else
-    | for
-    | print
-    | return
-    | block;*/
+if_else_condition: TOKEN_OPEN_PARENTHESIS expr TOKEN_CLOSE_PARENTHESIS;
 
+/* RETURN */
+return: TOKEN_RETURN expr TOKEN_SEMICOLON
+    | TOKEN_RETURN TOKEN_SEMICOLON;
 
-/* LOOK ABOVE AND CHANGE ACCORDINGLY */
-stmt_w_full_if_else: local_decl
-    | expr TOKEN_SEMICOLON
-    | block
-    | for
-    | print
-    | return
-    | full_if_else;
+/* PRINT */
+print: TOKEN_PRINT expr_list_empty TOKEN_SEMICOLON;
 
+/* FOR */
+for_header: TOKEN_FOR empty_expr_after_open_paren empty_expr_after_semi empty_expr_after_semi TOKEN_CLOSE_PARENTHESIS;
 
-return: TOKEN_RETURN expr TOKEN_SEMICOLON;
+empty_expr_after_open_paren: TOKEN_OPEN_PARENTHESIS expr
+    | TOKEN_OPEN_PARENTHESIS;
 
-/**************** TESTING ******************/
-
-
-/**************** TODO ********************/
+empty_expr_after_semi: TOKEN_SEMICOLON expr
+    | TOKEN_SEMICOLON;
 %%
 
 void yyerror (char const *s) {
-    fprintf(stderr, "parse error: %s\n", s);
+    fprintf(stderr, "parse error: %s. ", s);
     fprintf(stderr, "Last token is: %s\n", yytext);
 }

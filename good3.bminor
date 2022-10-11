@@ -1,0 +1,11 @@
+compute: function integer() = 
+{
+    a = -3;
+    b[3-1][4] = main(b[3][2] - 1);
+    a: array [5] integer = {1,2,3,4,5};
+    s: array[34*2] array[x-6] integer = {1-2 + a[3-4]};
+    c = (3*2)^6;
+    if (a) if(b) c; else d;
+    print "The temperature is: ", temp, " degrees\n";
+    return a[3][4][5*1-1]; 
+}

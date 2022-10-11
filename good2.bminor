@@ -1,0 +1,4 @@
+a: function string ();
+a: function string (s: string) = {
+    return s;
+}
