@@ -8,9 +8,10 @@ c: char    = 'q';
 s: string  = "hello bminor\n";
 
 ===[good0.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good1.bminor Input]===
@@ -19,9 +20,10 @@ a: array [5] array[5] integer = {{1},{2},{3},{4},{5}};
 
 
 ===[good1.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good2.bminor Input]===
@@ -31,9 +33,10 @@ a: function string (s: string) = {
 }
 
 ===[good2.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good3.bminor Input]===
@@ -50,9 +53,10 @@ compute: function integer() =
 }
 
 ===[good3.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good4.bminor Input]===
@@ -60,9 +64,10 @@ a: integer = b[2][3];
 a: integer = a[x[x[s[d[e[3]]]]]];
 
 ===[good4.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good5.bminor Input]===
@@ -74,9 +79,10 @@ main: function void () = {
 }
 
 ===[good5.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good6.bminor Input]===
@@ -85,9 +91,10 @@ main: function integer () = {
 }
 
 ===[good6.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good7.bminor Input]===
@@ -103,18 +110,20 @@ main: function integer () = {
 }
 
 ===[good7.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good8.bminor Input]===
 //empty
 
 ===[good8.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good9.bminor Input]===
@@ -124,9 +133,10 @@ return;
 }
 
 ===[good9.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ====Bad Tests====
@@ -135,8 +145,9 @@ Invalid command-line arguments.
 
 ===[bad0.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_SEMICOLON, expecting TOKEN_EOF. Last token is: ;
 
+return code: 1
 
 
 ===[bad1.bminor Input]===
@@ -144,8 +155,9 @@ print "Can't have statements at global";
 
 ===[bad1.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_PRINT, expecting TOKEN_EOF. Last token is: print
 
+return code: 1
 
 
 ===[bad2.bminor Input]===
@@ -155,8 +167,9 @@ if (a)
 
 ===[bad2.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_IF, expecting TOKEN_EOF. Last token is: if
 
+return code: 1
 
 
 ===[bad3.bminor Input]===
@@ -164,8 +177,9 @@ a: function void() = {return 3}
 
 ===[bad3.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_CLOSE_BRACE, expecting TOKEN_SEMICOLON. Last token is: }
 
+return code: 1
 
 
 ===[bad4.bminor Input]===
@@ -173,8 +187,9 @@ x: function ();
 
 ===[bad4.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_OPEN_PARENTHESIS. Last token is: (
 
+return code: 1
 
 
 ===[bad5.bminor Input]===
@@ -182,8 +197,9 @@ y: function void () return 3;
 
 ===[bad5.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_RETURN, expecting TOKEN_ASSIGNMENT or TOKEN_SEMICOLON. Last token is: return
 
+return code: 1
 
 
 ===[bad6.bminor Input]===
@@ -191,8 +207,9 @@ f: function void() = {print print;}
 
 ===[bad6.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_PRINT, expecting TOKEN_SEMICOLON. Last token is: print
 
+return code: 1
 
 
 ===[bad7.bminor Input]===
@@ -203,8 +220,9 @@ if (a){
 
 ===[bad7.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_IF, expecting TOKEN_EOF. Last token is: if
 
+return code: 1
 
 
 ===[bad8.bminor Input]===
@@ -212,8 +230,9 @@ for (;) x= 2;
 
 ===[bad8.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_FOR, expecting TOKEN_EOF. Last token is: for
 
+return code: 1
 
 
 ===[bad9.bminor Input]===
@@ -221,8 +240,9 @@ a = 3;
 
 ===[bad9.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_ASSIGNMENT, expecting TOKEN_COLON. Last token is: =
 
+return code: 1
 
 
 =====HIDDEN TESTS=====
@@ -262,9 +282,10 @@ testfunc: function void () = {
 }
 
 ===[good10.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good2.bminor Input]===
@@ -282,9 +303,10 @@ GetArea: function integer ( width: integer, height: integer ) =
 }
 
 ===[good2.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good4.bminor Input]===
@@ -312,9 +334,10 @@ simplefunc: function boolean ( x: integer, y: integer ) = {
 }
 
 ===[good4.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good5.bminor Input]===
@@ -342,9 +365,10 @@ simplefunc: function boolean ( x: integer, y: integer ) = {
 }
 
 ===[good5.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good6.bminor Input]===
@@ -373,9 +397,10 @@ simplefunc: function void (r: integer, s: integer, t: integer ) = {
 }
 
 ===[good6.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good7.bminor Input]===
@@ -414,9 +439,10 @@ testit: function boolean ( x: integer, y: integer ) = {
 }
 
 ===[good7.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good9.bminor Input]===
@@ -441,9 +467,10 @@ testfunc: function void ( x: integer, y:integer, z:integer ) = {
 }
 
 ===[good9.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good1.bminor Input]===
@@ -472,8 +499,9 @@ i: array [2] array [3] string = { {"a","b","c"}, {"x","y","z"} };
 
 ===[good1.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_CLOSE_BRACKET. Last token is: ]
 
+return code: 1
 
 
 ===[good3.bminor Input]===
@@ -488,9 +516,10 @@ simplefunc: function void () = {
 }
 
 ===[good3.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good8.bminor Input]===
@@ -532,9 +561,10 @@ testfunc: function void ( z: integer ) =
 }
 
 ===[good8.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ====Bad Tests====
@@ -546,8 +576,9 @@ x = 5;
 
 ===[bad1.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_ASSIGNMENT, expecting TOKEN_COLON. Last token is: =
 
+return code: 1
 
 
 ===[bad10.bminor Input]===
@@ -566,8 +597,9 @@ main:function integer ( x: integer ) =
 
 ===[bad10.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_EOF, expecting TOKEN_CLOSE_BRACE. Last token is: 
 
+return code: 1
 
 
 ===[bad2.bminor Input]===
@@ -578,8 +610,9 @@ return 5;
 
 ===[bad2.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_PRINT, expecting TOKEN_EOF. Last token is: print
 
+return code: 1
 
 
 ===[bad3.bminor Input]===
@@ -594,8 +627,9 @@ simplefunc: function void () = {
 
 ===[bad3.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_ELSE. Last token is: else
 
+return code: 1
 
 
 ===[bad4.bminor Input]===
@@ -609,8 +643,9 @@ main: function void() =
 
 ===[bad4.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_CLOSE_PARENTHESIS, expecting TOKEN_SEMICOLON. Last token is: )
 
+return code: 1
 
 
 ===[bad5.bminor Input]===
@@ -623,8 +658,9 @@ main:function void()
 
 ===[bad5.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_OPEN_BRACE, expecting TOKEN_ASSIGNMENT or TOKEN_SEMICOLON. Last token is: {
 
+return code: 1
 
 
 ===[bad6.bminor Input]===
@@ -634,8 +670,9 @@ main:function void( x:integer y:integer );
 
 ===[bad6.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_IDENTIFIER, expecting TOKEN_CLOSE_PARENTHESIS. Last token is: y
 
+return code: 1
 
 
 ===[bad7.bminor Input]===
@@ -648,8 +685,9 @@ main:function integer ( x:integer ) = {
 
 ===[bad7.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_MULT. Last token is: *
 
+return code: 1
 
 
 ===[bad8.bminor Input]===
@@ -662,8 +700,9 @@ main:function integer( x: integer ) =
 
 ===[bad8.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_SEMICOLON, expecting TOKEN_CLOSE_PARENTHESIS. Last token is: ;
 
+return code: 1
 
 
 ===[bad9.bminor Input]===
@@ -685,8 +724,9 @@ main:function integer ( x: integer ) =
 
 ===[bad9.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_PRINT, expecting TOKEN_EOF. Last token is: print
 
+return code: 1
 
 
 =====COMMON TESTS=====
@@ -695,9 +735,10 @@ Invalid command-line arguments.
 //empty program
 
 ===[good1.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good10.bminor Input]===
@@ -717,9 +758,10 @@ fxn : function  integer () =
 } 
 
 ===[good10.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good11.bminor Input]===
@@ -735,9 +777,10 @@ main: function void () = {
 }
 
 ===[good11.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good12.bminor Input]===
@@ -754,9 +797,10 @@ main:function void() =
 	
 
 ===[good12.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good13.bminor Input]===
@@ -770,9 +814,10 @@ barr:array [4] boolean = {true, false, true, true};
 iaar: array [4] array [4] integer = {iarr, iarr, iarr, iarr};
 
 ===[good13.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good14.bminor Input]===
@@ -806,9 +851,10 @@ main: function void ()=
 }
 
 ===[good14.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good15.bminor Input]===
@@ -908,9 +954,10 @@ main: function integer () =
 }
 
 ===[good15.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good2.bminor Input]===
@@ -927,9 +974,10 @@ fxn: function void () =
 }
 
 ===[good2.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good3.bminor Input]===
@@ -946,9 +994,10 @@ main: function void () = {
 }
 
 ===[good3.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good4.bminor Input]===
@@ -965,9 +1014,10 @@ main: function void() = {
 }
 
 ===[good4.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good5.bminor Input]===
@@ -980,9 +1030,10 @@ main: function void() = {
 }
 
 ===[good5.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good6.bminor Input]===
@@ -1021,9 +1072,10 @@ funct2: function void() = {
 }
 
 ===[good6.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good7.bminor Input]===
@@ -1044,9 +1096,10 @@ main:function void() = {
 }
 
 ===[good7.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good8.bminor Input]===
@@ -1066,9 +1119,10 @@ main: function void() = {
 }
 
 ===[good8.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ===[good9.bminor Input]===
@@ -1096,9 +1150,10 @@ fxn3: function char (x: array [] integer, y:char, z: array [] array [] boolean)=
 
 
 ===[good9.bminor Output]===
+parse successful
 
-Invalid command-line arguments.
 
+return code: 0
 
 
 ====Bad Tests====
@@ -1112,8 +1167,9 @@ main: function void() =
 
 ===[bad1.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_MULT. Last token is: *
 
+return code: 1
 
 
 ===[bad10.bminor Input]===
@@ -1140,8 +1196,9 @@ funct2: function void() = {
 
 ===[bad10.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_ELSE, expecting TOKEN_CLOSE_BRACE. Last token is: else
 
+return code: 1
 
 
 ===[bad11.bminor Input]===
@@ -1155,8 +1212,9 @@ main: function void () =
 
 ===[bad11.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_IDENTIFIER, expecting TOKEN_CLOSE_PARENTHESIS. Last token is: y
 
+return code: 1
 
 
 ===[bad12.bminor Input]===
@@ -1170,8 +1228,9 @@ main2:function void () {
 
 ===[bad12.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_OPEN_BRACE, expecting TOKEN_ASSIGNMENT or TOKEN_SEMICOLON. Last token is: {
 
+return code: 1
 
 
 ===[bad13.bminor Input]===
@@ -1186,8 +1245,9 @@ fxn:function void() =
 
 ===[bad13.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_INTEGER. Last token is: integer
 
+return code: 1
 
 
 ===[bad14.bminor Input]===
@@ -1198,8 +1258,9 @@ x:function(y:integer)=
 
 ===[bad14.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_OPEN_PARENTHESIS. Last token is: (
 
+return code: 1
 
 
 ===[bad15.bminor Input]===
@@ -1208,8 +1269,9 @@ x:array integer = {1, 2,3,4};
 
 ===[bad15.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_INTEGER, expecting TOKEN_OPEN_BRACKET. Last token is: integer
 
+return code: 1
 
 
 ===[bad2.bminor Input]===
@@ -1221,8 +1283,9 @@ fxn:function void() =
 
 ===[bad2.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_SEMICOLON. Last token is: ;
 
+return code: 1
 
 
 ===[bad3.bminor Input]===
@@ -1231,8 +1294,9 @@ printf "hello world", x, y;
 
 ===[bad3.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_STRING_LITERAL, expecting TOKEN_COLON. Last token is: "hello world"
 
+return code: 1
 
 
 ===[bad4.bminor Input]===
@@ -1246,8 +1310,9 @@ main:function void()=
 
 ===[bad4.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_CLOSE_PARENTHESIS, expecting TOKEN_SEMICOLON. Last token is: )
 
+return code: 1
 
 
 ===[bad5.bminor Input]===
@@ -1260,8 +1325,9 @@ main:function void()
 
 ===[bad5.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_IDENTIFIER. Last token is: intger
 
+return code: 1
 
 
 ===[bad6.bminor Input]===
@@ -1276,8 +1342,9 @@ main:function void()=
 
 ===[bad6.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_CLOSE_BRACE, expecting TOKEN_SEMICOLON. Last token is: }
 
+return code: 1
 
 
 ===[bad7.bminor Input]===
@@ -1291,8 +1358,9 @@ main:function void()=
 
 ===[bad7.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_CLOSE_BRACE. Last token is: }
 
+return code: 1
 
 
 ===[bad8.bminor Input]===
@@ -1304,8 +1372,9 @@ main:function void("hello", x:integer) =
 
 ===[bad8.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_STRING_LITERAL, expecting TOKEN_CLOSE_PARENTHESIS. Last token is: "hello"
 
+return code: 1
 
 
 ===[bad9.bminor Input]===
@@ -1317,16 +1386,17 @@ main:function void(hello:string, )=
 
 ===[bad9.bminor Output]===
 
-Invalid command-line arguments.
+parse error: syntax error, unexpected TOKEN_CLOSE_PARENTHESIS, expecting TOKEN_IDENTIFIER. Last token is: )
 
+return code: 1
 
 
 ===== SUMMARIZED RESULTS =====
 {
   "student_tests": {
     "Good": {
-      "correct": 0,
-      "incorrect": 10
+      "correct": 10,
+      "incorrect": 0
     },
     "Bad": {
       "correct": 10,
@@ -1335,8 +1405,8 @@ Invalid command-line arguments.
   },
   "hidden_tests": {
     "Good": {
-      "correct": 0,
-      "incorrect": 10
+      "correct": 9,
+      "incorrect": 1
     },
     "Bad": {
       "correct": 10,
@@ -1345,8 +1415,8 @@ Invalid command-line arguments.
   },
   "common_tests": {
     "Good": {
-      "correct": 0,
-      "incorrect": 15
+      "correct": 15,
+      "incorrect": 0
     },
     "Bad": {
       "correct": 15,
