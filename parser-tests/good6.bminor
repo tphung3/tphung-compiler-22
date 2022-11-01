@@ -1,0 +1,3 @@
+main: function integer () = {
+    if (a) if (b) if(c) if(d) 4; else 3;
+}

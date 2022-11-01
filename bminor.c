@@ -1,5 +1,6 @@
 #include "token.h"
 #include "bminor.h"
+#include "decl.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +10,8 @@ extern int yylex();
 extern char *yytext;
 
 extern int yyparse();
+
+extern struct decl* parser_result;
 
 extern const char * token_map[];
 extern const int token_map_len;
@@ -24,11 +27,27 @@ int parse_cmd(int argc, char **argv)
     {   
         return parse(*(argv + 2));
     }
+    else if (!strncmp(*(argv + 1), "-print", 6) && argc == 3)
+    {
+        return pretty_printer(*(argv + 2));
+    }
     else
     {
         fprintf(stderr, "Invalid command-line arguments.\n");
         return 1;
     }
+}
+
+int pretty_printer(char *fname)
+{
+    yyin = fopen(fname, "r");
+    if (yyparse() == 0)
+    {
+        decl_print(parser_result, 0);
+        return 0;
+    }
+    else
+        return 1;
 }
 
 int parse(char *fname)

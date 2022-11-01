@@ -11,7 +11,7 @@ do
     fi
 done
 
-for bad in bad*.bminor
+for bad in parser-tests/bad*.bminor
 do
     if ./bminor -parser $bad
     then 

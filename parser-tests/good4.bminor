@@ -1,0 +1,2 @@
+a: integer = b[2][3];
+a: integer = a[x[x[s[d[e[3]]]]]];

@@ -12,7 +12,7 @@ do
     fi
 done
 
-for good in good*.bminor
+for good in parser-tests/good*.bminor
 do
     echo $good
     if ./bminor -parse $good

@@ -1,0 +1,1 @@
+print "Can't have statements at global";

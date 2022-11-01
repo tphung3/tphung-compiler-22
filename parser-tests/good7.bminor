@@ -1,0 +1,10 @@
+main: function integer () = {
+    for (i=2; i=3; i=4){
+        if (i> 2){
+            return 2;
+}
+    else if (i<2){
+        exit(1);
+    }
+}
+}
