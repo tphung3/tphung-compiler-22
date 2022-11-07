@@ -105,7 +105,7 @@ global_decl: global_var_decl {$$ = $1;}
     | global_func_decl {$$ = $1;};
 
 /* GLOBAL VARIABLE DECLARATIONS */
-global_var_decl: identifier TOKEN_COLON global_var_type global_var_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0);};
+global_var_decl: identifier TOKEN_COLON global_var_type global_var_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0, 0);};
 
 identifier: TOKEN_IDENTIFIER {$$ = expr_create_name(strdup(yytext));}
 
@@ -129,13 +129,13 @@ literal: TOKEN_INTEGER_LITERAL {$$ = expr_create_integer_literal(atoi(strdup(yyt
     | TOKEN_TRUE {$$ = expr_create_boolean_literal(1);};
 
 /* GLOBAL ARRAY DECLARATIONS */
-global_array_decl: identifier TOKEN_COLON expr_array_type_list global_array_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0);};
+global_array_decl: identifier TOKEN_COLON expr_array_type_list global_array_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0, 0);};
 
 global_array_decl_optional: TOKEN_ASSIGNMENT expr_array_literal TOKEN_SEMICOLON {$$ = $2;}
     | TOKEN_SEMICOLON {$$ = 0;};
 
 /* GLOBAL FUNCTION DECLARATIONS */
-global_func_decl: identifier TOKEN_COLON global_function_type global_func_decl_optional {$$ = decl_create((char*) $1->name, $3, 0, $4, 0);};
+global_func_decl: identifier TOKEN_COLON global_function_type global_func_decl_optional {$$ = decl_create((char*) $1->name, $3, 0, $4, 0, 0);};
 
 global_function_type: TOKEN_FUNCTION function_return_type TOKEN_OPEN_PARENTHESIS global_function_argument_list_w_empty TOKEN_CLOSE_PARENTHESIS {$$ = type_create(TYPE_FUNCTION, $2, $4, 0);};
 
@@ -299,14 +299,14 @@ stmt_list: stmt stmt_list {$1->next = $2; $$ = $1;}
 local_decl: local_var_decl {$$ = $1;}
     | local_array_decl {$$ = $1;};
 
-local_var_decl: identifier TOKEN_COLON global_var_type local_var_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0);};
+local_var_decl: identifier TOKEN_COLON global_var_type local_var_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0, 0);};
 
 local_var_decl_optional: TOKEN_ASSIGNMENT local_var_initializer TOKEN_SEMICOLON {$$ = $2;}
     | TOKEN_SEMICOLON {$$ = 0;};
 
 local_var_initializer: expr {$$ = $1;};
 
-local_array_decl: identifier TOKEN_COLON expr_array_type_list local_array_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0);};
+local_array_decl: identifier TOKEN_COLON expr_array_type_list local_array_decl_optional {$$ = decl_create((char*) $1->name, $3, $4, 0, 0, 0);};
 
 expr_array_type_list: expr_array_type expr_array_type_list {$$ = type_create(TYPE_ARRAY, $2, 0, $1);}
     | expr_array_type global_var_type {$$ = type_create(TYPE_ARRAY, $2, 0, $1);};

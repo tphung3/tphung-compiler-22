@@ -413,3 +413,29 @@ void unary_post_operator_print(struct expr* e, char* op)
     
     return;
 }
+
+void expr_resolve(struct expr* e)
+{
+    if (!e)
+        return;
+
+    if (e->kind == EXPR_NAME)
+    {
+        struct symbol* s;
+        s = scope_lookup(e->name);
+        if (!s)
+        {
+            fprintf(stderr, "variable named %s isn't declared anywhere\n", e->name);
+        }
+        else
+        {
+            e->symbol = s;
+        }
+    }
+    else
+    {
+        expr_resolve(e->left);
+        expr_resolve(e->mid);
+        expr_resolve(e->right);
+    }
+}

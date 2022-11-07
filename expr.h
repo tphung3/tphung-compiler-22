@@ -2,6 +2,7 @@
 #define EXPR_H
 
 #include "symbol.h"
+#include "scope.h"
 
 typedef enum {
     EXPR_GROUPING = 0,
@@ -67,4 +68,6 @@ void binary_operator_print(struct expr* s, char* op);
 void unary_pre_operator_print(struct expr* e, char* op);
 
 void unary_post_operator_print(struct expr* e, char* op);
+
+void expr_resolve(struct expr* e);
 #endif
