@@ -31,11 +31,27 @@ int parse_cmd(int argc, char **argv)
     {
         return pretty_printer(*(argv + 2));
     }
+    else if (!strncmp(*(argv + 1), "-resolve", 8) && argc == 3)
+    {
+        return AST_resolve(*(argv + 2));
+    }
     else
     {
         fprintf(stderr, "Invalid command-line arguments.\n");
         return 1;
     }
+}
+
+int AST_resolve(char *fname)
+{
+    yyin = fopen(fname, "r");
+    if (yyparse() == 0)
+    {
+        decl_resolve(parser_result);
+        return 0;
+    }
+    else
+        return 1;
 }
 
 int pretty_printer(char *fname)

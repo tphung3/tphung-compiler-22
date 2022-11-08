@@ -2,6 +2,7 @@
 #define SCOPE_H
 
 #include "hash_table.h"
+#include "symbol.h"
 
 #define MAX_SCOPES 127
 #define SCOPE_RATE 2

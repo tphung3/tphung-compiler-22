@@ -1,7 +1,11 @@
-all: bminor-printer
+all: bminor-resolve
+
+bminor-resolve: parser.o scanner.o bminor.o token_map.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
+	gcc -g -o bminor scanner.o bminor.o parser.o token_map.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
+
 
 bminor-printer: parser.o scanner.o bminor.o token_map.o decl.o expr.o param_list.o stmt.o type.o
-	gcc -g -o bminor scanner.o bminor.o parser.o token_map.o decl.o expr.o param_list.o stmt.o type.o 
+	gcc -g -o bminor scanner.o bminor.o parser.o token_map.o decl.o expr.o param_list.o stmt.o type.o
 
 bminor-parser: parser.o scanner.o bminor.o token_map.o decl.o expr.o param_list.o stmt.o type.o
 	gcc -g -o bminor scanner.o bminor.o parser.o token_map.o decl.o expr.o param_list.o stmt.o type.o
@@ -32,6 +36,14 @@ stmt.o: stmt.c
 type.o: type.c
 	gcc -g -c type.c
 
+scope.o: scope.c
+	gcc -g -c scope.c
+
+symbol.o: symbol.c
+	gcc -g -c symbol.c
+
+hash_table.o: hash_table.c
+	gcc -g -c hash_table.c
 
 scanner.o:	scanner.c
 	gcc -g -c scanner.c
@@ -46,7 +58,7 @@ token_map.o:
 	gcc -g -c token_map.c
 
 clean:
-	rm bminor bminor.o scanner.c scanner.o token_map.o parser.c token.h parser.output parser.o decl.o expr.o param_list.o stmt.o type.o
+	rm bminor bminor.o scanner.c scanner.o token_map.o parser.c token.h parser.output parser.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
 
 sgood:
 	./bminor -scan good_test.bminor

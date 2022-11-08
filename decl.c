@@ -51,17 +51,24 @@ void decl_resolve(struct decl* d)
 
     if (scope_lookup_current(d->name))
     {
-        fprintf(stderr, "Variable named %s is already declared in the current scope of level %d\n", d->name, scope_level());         
+        fprintf(stderr, "Variable named %s is already declared in the current scope of level %d\n", d->name, scope_level());
+        decl_resolve(d->next);
+        return;
     }
     
     symbol_t kind = scope_level() > 1 ? SYMBOL_LOCAL : SYMBOL_GLOBAL;
     struct symbol* s = symbol_create(kind, d->type, d->name, 0);
     scope_bind(d->name, s);
 
+    if (d->value)
+    {
+        expr_resolve(d->value);
+    }
+
     if (d->code)
     {
         scope_enter();
-        param_list_resolve(d->type->params);
+        param_list_resolve(d->type->params, 1);
         stmt_resolve(d->code);        
         scope_exit();
     }

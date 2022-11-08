@@ -101,3 +101,42 @@ void stmt_print(struct stmt* s, int indent)
     stmt_print(s->next, indent);
     return;
 }
+
+void stmt_resolve(struct stmt* s)
+{
+    if (!s)
+        return;
+
+    switch (s->kind)
+    {
+        case STMT_DECL:
+            decl_resolve(s->decl);
+            break;
+        case STMT_EXPR:
+            expr_resolve(s->expr);
+            break;
+        case STMT_IF_ELSE:
+            expr_resolve(s->expr);
+            stmt_resolve(s->body);
+            stmt_resolve(s->else_body);
+            break;
+        case STMT_FOR:
+            expr_resolve(s->init_expr);
+            expr_resolve(s->expr);
+            expr_resolve(s->next_expr);
+            stmt_resolve(s->body);
+            break;
+        case STMT_PRINT:
+            expr_resolve(s->expr);
+            break;
+        case STMT_RETURN:
+            expr_resolve(s->expr);
+            break;
+        case STMT_BLOCK:
+            scope_enter();
+            stmt_resolve(s->body);
+            scope_exit();
+            break;
+    }
+    stmt_resolve(s->next);
+}
