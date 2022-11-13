@@ -5,8 +5,6 @@ z: array [1] integer;
 
 zz: array [1] array [1] integer;
 
-zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
-
 main:function void ()=
 {
     yy: array [1] array [1] integer;
@@ -18,11 +16,6 @@ main:function void ()=
         print "haha";
     zz[0][0] = 2;
     yy = zz;
-    if ('a' == 'c')
-        if ("a" == "c")
-            print "noice";
-        print 'h';
-    
 }
 	
 

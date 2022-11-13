@@ -7,6 +7,8 @@ zz: array [1] array [1] integer;
 
 zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
 
+f1: function integer (a: integer, b: integer);
+
 main:function void ()=
 {
     yy: array [1] array [1] integer;
@@ -22,7 +24,21 @@ main:function void ()=
         if ("a" == "c")
             print "noice";
         print 'h';
-    
+    if (zzz[1][0])
+        return;    
+}
+
+f1: function integer (a: integer, b: integer) = 
+{
+    return a^b;
 }
 	
-
+f: function auto () =
+{
+    if (zzz[1][1])
+        return 1;
+    if (f() > 2)
+        return 3;
+    else
+        return f1(2, 3);
+}

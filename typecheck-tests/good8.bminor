@@ -22,7 +22,14 @@ main:function void ()=
         if ("a" == "c")
             print "noice";
         print 'h';
-    
+    if (zzz[1][0])
+        return;    
 }
 	
-
+f: function auto () =
+{
+    if (zzz[1][1])
+        return 1;
+    if (f() > 2)
+        return 3;
+}

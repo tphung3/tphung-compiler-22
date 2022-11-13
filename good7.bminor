@@ -7,9 +7,13 @@ zz: array [1] array [1] integer;
 
 zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
 
+zzzz: array [2] array [1] auto;
+
 main:function void ()=
 {
     yy: array [1] array [1] integer;
+    zxcv: auto;
+    zxcv = "hohoho";
 	x:integer = y * 10 + 15 - 4;
     z[0] = 1;
     if (1 < x)
@@ -22,7 +26,13 @@ main:function void ()=
         if ("a" == "c")
             print "noice";
         print 'h';
-    
+    if (zzz[1][0])
+        return;    
 }
 	
-
+f: function auto () =
+{
+    zzzz[1][0] = 'c';
+    if (zzz[1][1])
+        return 1;
+}

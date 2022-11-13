@@ -187,7 +187,7 @@ void stmt_typecheck(struct stmt* s, struct symbol* sym)
             if (!s->expr)
             {
                 sym->type->subtype->kind = TYPE_VOID;               
-                printf("function %s that returns type auto now returns type void\n", sym->name);
+                printf("notice: function %s that returns type auto now returns type void\n", sym->name);
             }
             else
             {
@@ -202,22 +202,60 @@ void stmt_typecheck(struct stmt* s, struct symbol* sym)
                 }
                 else
                 {
-                    printf("function %s that returns type auto now returns type ", sym->name);
-                    type_print(tmp_t);
-                    printf("\n");
+                    if (tmp_t->kind == TYPE_ARRAY || tmp_t->kind == TYPE_FUNCTION || tmp_t->kind == TYPE_AUTO)
+                    {
+                        printf("type error: cannot return expression ");
+                        expr_print(s->expr);
+                        printf(" of type ");
+                        type_print(tmp_t);
+                        printf("\n");
+                        typecheck_fail = 1;
+                    }
+                    else
+                    {
+                        sym->type->subtype->kind = tmp_t->kind;
+                        printf("notice: function %s that returns type auto now returns type ", sym->name);
+                        type_print(tmp_t);
+                        printf("\n");
+                    }
                 }
             }
         }
-        if (!type_equals(expr_typecheck(s->expr), sym->type->subtype))
+        if (s->expr)
         {
-            printf("type error: function %s of return type ", sym->name);
-            type_print(sym->type->subtype);
-            printf(" cannot have a return statement return expression ");
-            expr_print(s->expr);
-            printf(" of type ");
-            type_print(expr_typecheck(s->expr));
-            printf("\n");
-            typecheck_fail = 1;
+            struct type* tmp_t = expr_typecheck(s->expr);
+            if (!type_equals(tmp_t, sym->type->subtype))
+            {
+                printf("type error: function %s of return type ", sym->name);
+                type_print(sym->type->subtype);
+                printf(" cannot have a return statement return expression ");
+                expr_print(s->expr);
+                printf(" of type ");
+                type_print(tmp_t);
+                printf("\n");
+                typecheck_fail = 1;
+            }
+            else if (tmp_t->kind == TYPE_ARRAY || tmp_t->kind == TYPE_FUNCTION || tmp_t->kind == TYPE_AUTO)
+            {
+                printf("type error: cannot return expression ");
+                expr_print(s->expr);
+                printf(" of type ");
+                type_print(tmp_t);
+                printf("\n");
+                typecheck_fail = 1;
+            }
+        }
+        else
+        {
+            if (sym->type->subtype->kind == TYPE_VOID)
+                ;
+            else
+            {
+                printf("type error: function %s of return type ", sym->name);
+                type_print(sym->type->subtype);
+                printf(" cannot have a return statement return nothing\n");
+                typecheck_fail = 1;
+            }
         }
         break;
     case STMT_BLOCK:

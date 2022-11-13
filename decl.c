@@ -249,32 +249,56 @@ void decl_typecheck(struct decl* d)
             {
                 if (d->value)
                 {
-                    t = expr_typecheck(d->value);
-
-                    if (d->symbol->type->kind == TYPE_AUTO) //set type of variable if it is auto
+                    if (d->value->kind != EXPR_INTEGER_LITERAL && d->value->kind != EXPR_STRING_LITERAL && d->value->kind != EXPR_CHAR_LITERAL && d->value->kind != EXPR_BOOLEAN_LITERAL)
                     {
-                        d->symbol->type->kind = t->kind;
-                    }
-                    if (type_equals(d->symbol->type, t))
-                    {
-                        //if type is equal, move on to next decl
-                        ;
-                    }
-                    else if (d->symbol->type->kind == TYPE_AUTO)
-                    {
-                        d->symbol->type = t;
+                        printf("type error: global variable %s must be initialized with constants\n", d->name);
+                        typecheck_fail = 1;
                     }
                     else
                     {
-                        printf("type error: cannot define global variable %s of type ", d->name);
-                        type_print(d->symbol->type);
-                        printf(" to expression ");
-                        typecheck_fail = 1;
-                        expr_print(d->value);
-                        printf(" of type ");
-                        type_print(t);
-                        printf("\n");
+                        t = expr_typecheck(d->value);
+
+                        if (d->symbol->type->kind == TYPE_AUTO) //set type of variable if it is auto
+                        {
+                            if (t->kind == TYPE_VOID || t->kind == TYPE_ARRAY || t->kind == TYPE_FUNCTION || t->kind == TYPE_AUTO)
+                            {
+                                printf("type error: cannot assign local variable %s of type auto to expression ", d->name);
+                                expr_print(d->value);
+                                printf(" of type ");
+                                type_print(t);
+                                printf("\n");
+                                typecheck_fail = 1;
+                            }
+                            else
+                            {
+                                printf("notice: global variable %s had type auto and now has type ", d->name);
+                                d->symbol->type->kind = t->kind;
+                                type_print(d->symbol->type);
+                                printf("\n");
+                            }
+                        }
+                        if (type_equals(d->symbol->type, t))
+                        {
+                            //if type is equal, move on to next decl
+                            ;
+                        }
+                        else if (d->symbol->type->kind == TYPE_AUTO)
+                        {
+                            d->symbol->type = t;
+                        }
+                        else
+                        {
+                            printf("type error: cannot define global variable %s of type ", d->name);
+                            type_print(d->symbol->type);
+                            printf(" to expression ");
+                            typecheck_fail = 1;
+                            expr_print(d->value);
+                            printf(" of type ");
+                            type_print(t);
+                            printf("\n");
+                        }                   
                     }
+
                 }    
             }
             else
@@ -324,7 +348,22 @@ void decl_typecheck(struct decl* d)
                     }
                     else if (d->symbol->type->kind == TYPE_AUTO)
                     {
-                        d->symbol->type = t;
+                        if (t->kind == TYPE_VOID || t->kind == TYPE_ARRAY || t->kind == TYPE_FUNCTION || t->kind == TYPE_AUTO)
+                        {
+                            printf("type error: cannot assign local variable %s of type auto to expression ", d->name);
+                            expr_print(d->value);
+                            printf(" of type ");
+                            type_print(t);
+                            printf("\n");
+                            typecheck_fail = 1;
+                        }
+                        else
+                        {    
+                            printf("notice: local variable %s had type auto and now has type ", d->name);
+                            d->symbol->type->kind = t->kind;
+                            type_print(d->symbol->type);
+                            printf("\n");
+                        }
                     }
                     else
                     {

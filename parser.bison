@@ -140,7 +140,8 @@ global_func_decl: identifier TOKEN_COLON global_function_type global_func_decl_o
 global_function_type: TOKEN_FUNCTION function_return_type TOKEN_OPEN_PARENTHESIS global_function_argument_list_w_empty TOKEN_CLOSE_PARENTHESIS {$$ = type_create(TYPE_FUNCTION, $2, $4, 0);};
 
 function_return_type: atomic_type {$$ = $1;}
-    | TOKEN_VOID {$$ = type_create(TYPE_VOID, 0, 0, 0);};
+    | TOKEN_VOID {$$ = type_create(TYPE_VOID, 0, 0, 0);}
+    | TOKEN_AUTO {$$ = type_create(TYPE_AUTO, 0, 0, 0);};
 
 global_function_argument_list_w_empty: global_function_argument_list {$$ = $1;}
     | /* Nothing */ {$$ = 0;};
@@ -154,7 +155,8 @@ global_argument_type: loose_array_type_list {$$ = $1;}
     | atomic_type {$$ = $1;};
 
 loose_array_type_list: loose_array_type loose_array_type_list {$1->subtype = $2; $$ = $1;}
-    | loose_array_type atomic_type {$1->subtype = $2; $$ = $1;};
+    | loose_array_type atomic_type {$1->subtype = $2; $$ = $1;}
+    | loose_array_type TOKEN_AUTO {$1->subtype = type_create(TYPE_AUTO, 0, 0, 0); $$ = $1;};
 
 loose_array_type: TOKEN_ARRAY TOKEN_OPEN_BRACKET TOKEN_CLOSE_BRACKET {$$ = type_create(TYPE_ARRAY, 0, 0, 0);};
 

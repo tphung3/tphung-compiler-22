@@ -1,0 +1,17 @@
+a: auto = 'c';
+
+f: function void () = 
+{
+    z: array [2] integer;
+    a: auto = 2;
+    z[1] = 2;
+    for  (;;)
+    {
+        return;
+    }
+    ax: auto;
+    bx: auto = 3;
+    ax = bx;
+    aaaa: integer = f;
+    xxx: boolean = 3 && true;
+}

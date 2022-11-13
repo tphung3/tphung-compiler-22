@@ -22,7 +22,8 @@ main:function void ()=
         if ("a" == "c")
             print "noice";
         print 'h';
-    
+    if (zzz[1][0])
+        return;    
 }
 	
 

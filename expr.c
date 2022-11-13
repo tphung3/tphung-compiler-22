@@ -799,12 +799,39 @@ struct type* expr_typecheck(struct expr* e)
                     {
                         if (rt->kind == TYPE_BOOLEAN || rt->kind == TYPE_CHARACTER || rt->kind == TYPE_INTEGER || rt->kind == TYPE_STRING)
                         {
-                            e->left->symbol->type->kind = rt->kind;
+                            struct expr* tmp_e = e;
+                            while (e->left)
+                            {
+                                e = e->left;
+                            }
+                            if (e->kind == EXPR_NAME)
+                            {
+                                printf("notice: variable %s of type ", e->name);
+                                type_print(e->symbol->type);
+                                if (e->symbol->type->kind == TYPE_ARRAY)
+                                {
+                                    set_atomic_type_array(e->symbol->type, rt->kind);
+                                }
+                                else
+                                {
+                                    e->symbol->type->kind = rt->kind;
+                                }
+                                printf(" is now of type ");
+                                type_print(e->symbol->type);
+                                printf("\n");
+                            }
+                            else
+                            {
+                                printf("type error: left most expr is not a name\n");
+                                typecheck_fail = 1;
+                            }
                             return type_copy(rt);
                         }
                         else
                         {
-                            printf("type error: cannot assign a variable to type ");
+                            printf("type error: cannot assign expression ");
+                            expr_print(e->left);
+                            printf(" to type ");
                             type_print(rt);
                             printf("\n");
                             typecheck_fail = 1;
@@ -1178,7 +1205,7 @@ int expr_global_array_check_valid(struct expr* e, struct symbol* t)
     else
     {
         typecheck_fail = 1;
-        printf("expression ");
+        printf("type error: expression ");
         expr_print(e);
         printf(" is not an EXPR_ARRAY_LITERAL\n");
         return 0;

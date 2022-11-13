@@ -1,0 +1,9 @@
+f: function void () = 
+{
+    z: array [2] integer;
+    z[1] = 2;
+    for  (;;)
+    {
+        return 1;
+    }
+}
