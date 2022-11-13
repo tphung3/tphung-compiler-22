@@ -70,4 +70,18 @@ void unary_pre_operator_print(struct expr* e, char* op);
 void unary_post_operator_print(struct expr* e, char* op);
 
 void expr_resolve(struct expr* e);
+
+struct expr* expr_copy(struct expr* e);
+
+struct type* expr_typecheck(struct expr* e);
+
+//1 if valid, 0 if not
+int expr_global_array_check_valid(struct expr* e, struct symbol* t);
+
+struct type* expr_typecheck_unary_int_operators(struct type* lt, char* operator_name);
+struct type* expr_typecheck_binary_int_operators(struct type* lt, struct type* rt, char* operator_name);
+struct type* expr_typecheck_binary_int_return_boolean_operators(struct type* lt, struct type* rt, char* operator_name);
+struct type* expr_typecheck_binary_boolean_return_boolean_operators(struct type* lt, struct type* rt, char* operator_name);
+
+struct type* expr_typecheck_binary_equality_operators(struct type*, struct type*, char*);
 #endif

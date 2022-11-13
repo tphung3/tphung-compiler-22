@@ -1,4 +1,7 @@
-all: bminor-resolve
+all: bminor-typecheck
+
+bminor-typecheck: parser.o scanner.o bminor.o token_map.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
+	gcc -g -o bminor scanner.o bminor.o parser.o token_map.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
 
 bminor-resolve: parser.o scanner.o bminor.o token_map.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
 	gcc -g -o bminor scanner.o bminor.o parser.o token_map.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
@@ -58,7 +61,7 @@ token_map.o:
 	gcc -g -c token_map.c
 
 clean:
-	rm bminor bminor.o scanner.c scanner.o token_map.o parser.c token.h parser.output parser.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
+	rm -f bminor bminor.o scanner.c scanner.o token_map.o parser.c token.h parser.output parser.o decl.o expr.o param_list.o stmt.o type.o scope.o symbol.o hash_table.o
 
 sgood:
 	./bminor -scan good_test.bminor

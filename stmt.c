@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include "stmt.h"
 
+extern int resolve_fail;
+extern int typecheck_fail;
+
 struct stmt* stmt_create(stmt_t kind, 
                         struct decl *decl, 
                         struct expr *init_expr, 
@@ -102,7 +105,7 @@ void stmt_print(struct stmt* s, int indent)
     return;
 }
 
-void stmt_resolve(struct stmt* s)
+void stmt_resolve(struct stmt* s, int which)
 {
     if (!s)
         return;
@@ -110,21 +113,22 @@ void stmt_resolve(struct stmt* s)
     switch (s->kind)
     {
         case STMT_DECL:
-            decl_resolve(s->decl);
+            decl_resolve(s->decl, which);
+            ++which;
             break;
         case STMT_EXPR:
             expr_resolve(s->expr);
             break;
         case STMT_IF_ELSE:
             expr_resolve(s->expr);
-            stmt_resolve(s->body);
-            stmt_resolve(s->else_body);
+            stmt_resolve(s->body, 0);
+            stmt_resolve(s->else_body, 0);
             break;
         case STMT_FOR:
             expr_resolve(s->init_expr);
             expr_resolve(s->expr);
             expr_resolve(s->next_expr);
-            stmt_resolve(s->body);
+            stmt_resolve(s->body, 0);
             break;
         case STMT_PRINT:
             expr_resolve(s->expr);
@@ -134,9 +138,93 @@ void stmt_resolve(struct stmt* s)
             break;
         case STMT_BLOCK:
             scope_enter();
-            stmt_resolve(s->body);
+            stmt_resolve(s->body, 0);
             scope_exit();
             break;
     }
-    stmt_resolve(s->next);
+    stmt_resolve(s->next, which);
+}
+
+
+void stmt_typecheck(struct stmt* s, struct symbol* sym)
+{
+    if (!s)
+       return;
+
+    switch (s->kind)
+    {
+    case STMT_DECL:
+        decl_typecheck(s->decl);
+        break;
+    case STMT_EXPR:
+        expr_typecheck(s->expr);
+        break;
+    case STMT_IF_ELSE:
+        if (!type_equals(expr_typecheck(s->expr), type_create(TYPE_BOOLEAN, 0, 0, 0)))
+        {
+            printf("type error: expression ");
+            expr_print(s->expr);
+            printf(" of type ");
+            type_print(expr_typecheck(s->expr)); 
+            printf(" is not of type boolean in an if else statement\n");
+            typecheck_fail = 1;
+        }
+        stmt_typecheck(s->body, sym);
+        stmt_typecheck(s->else_body, sym);
+        break;
+    case STMT_FOR:
+        expr_typecheck(s->init_expr);
+        expr_typecheck(s->expr);
+        expr_typecheck(s->next_expr);
+        stmt_typecheck(s->body, sym);
+        break;
+    case STMT_PRINT:
+        expr_typecheck(s->expr);
+        break;
+    case STMT_RETURN:
+        if (sym->type->subtype->kind == TYPE_AUTO)
+        {
+            if (!s->expr)
+            {
+                sym->type->subtype->kind = TYPE_VOID;               
+                printf("function %s that returns type auto now returns type void\n", sym->name);
+            }
+            else
+            {
+                struct type* tmp_t = expr_typecheck(s->expr);
+                if (tmp_t->kind == TYPE_ARRAY || tmp_t->kind == TYPE_FUNCTION)
+                {
+                    printf("type error: function %s cannot have a return statement that has a return type ", sym->name);
+                    type_print(tmp_t);
+                    printf(" , so setting its return type to TYPE_INTEGER instead\n");
+                    sym->type->subtype->kind = TYPE_INTEGER;
+                    typecheck_fail = 1;
+                }
+                else
+                {
+                    printf("function %s that returns type auto now returns type ", sym->name);
+                    type_print(tmp_t);
+                    printf("\n");
+                }
+            }
+        }
+        if (!type_equals(expr_typecheck(s->expr), sym->type->subtype))
+        {
+            printf("type error: function %s of return type ", sym->name);
+            type_print(sym->type->subtype);
+            printf(" cannot have a return statement return expression ");
+            expr_print(s->expr);
+            printf(" of type ");
+            type_print(expr_typecheck(s->expr));
+            printf("\n");
+            typecheck_fail = 1;
+        }
+        break;
+    case STMT_BLOCK:
+        scope_enter();
+        stmt_typecheck(s->body, sym);
+        scope_exit();
+        break;
+    } 
+    stmt_typecheck(s->next, sym);
 }

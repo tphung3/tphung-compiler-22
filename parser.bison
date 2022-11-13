@@ -89,7 +89,7 @@ extern char *yytext;
 %type <decl> program global_decl_list global_decl global_var_decl global_array_decl global_func_decl local_decl local_var_decl local_array_decl
 %type <stmt> stmt if_only others block stmt_list return print for_header global_func_decl_optional
 %type <type> global_var_type atomic_type global_function_type function_return_type global_argument_type loose_array_type_list loose_array_type expr_array_type_list
-%type <expr> global_var_decl_optional global_var_initializer literal global_array_decl_optional expr_array_element_list expr expr_lv0_0 assignment_expr expr_lv_0_1 ternary_expr expr_lv_1_0 logical_or_expr expr_lv_2_0 logical_and_expr expr_lv_3_0 less_expr expr_lv_3_1 less_equal_expr expr_lv_3_2 greater_expr expr_lv_3_3 greater_equal_expr expr_lv_3_4 equal_expr expr_lv_3_5 not_equal_expr expr_lv_4_0 add_expr expr_lv_4_1 sub_expr expr_lv_5_0 mult_expr expr_lv_5_1 div_expr expr_lv_5_2 remainder_expr expr_lv_6_0 exponent_expr expr_lv_7_0 expr_lv_7_1 expr_lv_8_0 expr_lv_8_1 expr_lv_9_0 grouping_expr expr_lv_9_1 arr_sub_expr arr_index_list expr_lv_9_2 func_call_expr expr_list_empty expr_list expr_lv_10_0 local_var_decl_optional local_var_initializer expr_array_type local_array_decl_optional expr_array_element if_else_condition empty_expr_after_open_paren empty_expr_after_semi expr_array_literal identifier
+%type <expr> global_var_decl_optional global_var_initializer literal global_array_decl_optional expr_array_element_list expr expr_lv0_0 assignment_expr expr_lv_0_1 ternary_expr expr_lv_1_0 logical_or_expr expr_lv_2_0 logical_and_expr expr_lv_3_0 less_expr expr_lv_3_1 less_equal_expr expr_lv_3_2 greater_expr expr_lv_3_3 greater_equal_expr expr_lv_3_4 equal_expr expr_lv_3_5 not_equal_expr expr_lv_4_0 add_expr expr_lv_4_1 sub_expr expr_lv_5_0 mult_expr expr_lv_5_1 div_expr expr_lv_5_2 remainder_expr expr_lv_6_0 exponent_expr expr_lv_7_0 expr_lv_7_1 expr_lv_8_0 expr_lv_8_1 expr_lv_9_0 grouping_expr expr_lv_9_1 arr_sub_expr expr_lv_9_2 func_call_expr expr_list_empty expr_list expr_lv_10_0 local_var_decl_optional local_var_initializer expr_array_type local_array_decl_optional expr_array_element if_else_condition empty_expr_after_open_paren empty_expr_after_semi expr_array_literal identifier
 %type <param_list> global_function_argument_list_w_empty global_function_argument_list global_function_argument
 
 %%
@@ -148,7 +148,7 @@ global_function_argument_list_w_empty: global_function_argument_list {$$ = $1;}
 global_function_argument_list: global_function_argument TOKEN_COMMA global_function_argument_list {$1->next = $3; $$ = $1;}
     | global_function_argument {$$ = $1;};
 
-global_function_argument: identifier TOKEN_COLON global_argument_type {$$ = param_list_create((char*) $1->name, $3, 0);};
+global_function_argument: identifier TOKEN_COLON global_argument_type {$$ = param_list_create((char*) $1->name, $3, 0, 0);};
 
 global_argument_type: loose_array_type_list {$$ = $1;}
     | atomic_type {$$ = $1;};
@@ -264,11 +264,8 @@ grouping_expr: TOKEN_OPEN_PARENTHESIS expr TOKEN_CLOSE_PARENTHESIS {$$ = expr_cr
 
 expr_lv_9_1: arr_sub_expr {$$ = $1;};
 
-arr_sub_expr: identifier arr_index_list {$$ = expr_create(EXPR_SUBSCRIPT, $1, $2, 0);}
+arr_sub_expr: arr_sub_expr TOKEN_OPEN_BRACKET expr TOKEN_CLOSE_BRACKET {$$ = expr_create(EXPR_SUBSCRIPT, $1, $3, 0);}
     | expr_lv_9_2 {$$ = $1;};
-
-arr_index_list: TOKEN_OPEN_BRACKET expr TOKEN_CLOSE_BRACKET arr_index_list {$$ = expr_create(EXPR_SUBSCRIPT, $2, $4, 0);}
-    | TOKEN_OPEN_BRACKET expr TOKEN_CLOSE_BRACKET {$$ = $2;};
 
 expr_lv_9_2: func_call_expr {$$ = $1;};
 

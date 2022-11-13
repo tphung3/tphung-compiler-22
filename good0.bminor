@@ -8,10 +8,6 @@ main:function void ()=
 {
 	x:integer = y * 10 + 15 - 4;
     z[0] = 1;
-    if (1 < x)
-        return;
-    else
-        print "haha";
 }
 	
 

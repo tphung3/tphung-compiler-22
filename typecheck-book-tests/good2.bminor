@@ -6,6 +6,7 @@ main:function void ()=
 {
 	x:integer = y * 10 + 15 - test();
 }
+z: integer = 3;
 test:function integer () =
 {
 	return 5;

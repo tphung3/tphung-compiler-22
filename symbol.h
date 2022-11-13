@@ -14,9 +14,13 @@ struct symbol {
 	symbol_t kind;
 	struct type *type;
 	char *name;
-	int which;
+	int which;  //for locals and params, their positions. for functions, whether it is defined (-1) or not(-2: only declared)
 };
 
 struct symbol * symbol_create( symbol_t kind, struct type *type, char *name, int which);
+
+struct symbol* symbol_copy(struct symbol* s);
+
+void symbol_delete(struct symbol* s);
 
 #endif

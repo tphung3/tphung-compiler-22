@@ -16,6 +16,9 @@ extern struct decl* parser_result;
 extern const char * token_map[];
 extern const int token_map_len;
 
+int resolve_fail = 0;
+int typecheck_fail = 0;
+
 /* Parse command line arguments and act accordingly */
 int parse_cmd(int argc, char **argv)
 {
@@ -35,6 +38,10 @@ int parse_cmd(int argc, char **argv)
     {
         return AST_resolve(*(argv + 2));
     }
+    else if (!strncmp(*(argv + 1), "-typecheck", 10) && argc == 3)
+    {
+        return AST_typecheck(*(argv + 2));
+    }
     else
     {
         fprintf(stderr, "Invalid command-line arguments.\n");
@@ -42,12 +49,31 @@ int parse_cmd(int argc, char **argv)
     }
 }
 
+int AST_typecheck(char* fname)
+{
+    yyin = fopen(fname, "r");
+    if (yyparse() == 0)
+    {
+        decl_resolve(parser_result, 0);
+        if (resolve_fail)
+            return 1;
+        decl_typecheck(parser_result);
+        if (typecheck_fail)
+            return 1;
+        return 0;
+    }
+    else
+        return 1;
+}
+
 int AST_resolve(char *fname)
 {
     yyin = fopen(fname, "r");
     if (yyparse() == 0)
     {
-        decl_resolve(parser_result);
+        decl_resolve(parser_result, 0);
+        if (resolve_fail)
+            return 1;
         return 0;
     }
     else
