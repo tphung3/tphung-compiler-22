@@ -1,0 +1,849 @@
+=====HIDDEN TESTS=====
+====Good Tests====
+===[good1.bminor Input]===
+/* Correct: x used but not defined. */
+
+x: integer = 10;
+
+===[good1.bminor Output]===
+Success!
+
+x is declared and stored as global x
+
+
+return code: 0
+
+
+===[good10.bminor Input]===
+/* Correct: Many variables to resolve. */
+
+D: function integer() = {
+        d1: integer = 5;
+        d2: integer = d1 + 1; //6
+        {
+                d3: integer = 9;
+                d2: integer = d3 + d1 - 3; //11
+                d4: integer = -1;
+                d2 = d2 + d3; //20
+                print d2 - d4, "\n";
+        }
+        d4: integer = 16;
+        print d2 - d4, '\n';
+        {
+                d4: integer = -2;
+                d3: integer = 1000;
+                print d3 + 10;
+                print "\n";
+                print d4;
+                print '\n';
+        }
+        print d4;
+        return 3;
+}
+
+main: function integer () = {
+        return D();
+}
+
+===[good10.bminor Output]===
+Success!
+
+D is declared and stored as global D
+d1 is declared and stored as local 0
+d2 is declared and stored as local 1
+d1 resolves to local 0
+d3 is declared and stored as local 0
+d2 is declared and stored as local 1
+d3 resolves to local 0
+d1 resolves to local 0
+d4 is declared and stored as local 2
+d2 resolves to local 1
+d2 resolves to local 1
+d3 resolves to local 0
+d2 resolves to local 1
+d4 resolves to local 2
+d4 is declared and stored as local 2
+d2 resolves to local 1
+d4 resolves to local 2
+d4 is declared and stored as local 0
+d3 is declared and stored as local 1
+d3 resolves to local 1
+d4 resolves to local 0
+d4 resolves to local 2
+main is declared and stored as global main
+D resolves to global D
+
+
+return code: 0
+
+
+===[good2.bminor Input]===
+/* Correct: redefining a name at the local scope. */
+
+x: integer = 10;
+
+f: function void () = {
+     x: integer = 20;
+     print x, "\n";
+}
+
+
+===[good2.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+x is declared and stored as local 0
+x resolves to local 0
+
+
+return code: 0
+
+
+===[good3.bminor Input]===
+/* Correct: redefining a name at the local scope. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer ) = {
+     x: integer = 20;
+     if(a<b) {
+          x: integer = 30;
+          print x, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+
+
+===[good3.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+x is declared and stored as local 0
+a resolves to param 0
+b resolves to param 1
+x is declared and stored as local 0
+x resolves to local 0
+
+
+return code: 0
+
+
+===[good4.bminor Input]===
+/* Correct: Accessing names in different scopes. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+
+}
+
+
+===[good4.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+z resolves to local 0
+
+
+return code: 0
+
+
+===[good5.bminor Input]===
+/* Correct: f is called multiple times from main. */
+/* (Should resolve the expression before adding the decl of y. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = a * 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+main: function integer ( argc: integer, argv: array [] string ) = {
+     f(10,20);
+     f(40,30);
+}
+
+
+
+===[good5.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+a resolves to param 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+z resolves to local 0
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+f resolves to global f
+f resolves to global f
+
+
+return code: 0
+
+
+===[good6.bminor Input]===
+/* Correct: f is prototyped, then defined, then called. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer );
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = a * 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+main: function integer ( argc: integer, argv: array [] string ) = {
+     f(10,20);
+     f(40,30);
+}
+
+
+
+
+===[good6.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+f was declared as a function and is now defined with code
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+a resolves to param 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+z resolves to local 0
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+f resolves to global f
+f resolves to global f
+
+
+return code: 0
+
+
+===[good7.bminor Input]===
+/* Correct: f is prototyped, then called, then defined. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer );
+
+main: function integer ( argc: integer, argv: array [] string ) = {
+     f(10,20);
+     f(40,30);
+}
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = a * 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+
+
+===[good7.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+f resolves to global f
+f resolves to global f
+f was declared as a function and is now defined with code
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+a resolves to param 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+z resolves to local 0
+
+
+return code: 0
+
+
+===[good8.bminor Input]===
+/* Correct: Resolver should work all the way down the tree. */
+
+f: function void ( n:integer, s: string ) =
+{
+	i:integer;
+
+	for(i=0;i<n;i++) { 
+		if( i%2 == 0 ) {
+			print i, "is even\n";
+		} else {
+			print i, "is odd\n";
+		}
+	}
+
+	/* We can open a new scope with braces */
+	{
+		i: integer;
+		j: integer;
+		for(i=0;i<n;i++) {
+			for(j=0;j<n;j++) {
+				print i, ":", j, " -> ", i*j, " ", s, "\n";
+			}
+		}
+	}
+}
+
+===[good8.bminor Output]===
+Success!
+
+f is declared and stored as global f
+n is declared as a parameter with position 0
+s is declared as a parameter with position 1
+i is declared and stored as local 0
+i resolves to local 0
+i resolves to local 0
+n resolves to param 0
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+i is declared and stored as local 0
+j is declared and stored as local 1
+i resolves to local 0
+i resolves to local 0
+n resolves to param 0
+i resolves to local 0
+j resolves to local 1
+j resolves to local 1
+n resolves to param 0
+j resolves to local 1
+i resolves to local 0
+j resolves to local 1
+i resolves to local 0
+j resolves to local 1
+s resolves to param 1
+
+
+return code: 0
+
+
+===[good9.bminor Input]===
+/* Correct: Different functions can define variables with same params and locals. */
+
+x: integer = 10;
+
+f: function integer ( x: integer ) =
+{
+	y: integer = 20;
+	return x*y;
+}
+
+g: function void ( x: integer ) =
+{
+	y: integer = 30;
+	return x*y;
+}
+
+main: function integer ( argc: integer, argv: array [] string ) =
+{
+	return f(x) + g(x);
+}
+
+===[good9.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+x is declared as a parameter with position 0
+y is declared and stored as local 0
+x resolves to param 0
+y resolves to local 0
+g is declared and stored as global g
+x is declared as a parameter with position 0
+y is declared and stored as local 0
+x resolves to param 0
+y resolves to local 0
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+f resolves to global f
+x resolves to global x
+g resolves to global g
+x resolves to global x
+
+
+return code: 0
+
+
+===[good11.bminor Input]===
+/* Correct: Ternary works properly. */
+
+E: function integer() = {
+        e0: integer = 4;
+        e1: integer = 9;
+        e2: integer = 5;
+        e3: integer = 3;
+        e4: integer = e1 > e3 ? e0 : e2;
+        return e4;
+}
+
+main: function integer () = {
+        return E();
+}
+
+===[good11.bminor Output]===
+Success!
+
+E is declared and stored as global E
+e0 is declared and stored as local 0
+e1 is declared and stored as local 1
+e2 is declared and stored as local 2
+e3 is declared and stored as local 3
+e4 is declared and stored as local 4
+e1 resolves to local 1
+e3 resolves to local 3
+e0 resolves to local 0
+e2 resolves to local 2
+e4 resolves to local 4
+main is declared and stored as global main
+E resolves to global E
+
+
+return code: 0
+
+
+====Bad Tests====
+===[bad1.bminor Input]===
+/* Error: name already used in the global scope. */
+x: integer = 10;
+x: integer = 20;
+
+
+===[bad1.bminor Output]===
+Success!
+
+x is declared and stored as global x
+resolve error: x is already declared in the current scope of level 1
+
+
+return code: 1
+
+
+===[bad10.bminor Input]===
+/* Error: Function has the same name as a declared variable. */
+
+str: string = "hello";
+
+str: function string ( s: string ) = 
+{
+	return "goodbye";
+}
+
+
+===[bad10.bminor Output]===
+Success!
+
+str is declared and stored as global str
+resolve error: str is already declared in the current scope of level 1
+
+
+return code: 1
+
+
+===[bad2.bminor Input]===
+/* Error: Variable z went out of scope. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = 20;
+     if(a<b) {
+          z: integer = 30;
+	  print "a<b\n";
+     }
+     print x, " ", y, " ", z, "\n";
+}
+
+
+===[bad2.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+resolve error: z is not declared
+
+
+return code: 1
+
+
+===[bad3.bminor Input]===
+/* Error: Cannot refer to variable y in its own definition. */
+/* (Should resolve the expression before adding the decl of y. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = y * 20;
+     if(a<b) {
+          z: integer = 30;
+	  print "a<b\n";
+     } else {
+          print "a>=b\n";
+     }
+     print x, " ", y, " ", z, "\n";
+}
+
+
+===[bad3.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+y resolves to local 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+resolve error: z is not declared
+
+
+return code: 1
+
+
+===[bad4.bminor Input]===
+/* Error: f has multiple definitions. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = y * 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+f: function string ( s: string ) = {
+    print "hello";
+    return "goodbye";
+}
+
+
+===[bad4.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+y resolves to local 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+z resolves to local 0
+resolve error: f is a function already defined in the current scope of level 1
+
+
+return code: 1
+
+
+===[bad5.bminor Input]===
+/* Error: f is called prior to definition. */
+
+x: integer = 10;
+
+main: function integer ( argc: integer, argv: array [] string ) = {
+     f(10,20);
+     f(40,30);
+}
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = y * 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+
+
+===[bad5.bminor Output]===
+Success!
+
+x is declared and stored as global x
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+resolve error: f is not declared
+resolve error: f is not declared
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+y resolves to local 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+z resolves to local 0
+
+
+return code: 1
+
+
+===[bad6.bminor Input]===
+/* Error: g is not defined. */
+
+x: integer = 10;
+
+f: function void ( a: integer, b: integer ) = {
+     y: integer = y * 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+main: function integer ( argc: integer, argv: array [] string ) = {
+     f(10,20);
+     g(40,30);
+}
+
+
+===[bad6.bminor Output]===
+Success!
+
+x is declared and stored as global x
+f is declared and stored as global f
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+y is declared and stored as local 0
+y resolves to local 0
+a resolves to param 0
+b resolves to param 1
+z is declared and stored as local 0
+x resolves to global x
+y resolves to local 0
+z resolves to local 0
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+f resolves to global f
+resolve error: g is not declared
+
+
+return code: 1
+
+
+===[bad7.bminor Input]===
+/* Error: Two parameters have the same name */
+/* Also, b is not defined. */
+
+f: function void ( a: integer, a: integer ) = {
+     y: integer = y * 20;
+     if(a<b) {
+          z: integer = 30;
+          print x, " ", y, " ", z, "\n";
+     } else {
+          print "a>=b\n";
+     }
+}
+
+===[bad7.bminor Output]===
+Success!
+
+f is declared and stored as global f
+a is declared as a parameter with position 0
+y is declared and stored as local 0
+y resolves to local 0
+a resolves to param 0
+resolve error: b is not declared
+z is declared and stored as local 0
+resolve error: x is not declared
+y resolves to local 0
+z resolves to local 0
+
+resolve error: name a is already defined in the current scope
+
+return code: 1
+
+
+===[bad8.bminor Input]===
+/* Error: x not defined, deep down in the expression. */
+
+a: integer;
+
+f: function integer ( b: integer ) =
+{
+	c: integer;
+	for(c=0;c<b;c++) {
+		if(a<b) {
+			print a + b * (c / (a+x)), "\n"; 
+		}
+	}
+	return b;
+}
+
+===[bad8.bminor Output]===
+Success!
+
+a is declared and stored as global a
+f is declared and stored as global f
+b is declared as a parameter with position 0
+c is declared and stored as local 0
+c resolves to local 0
+c resolves to local 0
+b resolves to param 0
+c resolves to local 0
+a resolves to global a
+b resolves to param 0
+a resolves to global a
+b resolves to param 0
+c resolves to local 0
+a resolves to global a
+resolve error: x is not declared
+b resolves to param 0
+
+
+return code: 1
+
+
+===[bad9.bminor Input]===
+/* Error: x redefined after several intervening scopes. */
+
+a: integer;
+
+f: function integer ( b: integer ) =
+{
+	x: integer = 20;
+	{
+		i: integer;
+		for(i=0;i<x;i++) print i;
+	}
+	{
+		j: integer;
+		for(j=0;j<x;j++) print j;
+	}
+	x: integer = 30;
+
+	return x;
+}
+
+===[bad9.bminor Output]===
+Success!
+
+a is declared and stored as global a
+f is declared and stored as global f
+b is declared as a parameter with position 0
+x is declared and stored as local 0
+i is declared and stored as local 0
+i resolves to local 0
+i resolves to local 0
+x resolves to local 0
+i resolves to local 0
+i resolves to local 0
+j is declared and stored as local 0
+j resolves to local 0
+j resolves to local 0
+x resolves to local 0
+j resolves to local 0
+j resolves to local 0
+resolve error: x is already declared in the current scope of level 3
+x resolves to local 0
+
+
+return code: 1
+
+
+===== SUMMARIZED RESOLVER RESULTS =====
+{
+  "hidden_tests": {
+    "Good": {
+      "correct": 11,
+      "incorrect": 0
+    },
+    "Bad": {
+      "correct": 10,
+      "incorrect": 0
+    }
+  }
+}

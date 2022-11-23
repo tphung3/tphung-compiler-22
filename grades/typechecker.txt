@@ -1,0 +1,2411 @@
+=====STUDENT TESTS=====
+====Good Tests====
+===[good0.bminor Input]===
+// assign integer expression to local variable/ typechecking with function call
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+main:function void ()=
+{
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+}
+	
+
+
+===[good0.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+main is declared and stored as global main
+x is declared and stored as local 0
+y resolves to global y
+z resolves to global z
+
+
+return code: 0
+
+
+===[good1.bminor Input]===
+// assign integer expression to local variable/ typechecking with function call
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+main:function void ()=
+{
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+}
+	
+
+
+===[good1.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+main is declared and stored as global main
+x is declared and stored as local 0
+y resolves to global y
+z resolves to global z
+x resolves to local 0
+
+
+return code: 0
+
+
+===[good2.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+main:function void ()=
+{
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+}
+	
+
+
+===[good2.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+main is declared and stored as global main
+x is declared and stored as local 0
+y resolves to global y
+z resolves to global z
+x resolves to local 0
+zz resolves to global zz
+
+
+return code: 0
+
+
+===[good3.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+main:function void ()=
+{
+    yy: array [1] array [1] integer;
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+    yy = zz;
+}
+	
+
+
+===[good3.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+main is declared and stored as global main
+yy is declared and stored as local 0
+x is declared and stored as local 1
+y resolves to global y
+z resolves to global z
+x resolves to local 1
+zz resolves to global zz
+yy resolves to local 0
+zz resolves to global zz
+
+
+return code: 0
+
+
+===[good4.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+main:function void ()=
+{
+    yy: array [1] array [1] integer;
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+    yy = zz;
+    if ('a' == 'c')
+        if ("a" == "c")
+            print "noice";
+        print 'h';
+
+}
+	
+
+
+===[good4.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+main is declared and stored as global main
+yy is declared and stored as local 0
+x is declared and stored as local 1
+y resolves to global y
+z resolves to global z
+x resolves to local 1
+zz resolves to global zz
+yy resolves to local 0
+zz resolves to global zz
+
+
+return code: 0
+
+
+===[good5.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
+
+main:function void ()=
+{
+    yy: array [1] array [1] integer;
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+    yy = zz;
+    if ('a' == 'c')
+        if ("a" == "c")
+            print "noice";
+        print 'h';
+    
+}
+	
+
+
+===[good5.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+zzz is declared and stored as global zzz
+main is declared and stored as global main
+yy is declared and stored as local 0
+x is declared and stored as local 1
+y resolves to global y
+z resolves to global z
+x resolves to local 1
+zz resolves to global zz
+yy resolves to local 0
+zz resolves to global zz
+
+
+return code: 0
+
+
+===[good6.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
+
+main:function void ()=
+{
+    yy: array [1] array [1] integer;
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+    yy = zz;
+    if ('a' == 'c')
+        if ("a" == "c")
+            print "noice";
+        print 'h';
+    if (zzz[1][0])
+        return;    
+}
+	
+
+
+===[good6.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+zzz is declared and stored as global zzz
+main is declared and stored as global main
+yy is declared and stored as local 0
+x is declared and stored as local 1
+y resolves to global y
+z resolves to global z
+x resolves to local 1
+zz resolves to global zz
+yy resolves to local 0
+zz resolves to global zz
+zzz resolves to global zzz
+
+
+return code: 0
+
+
+===[good7.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
+
+zzzz: array [2] array [1] auto;
+
+main:function void ()=
+{
+    yy: array [1] array [1] integer;
+    zxcv: auto;
+    zxcv = "hohoho";
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+    yy = zz;
+    if ('a' == 'c')
+        if ("a" == "c")
+            print "noice";
+        print 'h';
+    if (zzz[1][0])
+        return;    
+}
+	
+f: function auto () =
+{
+    zzzz[1][0] = 'c';
+    if (zzz[1][1])
+        return 1;
+}
+
+===[good7.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+zzz is declared and stored as global zzz
+zzzz is declared and stored as global zzzz
+main is declared and stored as global main
+yy is declared and stored as local 0
+zxcv is declared and stored as local 1
+zxcv resolves to local 1
+x is declared and stored as local 2
+y resolves to global y
+z resolves to global z
+x resolves to local 2
+zz resolves to global zz
+yy resolves to local 0
+zz resolves to global zz
+zzz resolves to global zzz
+f is declared and stored as global f
+zzzz resolves to global zzzz
+zzz resolves to global zzz
+notice: variable zxcv of type auto is now of type string
+notice: variable zzzz of type array [2] array [1] auto is now of type array [2] array [1] char
+notice: function f that returns type auto now returns type integer
+
+
+return code: 0
+
+
+===[good8.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
+
+main:function void ()=
+{
+    yy: array [1] array [1] integer;
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+    yy = zz;
+    if ('a' == 'c')
+        if ("a" == "c")
+            print "noice";
+        print 'h';
+    if (zzz[1][0])
+        return;    
+}
+	
+f: function auto () =
+{
+    if (zzz[1][1])
+        return 1;
+    if (f() > 2)
+        return 3;
+}
+
+===[good8.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+zzz is declared and stored as global zzz
+main is declared and stored as global main
+yy is declared and stored as local 0
+x is declared and stored as local 1
+y resolves to global y
+z resolves to global z
+x resolves to local 1
+zz resolves to global zz
+yy resolves to local 0
+zz resolves to global zz
+zzz resolves to global zzz
+f is declared and stored as global f
+zzz resolves to global zzz
+f resolves to global f
+notice: function f that returns type auto now returns type integer
+
+
+return code: 0
+
+
+===[good9.bminor Input]===
+y:integer = 10;
+x:integer = 5;
+
+z: array [1] integer;
+
+zz: array [1] array [1] integer;
+
+zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
+
+f1: function integer (a: integer, b: integer);
+
+main:function void ()=
+{
+    yy: array [1] array [1] integer;
+	x:integer = y * 10 + 15 - 4;
+    z[0] = 1;
+    if (1 < x)
+        return;
+    else
+        print "haha";
+    zz[0][0] = 2;
+    yy = zz;
+    if ('a' == 'c')
+        if ("a" == "c")
+            print "noice";
+        print 'h';
+    if (zzz[1][0])
+        return;    
+}
+
+f1: function integer (a: integer, b: integer) = 
+{
+    return a^b;
+}
+	
+f: function auto () =
+{
+    if (zzz[1][1])
+        return 1;
+    if (f() > 2)
+        return 3;
+    else
+        return f1(2, 3);
+}
+
+===[good9.bminor Output]===
+Success!
+
+y is declared and stored as global y
+x is declared and stored as global x
+z is declared and stored as global z
+zz is declared and stored as global zz
+zzz is declared and stored as global zzz
+f1 is declared and stored as global f1
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+main is declared and stored as global main
+yy is declared and stored as local 0
+x is declared and stored as local 1
+y resolves to global y
+z resolves to global z
+x resolves to local 1
+zz resolves to global zz
+yy resolves to local 0
+zz resolves to global zz
+zzz resolves to global zzz
+f1 was declared as a function and is now defined with code
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+a resolves to param 0
+b resolves to param 1
+f is declared and stored as global f
+zzz resolves to global zzz
+f resolves to global f
+f1 resolves to global f1
+notice: function f that returns type auto now returns type integer
+
+
+return code: 0
+
+
+====Bad Tests====
+===[bad0.bminor Input]===
+f: function array [2] char ();
+
+===[bad0.bminor Output]===
+Success!
+
+
+parse error: syntax error, unexpected TOKEN_ARRAY. Last token is: array
+
+return code: 1
+
+
+===[bad1.bminor Input]===
+f: function function integer () ();
+
+===[bad1.bminor Output]===
+Success!
+
+
+parse error: syntax error, unexpected TOKEN_FUNCTION. Last token is: function
+
+return code: 1
+
+
+===[bad2.bminor Input]===
+f: function string (a: function string ());
+
+===[bad2.bminor Output]===
+Success!
+
+
+parse error: syntax error, unexpected TOKEN_FUNCTION. Last token is: function
+
+return code: 1
+
+
+===[bad3.bminor Input]===
+a: array [2] array [3] function string ();
+
+===[bad3.bminor Output]===
+Success!
+
+
+parse error: syntax error, unexpected TOKEN_FUNCTION. Last token is: function
+
+return code: 1
+
+
+===[bad4.bminor Input]===
+a: integer = 4+4;
+
+===[bad4.bminor Output]===
+Success!
+
+a is declared and stored as global a
+type error: global variable a must be initialized with constants
+
+
+return code: 1
+
+
+===[bad5.bminor Input]===
+f: function void () = 
+{
+    z: array [2] integer = {1, 2};
+}
+
+===[bad5.bminor Output]===
+Success!
+
+f is declared and stored as global f
+z is declared and stored as local 0
+type error: local array named z cannot be initialized
+
+
+return code: 1
+
+
+===[bad6.bminor Input]===
+f: function void () = 
+{
+    z: array [2] integer;
+    z[1] = 'c';
+}
+
+===[bad6.bminor Output]===
+Success!
+
+f is declared and stored as global f
+z is declared and stored as local 0
+z resolves to local 0
+type error: cannot assign expression z[1] of type integer to an expression 'c' of type char
+
+
+return code: 1
+
+
+===[bad7.bminor Input]===
+f: function void () = 
+{
+    z: array [2] integer;
+    z[1] = 2;
+    for  (;;)
+    {
+        return 1;
+    }
+}
+
+===[bad7.bminor Output]===
+Success!
+
+f is declared and stored as global f
+z is declared and stored as local 0
+z resolves to local 0
+type error: function f of return type void cannot have a return statement return expression 1 of type integer
+
+
+return code: 1
+
+
+===[bad8.bminor Input]===
+f: function void () = 
+{
+    z: array [2] integer;
+    z[1] = 2;
+    for  (;;)
+    {
+        return;
+    }
+    ax: auto;
+    bx: auto;
+    ax = bx;
+
+}
+
+===[bad8.bminor Output]===
+Success!
+
+f is declared and stored as global f
+z is declared and stored as local 0
+z resolves to local 0
+ax is declared and stored as local 1
+bx is declared and stored as local 2
+ax resolves to local 1
+bx resolves to local 2
+type error: cannot assign expression ax to type auto
+
+
+return code: 1
+
+
+===[bad9.bminor Input]===
+a: auto = 'c';
+
+f: function void () = 
+{
+    z: array [2] integer;
+    a: auto = 2;
+    z[1] = 2;
+    for  (;;)
+    {
+        return;
+    }
+    ax: auto;
+    bx: auto = 3;
+    ax = bx;
+    aaaa: integer = f;
+    xxx: boolean = 3 && true;
+}
+
+===[bad9.bminor Output]===
+Success!
+
+a is declared and stored as global a
+f is declared and stored as global f
+z is declared and stored as local 0
+a is declared and stored as local 1
+z resolves to local 0
+ax is declared and stored as local 2
+bx is declared and stored as local 3
+ax resolves to local 2
+bx resolves to local 3
+aaaa is declared and stored as local 4
+f resolves to global f
+xxx is declared and stored as local 5
+notice: global variable a had type auto and now has type char
+notice: local variable a had type auto and now has type integer
+notice: local variable bx had type auto and now has type integer
+notice: variable ax of type auto is now of type integer
+type error: cannot define local variable aaaa of type integer to expression f of type function void ()
+type error: left operand of logical and must be a boolean
+
+
+return code: 1
+
+
+=====HIDDEN TESTS=====
+====Good Tests====
+===[good1.bminor Input]===
+/*
+Correct: The parameter name can vary as long as the type is the same.
+*/
+
+x: function integer(a:integer);
+
+x: function integer(b:integer) = {
+	return 0;
+}
+
+x: function integer(c:integer);
+
+===[good1.bminor Output]===
+TEST NOT PASSED
+
+x is declared and stored as global x
+a is declared as a parameter with position 0
+x was declared as a function and is now defined with code
+b is declared as a parameter with position 0
+resolve error: x is a function already defined in the current scope of level 1
+
+
+return code: 1
+
+
+===[good10.bminor Input]===
+/*
+Correct: Testing invocation of external function.
+*/
+
+abs: function integer(n: integer);
+
+digits: array [6] integer = {
+	14,
+	8,
+	6168,
+	42,
+	0,
+	74546
+};
+
+main:function integer () = {
+	digits[4] = -468;
+	i: integer = 0;
+	for (; abs(digits[i]) == digits[i];) {
+		print digits[i];
+		i = i + 1;
+		print ' ';
+	}
+	print '\n';
+
+	return 0;
+}
+
+===[good10.bminor Output]===
+TEST NOT PASSED
+
+abs is declared and stored as global abs
+n is declared as a parameter with position 0
+digits is declared and stored as global digits
+main is declared and stored as global main
+digits resolves to global digits
+i is declared and stored as local 0
+abs resolves to global abs
+digits resolves to global digits
+i resolves to local 0
+digits resolves to global digits
+i resolves to local 0
+digits resolves to global digits
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+type error: abs is called with wrong number of arguments
+
+
+return code: 1
+
+
+===[good2.bminor Input]===
+/*
+Correct: Test various nested definitions.
+*/
+
+f: function void() = {
+	x: integer = 1;
+	{
+		print x;
+		x: integer = x + 1;
+		print x;
+	}
+	print x;
+}
+
+===[good2.bminor Output]===
+Success!
+
+f is declared and stored as global f
+x is declared and stored as local 0
+x resolves to local 0
+x is declared and stored as local 0
+x resolves to local 0
+x resolves to local 0
+x resolves to local 0
+
+
+return code: 0
+
+
+===[good3.bminor Input]===
+/*
+Correct: Test various function return types.
+*/
+
+A: function boolean(x: integer, y: integer);
+B: function integer(x: char);
+C: function char(a: string);
+
+main: function integer() = {
+	i: integer;
+	for (i = 0; i < 10; i++)
+		if (i % 2 == 0)
+			print i;
+		else
+			return i;
+
+	if (A(B('d') - 1, 10)) {
+		x: integer = 0;
+		return 2 * B('c') + x;
+	}
+
+	return B(C("hello")) % 3;
+}
+
+===[good3.bminor Output]===
+TEST NOT PASSED
+
+A is declared and stored as global A
+x is declared as a parameter with position 0
+y is declared as a parameter with position 1
+B is declared and stored as global B
+x is declared as a parameter with position 0
+C is declared and stored as global C
+a is declared as a parameter with position 0
+main is declared and stored as global main
+i is declared and stored as local 0
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+A resolves to global A
+B resolves to global B
+x is declared and stored as local 0
+B resolves to global B
+x resolves to local 0
+B resolves to global B
+C resolves to global C
+type error: B is called with wrong number of arguments
+
+
+return code: 1
+
+
+===[good4.bminor Input]===
+/*
+Correct: Test combinations of boolean operators.
+*/
+
+func: function void(
+		a: integer,
+		b: integer,
+		c: boolean,
+		d: boolean
+	) = {
+
+	print a -b;
+	print c && d;
+	print a + b * a - a ^ b /a;
+
+	print a < b && d;
+	print (a < b) || (c && d);
+}
+
+===[good4.bminor Output]===
+Success!
+
+func is declared and stored as global func
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+c is declared as a parameter with position 2
+d is declared as a parameter with position 3
+a resolves to param 0
+b resolves to param 1
+c resolves to param 2
+d resolves to param 3
+a resolves to param 0
+b resolves to param 1
+a resolves to param 0
+a resolves to param 0
+b resolves to param 1
+a resolves to param 0
+a resolves to param 0
+b resolves to param 1
+d resolves to param 3
+a resolves to param 0
+b resolves to param 1
+c resolves to param 2
+d resolves to param 3
+
+
+return code: 0
+
+
+===[good5.bminor Input]===
+/*
+Correct: Test array assignments.
+*/
+
+x:array [5] integer = {1,2,3,4,5};
+y:array [5] array [5] integer;
+
+main:function void () =
+{
+	y[1] = x;
+	count:integer;
+	for(count = 0; count < 5; count++)
+	{
+		y[count] = x;
+	} 	
+}
+
+===[good5.bminor Output]===
+Success!
+
+x is declared and stored as global x
+y is declared and stored as global y
+main is declared and stored as global main
+y resolves to global y
+x resolves to global x
+count is declared and stored as local 0
+count resolves to local 0
+count resolves to local 0
+count resolves to local 0
+y resolves to global y
+count resolves to local 0
+x resolves to global x
+
+
+return code: 0
+
+
+===[good6.bminor Input]===
+/*
+Correct: Test assignment of array literals.
+*/
+
+main: function void (a: integer) = {
+	x: array [1] boolean = {true};
+	y: array [1] integer = {0};
+	if (x[y[a]]) return;
+}
+
+===[good6.bminor Output]===
+TEST NOT PASSED
+
+main is declared and stored as global main
+a is declared as a parameter with position 0
+x is declared and stored as local 0
+y is declared and stored as local 1
+x resolves to local 0
+y resolves to local 1
+a resolves to param 0
+type error: local array named x cannot be initialized
+type error: local array named y cannot be initialized
+
+
+return code: 1
+
+
+===[good7.bminor Input]===
+/*
+Correct: Test if-expression and return-expression.
+*/
+
+main: function integer() = {
+	m: integer = 2;
+	n: boolean = true;
+
+	if (!n) return 0; else return -m;
+
+	print 10 * (-1 + m);
+}
+
+===[good7.bminor Output]===
+Success!
+
+main is declared and stored as global main
+m is declared and stored as local 0
+n is declared and stored as local 1
+n resolves to local 1
+m resolves to local 0
+m resolves to local 0
+
+
+return code: 0
+
+
+===[good8.bminor Input]===
+/*
+Correct: Boolean expression in several places.
+*/
+
+x: function integer(a:boolean) = {
+	if (a) for (;a;) print a;
+}
+
+===[good8.bminor Output]===
+Success!
+
+x is declared and stored as global x
+a is declared as a parameter with position 0
+a resolves to param 0
+a resolves to param 0
+a resolves to param 0
+
+
+return code: 0
+
+
+===[good9.bminor Input]===
+/*
+Correct: A program to plot a quadratic function. 
+*/
+
+/* Make use of atoi from the standard library */
+
+atoi: function integer( s: string );
+
+quadratic: function integer ( a: integer, b: integer, c: integer, x: integer ) = {
+	return a*x*x + b*x + c*x;
+}
+
+main: function integer ( argc: integer, argv: array [] string ) =  {
+
+      if(argc<3) {
+          print "use: ", argv[0], "[a] [b] [c] [start] [end]\n";
+      }
+
+      a: integer = atoi(argv[0]);
+      b: integer = atoi(argv[1]);
+      c: integer = atoi(argv[2]);
+      start: integer = atoi(argv[3]);
+      end: integer = atoi(argv[4]);
+
+
+      x: integer;
+      
+      for(x=start;x<end;x++) {
+          print x, " ", quadratic(a,b,c,x), "\n";
+      }
+
+      return 0;
+}
+
+===[good9.bminor Output]===
+TEST NOT PASSED
+
+atoi is declared and stored as global atoi
+s is declared as a parameter with position 0
+quadratic is declared and stored as global quadratic
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+c is declared as a parameter with position 2
+x is declared as a parameter with position 3
+a resolves to param 0
+x resolves to param 3
+x resolves to param 3
+b resolves to param 1
+x resolves to param 3
+c resolves to param 2
+x resolves to param 3
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+argc resolves to param 0
+argv resolves to param 1
+a is declared and stored as local 0
+atoi resolves to global atoi
+argv resolves to param 1
+b is declared and stored as local 1
+atoi resolves to global atoi
+argv resolves to param 1
+c is declared and stored as local 2
+atoi resolves to global atoi
+argv resolves to param 1
+start is declared and stored as local 3
+atoi resolves to global atoi
+argv resolves to param 1
+end is declared and stored as local 4
+atoi resolves to global atoi
+argv resolves to param 1
+x is declared and stored as local 5
+x resolves to local 5
+start resolves to local 3
+x resolves to local 5
+end resolves to local 4
+x resolves to local 5
+x resolves to local 5
+quadratic resolves to global quadratic
+a resolves to local 0
+b resolves to local 1
+c resolves to local 2
+x resolves to local 5
+type error: atoi is called with wrong number of arguments
+type error: atoi is called with wrong number of arguments
+type error: atoi is called with wrong number of arguments
+type error: atoi is called with wrong number of arguments
+type error: atoi is called with wrong number of arguments
+
+
+return code: 1
+
+
+===[good11.bminor Input]===
+/*
+Correct: Test ternary operator
+*/
+
+func: function void(
+		a: integer,
+		b: integer,
+		c: boolean,
+		d: boolean
+	) = {
+        
+    print a < b ? c : d;
+}
+===[good11.bminor Output]===
+Success!
+
+func is declared and stored as global func
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+c is declared as a parameter with position 2
+d is declared as a parameter with position 3
+a resolves to param 0
+b resolves to param 1
+c resolves to param 2
+d resolves to param 3
+
+
+return code: 0
+
+
+===[good12.bminor Input]===
+/*
+Correct: Auto can correctly be used to infer types
+*/
+
+main: function integer() = {
+	m: auto = 3;
+	n: auto = 5;
+    
+    x: auto = m + n;
+
+    print x;
+}
+
+===[good12.bminor Output]===
+Success!
+
+main is declared and stored as global main
+m is declared and stored as local 0
+n is declared and stored as local 1
+x is declared and stored as local 2
+m resolves to local 0
+n resolves to local 1
+x resolves to local 2
+notice: local variable m had type auto and now has type integer
+notice: local variable n had type auto and now has type integer
+notice: local variable x had type auto and now has type integer
+
+
+return code: 0
+
+
+====Bad Tests====
+===[bad1.bminor Input]===
+/*
+Incorrect: Mismatched types in forward declaration
+*/
+
+x: function integer(a:char);
+x: function integer(a:integer) = {
+	return 0;
+}
+
+===[bad1.bminor Output]===
+Success!
+
+x is declared and stored as global x
+a is declared as a parameter with position 0
+type error: function named x was declared with type function integer (a: char) but is attempted to be defined with type function integer (a: integer)
+
+
+return code: 1
+
+
+===[bad10.bminor Input]===
+/*
+Incorrect: Several type errors throughout.
+*/
+
+abs: function string (n: integer);
+
+digits: array [6] char = {
+	14,
+	8,
+	6168,
+	42,
+	0,
+	74546
+};
+
+main:function integer () = {
+	digits[4] = -468;
+	i: boolean = 0;
+	for (; abs(digits[i]) == digits[i];) {
+		print digits[i];
+		i = i + 1;
+		print ' ';
+	}
+	print '\n';
+
+	return 0;
+}
+
+===[bad10.bminor Output]===
+Success!
+
+abs is declared and stored as global abs
+n is declared as a parameter with position 0
+digits is declared and stored as global digits
+main is declared and stored as global main
+digits resolves to global digits
+i is declared and stored as local 0
+abs resolves to global abs
+digits resolves to global digits
+i resolves to local 0
+digits resolves to global digits
+i resolves to local 0
+digits resolves to global digits
+i resolves to local 0
+i resolves to local 0
+i resolves to local 0
+type error: cannot assign expression digits[4] of type char to an expression -468 of type integer
+type error: cannot define local variable i of type boolean to expression 0 of type integer
+type error: index of array must be an integer literal instead of expression i
+type error: abs is called with wrong number of arguments
+type error: index of array must be an integer literal instead of expression i
+type error: right operand of equal is not the same as the left operand
+type error: index of array must be an integer literal instead of expression i
+type error: left operand of addition must be an integer
+
+
+return code: 1
+
+
+===[bad2.bminor Input]===
+/*
+Incorrect: Variable redefined within a scope.
+*/
+
+f: function void() = {
+	x: integer = 1;
+	{
+		print x;
+		x: integer = x + 1;
+		print x;
+	}
+	x: integer = 2;
+	print x;
+}
+
+===[bad2.bminor Output]===
+Success!
+
+f is declared and stored as global f
+x is declared and stored as local 0
+x resolves to local 0
+x is declared and stored as local 0
+x resolves to local 0
+x resolves to local 0
+resolve error: x is already declared in the current scope of level 3
+x resolves to local 0
+
+
+return code: 1
+
+
+===[bad3.bminor Input]===
+/*
+Incorrect: Mismatched function return types.
+*/
+
+main: function void() = {
+	return i;
+}
+
+func: function integer() = {
+	return;
+}
+
+===[bad3.bminor Output]===
+Success!
+
+main is declared and stored as global main
+resolve error: i is not declared
+func is declared and stored as global func
+
+
+return code: 1
+
+
+===[bad4.bminor Input]===
+/*
+Incorrect: Mismatched operators.
+*/
+
+
+func: function void(
+		a: integer,
+		b: integer,
+		c: boolean,
+		d: boolean
+	) = {
+
+	print a -c;
+	print c * d;
+	print a + b * a - a ^ b /d;
+
+	print a < b && a;
+	print (a < b) + (c && d);
+}
+
+===[bad4.bminor Output]===
+Success!
+
+func is declared and stored as global func
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+c is declared as a parameter with position 2
+d is declared as a parameter with position 3
+a resolves to param 0
+c resolves to param 2
+c resolves to param 2
+d resolves to param 3
+a resolves to param 0
+b resolves to param 1
+a resolves to param 0
+a resolves to param 0
+b resolves to param 1
+d resolves to param 3
+a resolves to param 0
+b resolves to param 1
+a resolves to param 0
+a resolves to param 0
+b resolves to param 1
+c resolves to param 2
+d resolves to param 3
+type error: right operand of subtraction must be an integer
+type error: left operand of multiplication must be an integer
+type error: right operand of division must be an integer
+type error: right operand of logical and must be a boolean
+type error: left operand of addition must be an integer
+
+
+return code: 1
+
+
+===[bad6.bminor Input]===
+/*
+Incorrect: Cannot assign an array to an atomic type.
+*/
+
+main: function void () = {
+	// array of one boolean != boolean
+	x: array [1] boolean = {true};
+	if (x) return;
+}
+
+===[bad6.bminor Output]===
+Success!
+
+main is declared and stored as global main
+x is declared and stored as local 0
+x resolves to local 0
+type error: local array named x cannot be initialized
+type error: expression x of type array [1] boolean is not of type boolean in an if else statement
+
+
+return code: 1
+
+
+===[bad7.bminor Input]===
+/*
+Incorrect: Improper operators on values.
+*/
+
+main: function integer() = {
+	m: integer = 2;
+	n: boolean = true;
+
+	// wrong negation
+	if (-n) return 0; else return !m;
+
+	// arithmetic on boolean
+	print 10 * (-1 + n);
+}
+
+===[bad7.bminor Output]===
+Success!
+
+main is declared and stored as global main
+m is declared and stored as local 0
+n is declared and stored as local 1
+n resolves to local 1
+m resolves to local 0
+n resolves to local 1
+type error: operand of single sub must be an integer
+type error: operand of logical not must be an integer
+type error: right operand of addition must be an integer
+
+
+return code: 1
+
+
+===[bad8.bminor Input]===
+/*
+Incorrect: Cannot use an integer in place of a boolean.
+*/
+
+x: function integer(a:integer) = {
+	if (a) return 10;
+	for (;a;) print a;
+}
+
+===[bad8.bminor Output]===
+Success!
+
+x is declared and stored as global x
+a is declared as a parameter with position 0
+a resolves to param 0
+a resolves to param 0
+a resolves to param 0
+type error: expression a of type integer is not of type boolean in an if else statement
+
+
+return code: 1
+
+
+===[bad9.bminor Input]===
+/*
+Incorrect: Several type mismatches throughout.
+*/
+
+/* Make use of atoi from the standard library */
+
+atoi: function boolean ( s: string );
+
+quadratic: function void ( a: char, b: string, c: boolean, x: integer ) = {
+	return a*x*x + b*x + c*x;
+}
+
+main: function integer ( argc: integer, argv: array [] string ) =  {
+
+      if(argc<3) {
+          print "use: ", argv[0], "[a] [b] [c] [start] [end]\n";
+      }
+
+      a: integer = atoi(argv[0]);
+      b: integer = atoi(argv[1]);
+      c: integer = atoi(argv[2]);
+      start: integer = atoi(argv[3]);
+      end: integer = atoi(argv[4]);
+
+
+      x: integer;
+      
+      for(x=start;x<end;x++) {
+          print x, " ", quadratic(a,b,c,x), "\n";
+      }
+
+      return 0;
+}
+
+===[bad9.bminor Output]===
+Success!
+
+atoi is declared and stored as global atoi
+s is declared as a parameter with position 0
+quadratic is declared and stored as global quadratic
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+c is declared as a parameter with position 2
+x is declared as a parameter with position 3
+a resolves to param 0
+x resolves to param 3
+x resolves to param 3
+b resolves to param 1
+x resolves to param 3
+c resolves to param 2
+x resolves to param 3
+main is declared and stored as global main
+argc is declared as a parameter with position 0
+argv is declared as a parameter with position 1
+argc resolves to param 0
+argv resolves to param 1
+a is declared and stored as local 0
+atoi resolves to global atoi
+argv resolves to param 1
+b is declared and stored as local 1
+atoi resolves to global atoi
+argv resolves to param 1
+c is declared and stored as local 2
+atoi resolves to global atoi
+argv resolves to param 1
+start is declared and stored as local 3
+atoi resolves to global atoi
+argv resolves to param 1
+end is declared and stored as local 4
+atoi resolves to global atoi
+argv resolves to param 1
+x is declared and stored as local 5
+x resolves to local 5
+start resolves to local 3
+x resolves to local 5
+end resolves to local 4
+x resolves to local 5
+x resolves to local 5
+quadratic resolves to global quadratic
+a resolves to local 0
+b resolves to local 1
+c resolves to local 2
+x resolves to local 5
+type error: left operand of multiplication must be an integer
+type error: left operand of multiplication must be an integer
+type error: left operand of multiplication must be an integer
+type error: left operand of addition must be an integer
+type error: left operand of addition must be an integer
+type error: function quadratic of return type void cannot have a return statement return expression a*x*x+b*x+c*x of type char
+type error: atoi is called with wrong number of arguments
+type error: cannot define local variable a of type integer to expression atoi(argv[0]) of type boolean
+type error: atoi is called with wrong number of arguments
+type error: cannot define local variable b of type integer to expression atoi(argv[1]) of type boolean
+type error: atoi is called with wrong number of arguments
+type error: cannot define local variable c of type integer to expression atoi(argv[2]) of type boolean
+type error: atoi is called with wrong number of arguments
+type error: cannot define local variable start of type integer to expression atoi(argv[3]) of type boolean
+type error: atoi is called with wrong number of arguments
+type error: cannot define local variable end of type integer to expression atoi(argv[4]) of type boolean
+type error: quadratic is called with arguments of wrong types
+
+
+return code: 1
+
+
+===[bad11.bminor Input]===
+/*
+Incorrect: An auto must eventually be assigned to something
+*/
+
+main: function integer() = {
+	m: auto;
+	n: auto = 5;
+    
+    // The m has not been set yet
+    x: auto = m + n;
+
+    print x;
+}
+
+===[bad11.bminor Output]===
+Success!
+
+main is declared and stored as global main
+m is declared and stored as local 0
+n is declared and stored as local 1
+x is declared and stored as local 2
+m resolves to local 0
+n resolves to local 1
+x resolves to local 2
+notice: local variable n had type auto and now has type integer
+type error: left operand of addition must be an integer
+type error: cannot assign local variable x of type auto to expression m+n of type auto
+
+
+return code: 1
+
+
+===[bad5.bminor Input]===
+/*
+Incorrect: Cannot subscript a value which is not an array.
+*/
+
+main: function void() = {
+	s : boolean = false;
+	c : char = s[1];
+	print c;
+}
+
+===[bad5.bminor Output]===
+Success!
+
+main is declared and stored as global main
+s is declared and stored as local 0
+c is declared and stored as local 1
+s resolves to local 0
+c resolves to local 1
+type error: left operand of array subscript must be of TYPE_ARRAY instead of boolean
+type error: cannot define local variable c of type char to expression s[1] of type boolean
+
+
+return code: 1
+
+
+=====COMMON TESTS=====
+====Good Tests====
+===[good1.bminor Input]===
+/* Assign integer expression to local variable/ typechecking with function call. */
+
+x: integer = 5;
+y: integer = 10;
+
+main: function void ()=
+{
+	x: integer = y * 10 + 15 - 4;
+}
+	
+
+
+===[good1.bminor Output]===
+Success!
+
+x is declared and stored as global x
+y is declared and stored as global y
+main is declared and stored as global main
+x is declared and stored as local 0
+y resolves to global y
+
+
+return code: 0
+
+
+===[good10.bminor Input]===
+/* Test array of array assignments. */
+
+x: array [5] integer = {1,2,3,4,5};
+y: array [5] array [5] integer;
+
+main: function void () =
+{
+	y[1] = x;
+	count: integer;
+	for(count = 0; count < 5; count++)
+	{
+		y[count] = x;
+	} 	
+}
+
+===[good10.bminor Output]===
+Success!
+
+x is declared and stored as global x
+y is declared and stored as global y
+main is declared and stored as global main
+y resolves to global y
+x resolves to global x
+count is declared and stored as local 0
+count resolves to local 0
+count resolves to local 0
+count resolves to local 0
+y resolves to global y
+count resolves to local 0
+x resolves to global x
+
+
+return code: 0
+
+
+===[good2.bminor Input]===
+/* Assign an integer expression to local variable. */
+
+x: integer = 5;
+y: integer = 10;
+
+test: function integer();
+
+main: function void ()=
+{
+	x:integer = y * 10 + 15 - test();
+}
+
+test: function integer () =
+{
+	return 5;
+}
+	
+
+
+===[good2.bminor Output]===
+Success!
+
+x is declared and stored as global x
+y is declared and stored as global y
+test is declared and stored as global test
+main is declared and stored as global main
+x is declared and stored as local 0
+y resolves to global y
+test resolves to global test
+test was declared as a function and is now defined with code
+
+
+return code: 0
+
+
+===[good3.bminor Input]===
+/* Test name resolution at multiple scope levels. */
+
+x: integer = 5;
+y: integer = 10;
+
+main: function void () =
+{
+	x: integer = 5;
+	y: integer = 10;
+	{
+		x: integer = 5;
+		y: integer = 10;
+		{
+			x: char = 'a';
+			y: integer = 10;
+		}
+		y = x + y;
+	}
+}
+	
+
+
+===[good3.bminor Output]===
+Success!
+
+x is declared and stored as global x
+y is declared and stored as global y
+main is declared and stored as global main
+x is declared and stored as local 0
+y is declared and stored as local 1
+x is declared and stored as local 0
+y is declared and stored as local 1
+x is declared and stored as local 0
+y is declared and stored as local 1
+y resolves to local 1
+x resolves to local 0
+y resolves to local 1
+
+
+return code: 0
+
+
+===[good4.bminor Input]===
+/* Use character types in various contexts. */
+
+charFxn: function char(x: char)=
+{
+	if(x == 'a')
+	{
+		return 'z';
+	}
+}
+
+main: function void ()=
+{
+	c: char;
+
+	if('a' == charFxn('c'))
+	{
+		print "unreachable";
+	}
+	if('a' != 'a')
+	{
+		print "unreachable";
+	}
+	if(c == 'a')
+	{
+		print "unreachable";
+	}
+}
+
+
+===[good4.bminor Output]===
+Success!
+
+charFxn is declared and stored as global charFxn
+x is declared as a parameter with position 0
+x resolves to param 0
+main is declared and stored as global main
+c is declared and stored as local 0
+charFxn resolves to global charFxn
+c resolves to local 0
+
+
+return code: 0
+
+
+===[good5.bminor Input]===
+// Test integer comparisons and functions. */
+
+intFxn: function integer(c:char);
+
+glob: integer = 1;
+
+main: function void ()=
+{
+	c: integer;
+	if(6 == intFxn('c'))
+	{
+		print "unreachable";
+	}
+	if(5 >= 5)
+	{
+		print "unreachable";
+	}
+	if(c > 5)
+	{
+		print "unreachable";
+	}
+	if(c >= 5)
+	{
+		print "unreachable";
+	}
+	if(intFxn('a') <= 5)
+	{
+		print "reachable";
+	}
+	if(glob < 5)
+	{
+		print "reachable";
+	}
+}
+
+intFxn: function integer(c: char)=
+{
+	if(c == 'a')
+	{
+		return 5;
+	}
+	return 0;
+}
+
+
+===[good5.bminor Output]===
+Success!
+
+intFxn is declared and stored as global intFxn
+c is declared as a parameter with position 0
+glob is declared and stored as global glob
+main is declared and stored as global main
+c is declared and stored as local 0
+intFxn resolves to global intFxn
+c resolves to local 0
+c resolves to local 0
+intFxn resolves to global intFxn
+glob resolves to global glob
+intFxn was declared as a function and is now defined with code
+c is declared as a parameter with position 0
+c resolves to param 0
+
+
+return code: 0
+
+
+===[good6.bminor Input]===
+/* Test function declarations without prototypes. */
+
+test1: function integer (a:integer, b:integer)=
+{
+	return a + b;
+}
+
+test2: function boolean (a:integer, b:integer)=
+{
+	return a < b;
+}
+
+test3: function char (a:integer)=
+{
+	if (a > 5) {
+		return 'x';
+	} else {
+		return 'y';
+	}
+}
+
+main:function void ()=
+{
+	print test1(10,20), test2(30,40), test3(10), "\n";
+}
+
+
+===[good6.bminor Output]===
+Success!
+
+test1 is declared and stored as global test1
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+a resolves to param 0
+b resolves to param 1
+test2 is declared and stored as global test2
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+a resolves to param 0
+b resolves to param 1
+test3 is declared and stored as global test3
+a is declared as a parameter with position 0
+a resolves to param 0
+main is declared and stored as global main
+test1 resolves to global test1
+test2 resolves to global test2
+test3 resolves to global test3
+
+
+return code: 0
+
+
+===[good7.bminor Input]===
+/* Test function invocations with prototypes. */
+
+test1:function integer (a:integer, b:integer);
+test2:function boolean (a:integer, b:integer);
+test3:function string (a:integer);
+
+main:function void ()=
+{
+	x:integer = test1(5, 6);
+	test2(5, 6);
+	print test3(7);
+}
+
+test1:function integer (a:integer, b:integer)=
+{
+	return a + b;
+}
+
+test2:function boolean (a:integer, b:integer)=
+{
+	return a==b;
+}
+
+test3:function string (a:integer)=
+{
+	if (test1(1, 5) > 6)
+	{
+		return "hello world";
+	}
+}
+
+===[good7.bminor Output]===
+Success!
+
+test1 is declared and stored as global test1
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+test2 is declared and stored as global test2
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+test3 is declared and stored as global test3
+a is declared as a parameter with position 0
+main is declared and stored as global main
+x is declared and stored as local 0
+test1 resolves to global test1
+test2 resolves to global test2
+test3 resolves to global test3
+test1 was declared as a function and is now defined with code
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+a resolves to param 0
+b resolves to param 1
+test2 was declared as a function and is now defined with code
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+a resolves to param 0
+b resolves to param 1
+test3 was declared as a function and is now defined with code
+a is declared as a parameter with position 0
+test1 resolves to global test1
+
+
+return code: 0
+
+
+===[good8.bminor Input]===
+/* Update one element of an array. */
+
+x:array [5] integer = {1,2,3,4,5};
+
+main:function void () =
+{
+	x[4] = 4;
+}
+
+===[good8.bminor Output]===
+Success!
+
+x is declared and stored as global x
+main is declared and stored as global main
+x resolves to global x
+
+
+return code: 0
+
+
+===[good9.bminor Input]===
+/* Update array with values from function calls. */
+
+x: array [5] integer = {1,2,3,4,5};
+intFxn: function integer ();
+
+main: function void () =
+{
+	x[4] = intFxn();
+	x[intFxn()] = 4;
+	
+}
+intFxn: function integer () =
+{
+	return 3;
+}
+
+===[good9.bminor Output]===
+Success!
+
+x is declared and stored as global x
+intFxn is declared and stored as global intFxn
+main is declared and stored as global main
+x resolves to global x
+intFxn resolves to global intFxn
+x resolves to global x
+intFxn resolves to global intFxn
+intFxn was declared as a function and is now defined with code
+
+
+return code: 0
+
+
+====Bad Tests====
+===[bad1.bminor Input]===
+/* Cannot assign a character to a global integer. */
+
+x: integer = 'c';
+
+
+===[bad1.bminor Output]===
+Success!
+
+x is declared and stored as global x
+type error: cannot define global variable x of type integer to expression 'c' of type char
+
+
+return code: 1
+
+
+===[bad10.bminor Input]===
+/* Cannot assign an array-of-arrays to an array. */
+
+x:array [5] integer;
+y:array [5] array [5] integer;
+
+main:function void () =
+{
+	y = x;
+}
+
+===[bad10.bminor Output]===
+Success!
+
+x is declared and stored as global x
+y is declared and stored as global y
+main is declared and stored as global main
+y resolves to global y
+x resolves to global x
+type error: cannot assign expression y of type array [5] array [5] integer to an expression x of type array [5] integer
+
+
+return code: 1
+
+
+===[bad2.bminor Input]===
+/* Cannot use a function without declaring it. */
+
+x: integer = 5;
+y: integer = 10;
+
+main: function void ()=
+{
+	x:integer = y * 10 + 15 - test();
+}
+
+test: function char () =
+{
+	return 'a';
+}
+	
+
+
+===[bad2.bminor Output]===
+Success!
+
+x is declared and stored as global x
+y is declared and stored as global y
+main is declared and stored as global main
+x is declared and stored as local 0
+y resolves to global y
+resolve error: test is not declared
+test is declared and stored as global test
+
+
+return code: 1
+
+
+===[bad3.bminor Input]===
+/* Cannot use a variable x that is not defined in the current scope. */
+
+y: integer = 10;
+
+main: function void ()=
+{
+	y: integer = 10;
+	{
+		
+		y: integer = 10;
+		{
+			
+			x: integer = 5;
+			y: integer = 10;
+		}
+		y = x + y;
+	}
+}
+	
+
+
+===[bad3.bminor Output]===
+Success!
+
+y is declared and stored as global y
+main is declared and stored as global main
+y is declared and stored as local 0
+y is declared and stored as local 0
+x is declared and stored as local 0
+y is declared and stored as local 1
+y resolves to local 0
+resolve error: x is not declared
+y resolves to local 0
+
+
+return code: 1
+
+
+===[bad4.bminor Input]===
+/* Type of return statement must match return type of function. */
+
+main: function integer ()=
+{
+	return 'c';
+}
+
+===[bad4.bminor Output]===
+Success!
+
+main is declared and stored as global main
+type error: function main of return type integer cannot have a return statement return expression 'c' of type char
+
+
+return code: 1
+
+
+===[bad5.bminor Input]===
+/* Check for invalid type inside of boolean expression. */
+
+y:integer = 10;
+
+main: function void () =
+{
+	if(y > 5 && 'a' || true)
+	{
+		print "ok";
+	}
+}
+	
+
+
+===[bad5.bminor Output]===
+Success!
+
+y is declared and stored as global y
+main is declared and stored as global main
+y resolves to global y
+type error: right operand of logical and must be a boolean
+
+
+return code: 1
+
+
+===[bad6.bminor Input]===
+/* Function definitions must match prior prototypes. */
+
+test1: function integer (a:integer, b:integer);
+test2: function boolean (a:integer, b:integer);
+test3: function string (a:integer);
+
+main: function void () =
+{
+	str: string = "hi";
+}
+
+/* Parameter type differs from prototype. */
+
+test3: function string (a:boolean) =
+{
+	return "hello!";
+}
+
+/* Return type differs from prototype. */
+
+test2: function integer (a:integer, b:integer) =
+{ 
+	return a + b;
+}
+
+
+===[bad6.bminor Output]===
+Success!
+
+test1 is declared and stored as global test1
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+test2 is declared and stored as global test2
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+test3 is declared and stored as global test3
+a is declared as a parameter with position 0
+main is declared and stored as global main
+str is declared and stored as local 0
+type error: function named test3 was declared with type function string (a: integer) but is attempted to be defined with type function string (a: boolean)
+type error: function named test2 was declared with type function boolean (a: integer, b: integer) but is attempted to be defined with type function integer (a: integer, b: integer)
+
+
+return code: 1
+
+
+===[bad7.bminor Input]===
+/* Function arguments must match formal parameter types. */
+
+test1:function integer (a:integer, b:integer);
+test2:function boolean (a:integer, b:integer);
+
+main: function void () =
+{
+	x:integer = test2(5, 6);
+	test2(5,6);
+	print test2(11);
+}
+
+test2: function boolean (a:integer, b:integer) =
+{
+	return a==b;
+}
+
+===[bad7.bminor Output]===
+Success!
+
+test1 is declared and stored as global test1
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+test2 is declared and stored as global test2
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+main is declared and stored as global main
+x is declared and stored as local 0
+test2 resolves to global test2
+test2 resolves to global test2
+test2 resolves to global test2
+test2 was declared as a function and is now defined with code
+a is declared as a parameter with position 0
+b is declared as a parameter with position 1
+a resolves to param 0
+b resolves to param 1
+type error: cannot define local variable x of type integer to expression test2(5, 6) of type boolean
+type error: test2 is called with wrong number of arguments
+
+
+return code: 1
+
+
+===[bad8.bminor Input]===
+/* Cannot assign a scalar value to an array. */
+
+x:array [5] integer = {1,2,3,4,5};
+
+main:function void () =
+{
+	x = 4;
+}
+
+===[bad8.bminor Output]===
+Success!
+
+x is declared and stored as global x
+main is declared and stored as global main
+x resolves to global x
+type error: cannot assign expression x of type array [5] integer to an expression 4 of type integer
+
+
+return code: 1
+
+
+===[bad9.bminor Input]===
+/* Cannot index an array with a boolean. */
+
+x:array [5] integer = {1,2,3,4,5};
+
+main: function void () =
+{
+	x[true] = intFxn();
+}
+
+intFxn: function integer ()=
+{
+	return 3;
+}
+
+===[bad9.bminor Output]===
+Success!
+
+x is declared and stored as global x
+main is declared and stored as global main
+x resolves to global x
+resolve error: intFxn is not declared
+intFxn is declared and stored as global intFxn
+
+
+return code: 1
+
+
+===== SUMMARIZED TYPECHECKER RESULTS =====
+{
+  "student_tests": {
+    "Good": {
+      "correct": 10,
+      "incorrect": 0
+    },
+    "Bad": {
+      "correct": 10,
+      "incorrect": 0
+    }
+  },
+  "hidden_tests": {
+    "Good": {
+      "correct": 7,
+      "incorrect": 5
+    },
+    "Bad": {
+      "correct": 11,
+      "incorrect": 0
+    }
+  },
+  "common_tests": {
+    "Good": {
+      "correct": 10,
+      "incorrect": 0
+    },
+    "Bad": {
+      "correct": 10,
+      "incorrect": 0
+    }
+  }
+}
