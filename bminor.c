@@ -1,47 +1,69 @@
+//import relevant libraries
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "token.h"
 #include "bminor.h"
 #include "decl.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-extern FILE *yyin;
-extern int yylex();
-extern char *yytext;
+//start: external variables from flex and bison
+extern FILE *yyin;      //input file to scan/parse
+extern int yylex();     //function returning token type
+extern char *yytext;    //actual token scanned
+//end
 
-extern int yyparse();
+extern int yyparse();   //parse the AST
 
-extern struct decl* parser_result;
+extern struct decl* parser_result;      //topmost decl node in AST
 
-extern const char * token_map[];
-extern const int token_map_len;
+extern const char * token_map[];    //custom token map mapping token id to token name
+extern const int token_map_len;     //length of token_map
 
-int resolve_fail = 0;
-int typecheck_fail = 0;
+int resolve_fail = 0;       //whether resolve fails or not
+int typecheck_fail = 0;     //whether typecheck fails or not
+
+char* outf;     //output assembly file from codegen
 
 /* Parse command line arguments and act accordingly */
 int parse_cmd(int argc, char **argv)
 {
+    //scan
     if (!strncmp(*(argv + 1), "-scan", 5) && argc == 3)
     {
         return scan(*(argv + 2));
     }
+
+    //parse
     else if (!strncmp(*(argv + 1), "-parse", 6) && argc == 3)
     {   
         return parse(*(argv + 2));
     }
+
+    //print
     else if (!strncmp(*(argv + 1), "-print", 6) && argc == 3)
     {
         return pretty_printer(*(argv + 2));
     }
+
+    //resolve
     else if (!strncmp(*(argv + 1), "-resolve", 8) && argc == 3)
     {
         return AST_resolve(*(argv + 2));
     }
+
+    //typecheck
     else if (!strncmp(*(argv + 1), "-typecheck", 10) && argc == 3)
     {
         return AST_typecheck(*(argv + 2));
     }
+
+    //codegen
+    else if (!strncmp(*(argv + 1), "-codegen", 8) && argc == 4)
+    {
+        return AST_codegen(*(argv + 2), *(argv + 3));
+    }
+    
     else
     {
         fprintf(stderr, "Invalid command-line arguments.\n");
@@ -49,6 +71,30 @@ int parse_cmd(int argc, char **argv)
     }
 }
 
+//parse then resolve then typecheck then codegen
+int AST_codegen(char* input_name, char* output_name)
+{
+    yyin = fopen(input_name, "r");
+    if (yyparse() == 0)
+    {
+        decl_resolve(parser_result, 0);
+        if (resolve_fail)
+            return 1;
+        
+        decl_typecheck(parser_result);
+        if (typecheck_fail)
+            return 1;
+
+        FILE* f = fopen(output_name, "w");    //clear contents of outfile
+        fclose(f);
+        decl_codegen(parser_result);
+        return 0;
+    }
+    else
+        return 1;
+}
+
+//parse then resolve then typecheck
 int AST_typecheck(char* fname)
 {
     yyin = fopen(fname, "r");
@@ -66,6 +112,7 @@ int AST_typecheck(char* fname)
         return 1;
 }
 
+//parse then resolve
 int AST_resolve(char *fname)
 {
     yyin = fopen(fname, "r");
@@ -80,6 +127,7 @@ int AST_resolve(char *fname)
         return 1;
 }
 
+//parse then print
 int pretty_printer(char *fname)
 {
     yyin = fopen(fname, "r");

@@ -592,7 +592,7 @@ struct type* expr_typecheck(struct expr* e)
                                 return type_copy(lt->subtype);
                             }
                         }
-                        if (!tmp_param_list->next && !tmp_expr->right)
+                        if (!tmp_param_list->next && tmp_expr->kind != EXPR_ARG)
                             return type_copy(lt->subtype);
                         printf("type error: %s is called with wrong number of arguments\n", e->left->name);
                         typecheck_fail = 1;

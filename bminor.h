@@ -1,8 +1,10 @@
-int parse_cmd(int, char **);
+int parse_cmd(int, char**);
+
+int AST_codegen(char*, char*);
 
 int AST_typecheck(char*);
 
-int AST_resolve(char* fname);
+int AST_resolve(char*);
 
 int pretty_printer(char*);
 

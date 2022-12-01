@@ -1,4 +1,0 @@
-f: function void () = 
-{
-    z: array [2] integer = {1, 2};
-}

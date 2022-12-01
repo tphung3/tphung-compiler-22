@@ -8,6 +8,7 @@
 extern int resolve_fail;
 extern int typecheck_fail;
 
+//create a decl
 struct decl* decl_create(char* name, struct type* type, struct expr* value, struct stmt* code, struct symbol* symbol, struct decl* next)
 {
     struct decl* d = malloc(sizeof(*d));
@@ -20,6 +21,7 @@ struct decl* decl_create(char* name, struct type* type, struct expr* value, stru
     return d;
 }
 
+//print a decl
 void decl_print(struct decl* d, int indent)
 {
     if (!d)
@@ -49,19 +51,59 @@ void decl_print(struct decl* d, int indent)
     decl_print(d->next, indent);
 }
 
+static void decl_func_resolve(struct decl* d, struct symbol* s)
+{
+    d->symbol = s;
+    scope_enter();
+    param_list_resolve(d->type->params, 0);
+    stmt_resolve(d->code, 0);        
+    scope_exit();   
+    decl_resolve(d->next, which);
+    return;
+}
+
+//resolve name in decl
 void decl_resolve(struct decl* d, int which)
 {
     if (!d)
         return;
     
+    //lookup if name already exists
     struct symbol* first_s = scope_lookup_current(d->name);
     
     if (first_s && first_s->which == -1)    //function already defined
     {
-        printf("resolve error: %s is a function already defined in the current scope of level %d\n", d->name, scope_level());
-        resolve_fail = 1;
-        decl_resolve(d->next, which);
-        return;
+        if (d->code)    //redefine means error
+        {
+            printf("resolve error: %s is a function already defined in the current scope of level %d and cannot be redefined\n", d->name, scope_level());
+            resolve_fail = 1;
+            decl_resolve(d->next, which);
+            return;
+        }
+        else
+        {
+            if (type_equals(first_s->type, d->type))    //redeclare of same type is ok
+            {
+                d->symbol = first_s;
+                scope_enter();
+                param_list_resolve(d->type->params, 0);
+                stmt_resolve(d->code, 0);        
+                scope_exit();   
+                decl_resolve(d->next, which);
+                return;
+            }
+            else    //redeclare with different type is error
+            {
+                printf("type error: function named %s was declared with type ", first_s->name);
+                type_print(first_s->type);
+                printf(" but is attempted to be defined with type ");
+                type_print(d->type);
+                printf("\n");
+                resolve_fail = 1;
+                decl_resolve(d->next, which);
+                return;
+            }
+        }
     }
     else if (first_s && first_s->which == -2)   //function only declared
     {
@@ -388,4 +430,9 @@ void decl_typecheck(struct decl* d)
         }
     } 
     decl_typecheck(d->next);
+}
+
+void decl_codegen(struct decl* d)
+{
+    return;
 }

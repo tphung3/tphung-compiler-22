@@ -1,4 +1,3 @@
-
 #ifndef DECL_H
 #define DECL_H
 
@@ -8,7 +7,6 @@
 #include "param_list.h"
 #include "scope.h"
 #include "symbol.h"
-#include <stdio.h>
 
 struct decl {
 	char *name;
@@ -26,5 +24,7 @@ void decl_print( struct decl *d, int indent );
 void decl_resolve(struct decl* d, int which);
 
 void decl_typecheck(struct decl* d);
+
+void decl_codegen(struct decl* d);
 
 #endif
