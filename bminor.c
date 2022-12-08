@@ -6,6 +6,7 @@
 #include "token.h"
 #include "bminor.h"
 #include "decl.h"
+#include "scope.h"
 
 //start: external variables from flex and bison
 extern FILE *yyin;      //input file to scan/parse
@@ -87,7 +88,8 @@ int AST_codegen(char* input_name, char* output_name)
 
         FILE* f = fopen(output_name, "w");    //clear contents of outfile
         fclose(f);
-        decl_codegen(parser_result);
+        outf = output_name;
+        decl_codegen(parser_result, SCOPE_GLOBAL);
         return 0;
     }
     else

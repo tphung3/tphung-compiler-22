@@ -2,9 +2,15 @@
 #include <string.h>
 #include <stdio.h>
 #include "expr.h"
+#include "scope.h"
+#include "codegen_helpers.h"
 
 extern int resolve_fail;
 extern int typecheck_fail;
+
+extern int in_print_stmt;
+
+extern char* outf;
 
 //array corresponding to expr_t enum in expr.h
 expr_t precedence_level[] = {112, //function call
@@ -39,6 +45,8 @@ expr_t precedence_level[] = {112, //function call
                             200, //array_lit
                             };
 
+static char* argument_registers[] = {"%rdi", "%rsi", "%rdx", "%rcx", "%r8", "%r9"};
+
 struct expr* expr_create(expr_t kind, 
                         struct expr* L, 
                         struct expr* R,
@@ -53,6 +61,7 @@ struct expr* expr_create(expr_t kind,
     e->symbol = NULL;
     e->literal_value = 0;
     e->string_literal = NULL;
+    e->reg = -1;
     return e;
 }
 
@@ -67,6 +76,7 @@ struct expr* expr_create_name(const char* n)
     e->symbol = NULL;
     e->literal_value = 0;
     e->string_literal = NULL;
+    e->reg = -1;
     return e;
 }
 
@@ -81,6 +91,7 @@ struct expr* expr_create_integer_literal(int c)
     e->mid = NULL;
     e->symbol = NULL;
     e->string_literal = NULL;
+    e->reg = -1;
     return e;
 }
 
@@ -95,6 +106,7 @@ struct expr* expr_create_boolean_literal(int c)
     e->mid = NULL;
     e->symbol = NULL;
     e->string_literal = NULL;
+    e->reg = -1;
     return e;
 }
 
@@ -109,6 +121,7 @@ struct expr* expr_create_char_literal(char* c)
     e->mid = NULL;
     e->symbol = NULL;
     e->string_literal = c;
+    e->reg = -1;
     return e;
 }
 
@@ -123,7 +136,274 @@ struct expr* expr_create_string_literal(const char* s)
     e->mid = NULL;
     e->symbol = NULL;
     e->literal_value = 0;
+    e->reg = -1;
     return e;
+}
+
+static int right_higher_than_left(expr_t l, expr_t r)
+{
+    if (precedence_level[r] > precedence_level[l])
+        return 1;
+    return 0;
+}
+
+static void binary_operator_print(struct expr* e, char* op)
+{
+    while ((e->left) && (e->left->kind == EXPR_GROUPING))
+    {
+        e->left = e->left->left;
+    }
+    if (right_higher_than_left(e->left->kind, e->kind))
+    {
+        printf("(");
+        expr_print(e->left);
+        printf(")");
+    }
+    else
+    {
+        expr_print(e->left);
+    }
+    
+    printf("%s", op);
+    
+    e->left = e->right;
+
+    int grouped = 0;
+    while ((e->left) && (e->left->kind == EXPR_GROUPING))
+    {
+        grouped = 1;
+        e->left = e->left->left;
+    }
+
+    if ((!right_higher_than_left(e->kind, e->left->kind)) && grouped)
+    {
+        printf("(");
+        expr_print(e->left);
+        printf(")");
+    }
+    else
+    {
+        expr_print(e->left);
+    }
+    return;   
+}
+
+static void unary_pre_operator_print(struct expr* e, char* op)
+{
+    printf("%s", op);
+    
+    while ((e->left) && (e->left->kind == EXPR_GROUPING))
+    {
+        e->left = e->left->left;   
+    }
+    if (right_higher_than_left(e->kind, e->left->kind))
+    {
+        expr_print(e->left);
+    }
+    else
+    {
+        printf("(");
+        expr_print(e->left);
+        printf(")");
+    }
+    return;
+}
+
+static void unary_post_operator_print(struct expr* e, char* op)
+{
+    while ((e->left) && (e->left->kind == EXPR_GROUPING))
+    {
+        e->left = e->left->left;   
+    }
+    if (right_higher_than_left(e->kind, e->left->kind))
+    {
+        expr_print(e->left);
+    }
+    else
+    {
+        printf("(");
+        expr_print(e->left);
+        printf(")");
+    }
+    
+    printf("%s", op);
+    
+    return;
+}
+
+static struct type* expr_typecheck_unary_int_operators(struct type* lt, char* operator_name)
+{
+    if (!lt)
+    {
+        printf("type error: operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else
+    {
+        if (lt->kind == TYPE_INTEGER)
+        {
+            return type_copy(lt);
+        }
+        else
+        {
+            printf("type error: operand of %s must be an integer\n", operator_name);
+            typecheck_fail = 1;
+            return type_copy(lt);
+        }
+    }
+}
+
+static struct type* expr_typecheck_binary_int_return_boolean_operators(struct type* lt, struct type* rt, char* operator_name)
+{
+    if (!lt)
+    {
+        printf("type error: left operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else if (!rt)
+    {
+        printf("type error: right operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else
+    {
+        if (lt->kind == TYPE_INTEGER)
+        {
+            if (rt->kind == TYPE_INTEGER)
+            {
+                return type_create(TYPE_BOOLEAN, 0, 0, 0);
+            }
+            else
+            {
+                printf("type error: right operand of %s must be an integer\n", operator_name);
+                typecheck_fail = 1;
+                return type_create(TYPE_BOOLEAN, 0, 0, 0);
+            }
+        }
+        else
+        {
+            printf("type error: left operand of %s must be an integer\n", operator_name);
+            typecheck_fail = 1;
+            return type_create(TYPE_BOOLEAN, 0, 0, 0);
+        }
+    }
+}
+
+static struct type* expr_typecheck_binary_int_operators(struct type* lt, struct type* rt, char* operator_name)
+{
+    if (!lt)
+    {
+        printf("type error: left operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else if (!rt)
+    {
+        printf("type error: right operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else
+    {
+        if (lt->kind == TYPE_INTEGER)
+        {
+            if (rt->kind == TYPE_INTEGER)
+            {
+                return type_copy(lt);
+            }
+            else
+            {
+                printf("type error: right operand of %s must be an integer\n", operator_name);
+                typecheck_fail = 1;
+                return type_copy(lt);
+            }
+        }
+        else
+        {
+            printf("type error: left operand of %s must be an integer\n", operator_name);
+            typecheck_fail = 1;
+            return type_copy(lt);
+        }
+    }
+}
+
+static struct type* expr_typecheck_binary_boolean_return_boolean_operators(struct type* lt, struct type* rt, char* operator_name)
+{
+    if (!lt)
+    {
+        printf("type error: left operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else if (!rt)
+    {
+        printf("type error: right operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else
+    {
+        if (lt->kind == TYPE_BOOLEAN)
+        {
+            if (rt->kind == TYPE_BOOLEAN)
+            {
+                return type_create(TYPE_BOOLEAN, 0, 0, 0);
+            }
+            else
+            {
+                printf("type error: right operand of %s must be a boolean\n", operator_name);
+                typecheck_fail = 1;
+                return type_create(TYPE_BOOLEAN, 0, 0, 0);
+            }
+        }
+        else
+        {
+            printf("type error: left operand of %s must be a boolean\n", operator_name);
+            typecheck_fail = 1;
+            return type_create(TYPE_BOOLEAN, 0, 0, 0);
+        }
+    }
+}
+
+static struct type* expr_typecheck_binary_equality_operators(struct type* lt, struct type* rt, char* operator_name)
+{
+    if (!lt)
+    {
+        printf("type error: left operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else if (!rt)
+    {
+        printf("type error: right operand of %s doesn't exist\n", operator_name);
+        typecheck_fail = 1;
+        return type_copy(lt);
+    }
+    else
+    {
+        if (lt->kind == TYPE_BOOLEAN || lt->kind == TYPE_CHARACTER || lt->kind == TYPE_INTEGER || lt->kind == TYPE_STRING)
+        {
+            if (rt->kind == lt->kind)
+            {
+                return type_create(TYPE_BOOLEAN, 0, 0, 0);
+            }
+            else
+            {
+                printf("type error: right operand of %s is not the same as the left operand\n", operator_name);
+                typecheck_fail = 1;
+                return type_create(TYPE_BOOLEAN, 0, 0, 0);
+            }
+        }
+        else
+        {
+            printf("type error: left operand of %s is not a valid type\n", operator_name);
+            typecheck_fail = 1;
+            return type_create(TYPE_BOOLEAN, 0, 0, 0);
+        }
+    }
 }
 
 void expr_print(struct expr* e)
@@ -327,96 +607,6 @@ void expr_print(struct expr* e)
     }
 }
 
-int right_higher_than_left(expr_t l, expr_t r)
-{
-    if (precedence_level[r] > precedence_level[l])
-        return 1;
-    return 0;
-}
-
-void binary_operator_print(struct expr* e, char* op)
-{
-    while ((e->left) && (e->left->kind == EXPR_GROUPING))
-    {
-        e->left = e->left->left;
-    }
-    if (right_higher_than_left(e->left->kind, e->kind))
-    {
-        printf("(");
-        expr_print(e->left);
-        printf(")");
-    }
-    else
-    {
-        expr_print(e->left);
-    }
-    
-    printf("%s", op);
-    
-    e->left = e->right;
-
-    int grouped = 0;
-    while ((e->left) && (e->left->kind == EXPR_GROUPING))
-    {
-        grouped = 1;
-        e->left = e->left->left;
-    }
-
-    if ((!right_higher_than_left(e->kind, e->left->kind)) && grouped)
-    {
-        printf("(");
-        expr_print(e->left);
-        printf(")");
-    }
-    else
-    {
-        expr_print(e->left);
-    }
-    return;   
-}
-
-void unary_pre_operator_print(struct expr* e, char* op)
-{
-    printf("%s", op);
-    
-    while ((e->left) && (e->left->kind == EXPR_GROUPING))
-    {
-        e->left = e->left->left;   
-    }
-    if (right_higher_than_left(e->kind, e->left->kind))
-    {
-        expr_print(e->left);
-    }
-    else
-    {
-        printf("(");
-        expr_print(e->left);
-        printf(")");
-    }
-    return;
-}
-
-void unary_post_operator_print(struct expr* e, char* op)
-{
-    while ((e->left) && (e->left->kind == EXPR_GROUPING))
-    {
-        e->left = e->left->left;   
-    }
-    if (right_higher_than_left(e->kind, e->left->kind))
-    {
-        expr_print(e->left);
-    }
-    else
-    {
-        printf("(");
-        expr_print(e->left);
-        printf(")");
-    }
-    
-    printf("%s", op);
-    
-    return;
-}
 
 void expr_resolve(struct expr* e)
 {
@@ -927,181 +1117,6 @@ struct type* expr_typecheck(struct expr* e)
     }
 }
 
-struct type* expr_typecheck_binary_equality_operators(struct type* lt, struct type* rt, char* operator_name)
-{
-    if (!lt)
-    {
-        printf("type error: left operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else if (!rt)
-    {
-        printf("type error: right operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else
-    {
-        if (lt->kind == TYPE_BOOLEAN || lt->kind == TYPE_CHARACTER || lt->kind == TYPE_INTEGER || lt->kind == TYPE_STRING)
-        {
-            if (rt->kind == lt->kind)
-            {
-                return type_create(TYPE_BOOLEAN, 0, 0, 0);
-            }
-            else
-            {
-                printf("type error: right operand of %s is not the same as the left operand\n", operator_name);
-                typecheck_fail = 1;
-                return type_create(TYPE_BOOLEAN, 0, 0, 0);
-            }
-        }
-        else
-        {
-            printf("type error: left operand of %s is not a valid type\n", operator_name);
-            typecheck_fail = 1;
-            return type_create(TYPE_BOOLEAN, 0, 0, 0);
-        }
-    }
-}
-
-struct type* expr_typecheck_binary_boolean_return_boolean_operators(struct type* lt, struct type* rt, char* operator_name)
-{
-    if (!lt)
-    {
-        printf("type error: left operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else if (!rt)
-    {
-        printf("type error: right operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else
-    {
-        if (lt->kind == TYPE_BOOLEAN)
-        {
-            if (rt->kind == TYPE_BOOLEAN)
-            {
-                return type_create(TYPE_BOOLEAN, 0, 0, 0);
-            }
-            else
-            {
-                printf("type error: right operand of %s must be a boolean\n", operator_name);
-                typecheck_fail = 1;
-                return type_create(TYPE_BOOLEAN, 0, 0, 0);
-            }
-        }
-        else
-        {
-            printf("type error: left operand of %s must be a boolean\n", operator_name);
-            typecheck_fail = 1;
-            return type_create(TYPE_BOOLEAN, 0, 0, 0);
-        }
-    }
-}
-
-struct type* expr_typecheck_binary_int_return_boolean_operators(struct type* lt, struct type* rt, char* operator_name)
-{
-    if (!lt)
-    {
-        printf("type error: left operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else if (!rt)
-    {
-        printf("type error: right operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else
-    {
-        if (lt->kind == TYPE_INTEGER)
-        {
-            if (rt->kind == TYPE_INTEGER)
-            {
-                return type_create(TYPE_BOOLEAN, 0, 0, 0);
-            }
-            else
-            {
-                printf("type error: right operand of %s must be an integer\n", operator_name);
-                typecheck_fail = 1;
-                return type_create(TYPE_BOOLEAN, 0, 0, 0);
-            }
-        }
-        else
-        {
-            printf("type error: left operand of %s must be an integer\n", operator_name);
-            typecheck_fail = 1;
-            return type_create(TYPE_BOOLEAN, 0, 0, 0);
-        }
-    }
-}
-
-struct type* expr_typecheck_binary_int_operators(struct type* lt, struct type* rt, char* operator_name)
-{
-    if (!lt)
-    {
-        printf("type error: left operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else if (!rt)
-    {
-        printf("type error: right operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else
-    {
-        if (lt->kind == TYPE_INTEGER)
-        {
-            if (rt->kind == TYPE_INTEGER)
-            {
-                return type_copy(lt);
-            }
-            else
-            {
-                printf("type error: right operand of %s must be an integer\n", operator_name);
-                typecheck_fail = 1;
-                return type_copy(lt);
-            }
-        }
-        else
-        {
-            printf("type error: left operand of %s must be an integer\n", operator_name);
-            typecheck_fail = 1;
-            return type_copy(lt);
-        }
-    }
-}
-
-struct type* expr_typecheck_unary_int_operators(struct type* lt, char* operator_name)
-{
-    if (!lt)
-    {
-        printf("type error: operand of %s doesn't exist\n", operator_name);
-        typecheck_fail = 1;
-        return type_copy(lt);
-    }
-    else
-    {
-        if (lt->kind == TYPE_INTEGER)
-        {
-            return type_copy(lt);
-        }
-        else
-        {
-            printf("type error: operand of %s must be an integer\n", operator_name);
-            typecheck_fail = 1;
-            return type_copy(lt);
-        }
-    }
-}
-
 int expr_global_array_check_valid(struct expr* e, struct symbol* t)
 {
     if (!e)
@@ -1211,4 +1226,376 @@ int expr_global_array_check_valid(struct expr* e, struct symbol* t)
         return 0;
     }
     return 1;
+}
+
+static void expr_compare_codegen(struct expr* e, scope_t s, char* ins, FILE* f)
+{
+
+    expr_codegen(e->left, s);
+    expr_codegen(e->right, s);
+    f = fopen(outf, "a");
+    e->reg = scratch_alloc();
+    int true_label = label_create();
+    int end_label = label_create();
+    fprintf(f, "CMPQ %s, %s\n", scratch_name(e->left->reg), scratch_name(e->right->reg));
+    fprintf(f, "%s %s\n", ins, label_name(true_label));
+    fprintf(f, "MOVQ $0, %s\n", scratch_name(e->reg));
+    fprintf(f, "JMP %s\n", label_name(end_label));
+    fprintf(f, "%s:\n", label_name(true_label));
+    fprintf(f, "MOVQ $1, %s\n", scratch_name(e->reg));
+    fprintf(f, "%s:\n", label_name(end_label));
+    scratch_free(e->left->reg);
+    scratch_free(e->right->reg);
+    fclose(f);
+}
+
+static void expr_logical_codegen(struct expr* e, scope_t s, int cmp_val, int def_val, int mid_val, FILE* f)
+{
+    expr_codegen(e->left, s);
+    expr_codegen(e->right, s);
+    f = fopen(outf, "a");
+    e->reg = scratch_alloc();
+    int mid_label = label_create();
+    int end_label = label_create();
+    fprintf(f, "CMPQ %s, %d\n", scratch_name(e->left->reg), cmp_val);
+    fprintf(f, "JNE %s\n", label_name(mid_label));
+    fprintf(f, "CMPQ %s, %d\n", scratch_name(e->right->reg), cmp_val);
+    fprintf(f, "JNE %s\n", label_name(mid_label));
+    fprintf(f, "MOVQ %d, %s\n", def_val, scratch_name(e->reg));
+    fprintf(f, "JMP %s\n", label_name(end_label));
+    fprintf(f, "%s:\n", label_name(mid_label));
+    fprintf(f, "MOVQ %d, %s\n", mid_val, scratch_name(e->reg));
+    fprintf(f, "%s:\n", label_name(end_label));
+    scratch_free(e->left->reg);
+    scratch_free(e->right->reg);
+    fclose(f);
+}
+
+static void expr_linear_arithmetic_codegen(struct expr* e, scope_t s, char* ins, FILE* f)
+{
+    expr_codegen(e->left, s);
+    expr_codegen(e->right, s);
+    f = fopen(outf, "a");
+    e->reg = e->left->reg;
+    fprintf(f, "%s %s, %s\n", ins, scratch_name(e->right->reg), scratch_name(e->left->reg));
+    scratch_free(e->right->reg);
+    fclose(f);
+}
+
+static void expr_poly_arithmetic_codegen(struct expr* e, scope_t s, char* ins, char* result_reg, FILE* f)
+{
+    expr_codegen(e->left, s);
+    expr_codegen(e->right, s);
+    f = fopen(outf, "a");
+    if (strcmp(ins, "IDIV") == 0)
+        fprintf(f, "movq $0, \%rdx\n");
+    fprintf(f, "MOVQ %s, \%rax\n", scratch_name(e->left->reg));
+    fprintf(f, "%s %s\n", ins, scratch_name(e->right->reg));
+    e->reg = e->left->reg;
+    fprintf(f, "MOVQ %s, %s\n", result_reg, scratch_name(e->reg));
+    scratch_free(e->right->reg);
+    fclose(f);
+}
+
+//s is scope where the expression resides, not the content of the expression
+void expr_codegen(struct expr* e, scope_t s)
+{
+    if (!e)
+        return;
+    
+    FILE* f;
+    switch (e->kind)
+    {
+        case EXPR_ARRAY_LITERAL:
+            f = fopen(outf, "a");
+            if (s == SCOPE_GLOBAL)
+            {
+                struct expr* tmp_e = e->left;
+                fprintf(f, ".quad ");
+                while (tmp_e)
+                {
+                    if (tmp_e->right)
+                        fprintf(f, "%d", tmp_e->left->literal_value);
+                    else
+                        fprintf(f, "%d", tmp_e->literal_value);
+                    tmp_e = tmp_e->right;
+                    if (tmp_e)
+                    {
+                        fprintf(f, ", ");
+                    }
+                }
+                fclose(f);
+            }
+            else
+            {
+                printf("codegen error: array not implemented\n");
+                exit(1);
+            }
+            break;
+        case EXPR_BOOLEAN_LITERAL:
+            f = fopen(outf, "a");
+            if (s == SCOPE_GLOBAL)
+                fprintf(f, ".quad %d", e->literal_value);
+            else
+            {
+                e->reg = scratch_alloc();
+                fprintf(f, "MOVQ $%d, %s\n", e->literal_value, scratch_name(e->reg));
+            }
+            fclose(f);
+            break;
+        case EXPR_CHAR_LITERAL:
+            f = fopen(outf, "a");
+            if (s == SCOPE_GLOBAL)
+            {
+                char c;
+                if (strlen(e->string_literal) == 3)
+                    c = *(e->string_literal + 1);
+                else
+                {
+                    if (*(e->string_literal + 2) == '0')
+                        c = '\0';
+                    else if (*(e->string_literal + 2) == 't')
+                        c = '\t';
+                    else if (*(e->string_literal + 2) == 'n')
+                        c = '\n';
+                }
+                fprintf(f, ".quad %d", c);
+            }
+            else
+            {
+                e->reg = scratch_alloc();
+                char c;
+                if (strlen(e->string_literal) == 3)
+                    c = *(e->string_literal + 1);
+                else
+                {
+                    if (*(e->string_literal + 2) == '0')
+                        c = '\0';
+                    else if (*(e->string_literal + 2) == 't')
+                        c = '\t';
+                    else if (*(e->string_literal + 2) == 'n')
+                        c = '\n';
+                }
+                fprintf(f, "MOVQ $%d, %s\n", c, scratch_name(e->reg));
+            }
+            fclose(f);
+            break;
+        case EXPR_STRING_LITERAL:
+            f = fopen(outf, "a");
+            if (s == SCOPE_GLOBAL)
+            {
+                fprintf(f, ".string %s", e->string_literal);
+                fclose(f);
+            }
+            else
+            {
+                e->reg = scratch_alloc();
+                int label = label_create();
+                fprintf(f, ".data\n");
+                fprintf(f, "%s: ", label_name(label));
+                fprintf(f, ".string %s\n", e->string_literal);
+                fprintf(f, ".text\nleaq %s, %s\n", label_name(label), scratch_name(e->reg));
+                fclose(f);
+            }
+            break;
+        case EXPR_INTEGER_LITERAL:
+            f = fopen(outf, "a");
+            if (s == SCOPE_GLOBAL)
+                fprintf(f, ".quad %d", e->literal_value);
+            else
+            {
+                e->reg = scratch_alloc();
+                fprintf(f, "MOVQ $%d, %s\n", e->literal_value, scratch_name(e->reg));
+            }
+            fclose(f);
+            break;
+        case EXPR_NAME:
+            f = fopen(outf, "a");
+            if (s == SCOPE_GLOBAL)
+            {
+                printf("codegen error: cannot have expr name in global scope\n");
+                exit(1);
+            }   
+            else
+            {
+                e->reg = scratch_alloc();
+                fprintf(f, "MOVQ %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
+            }
+            fclose(f);
+            break;
+        case EXPR_ARG:
+            expr_codegen(e->left, s);
+            e->reg = e->left->reg;
+            if (!in_print_stmt)
+                expr_codegen(e->right, s);
+            break;
+        case EXPR_ASSIGN: //TODO: array assignment
+            expr_codegen(e->right, s);
+            f = fopen(outf, "a");
+            fprintf(f, "MOVQ %s, %s\n", scratch_name(e->right->reg), symbol_codegen(e->left->symbol));
+            e->reg = e->right->reg;
+            fclose(f);
+            break;
+        case EXPR_TERNARY:
+            expr_codegen(e->left, s);
+            expr_codegen(e->mid, s);
+            expr_codegen(e->right, s);
+            f = fopen(outf, "a");
+            fprintf(f, "CMPQ %s, $0\n", scratch_name(e->left->reg));
+            int equal_label = label_create();
+            int end_label = label_create();
+            fprintf(f, "JEQ %s\n", label_name(equal_label));
+            e->reg = scratch_alloc();
+            fprintf(f, "MOVQ %s, %s\n", scratch_name(e->right->reg), scratch_name(e->reg));
+            fprintf(f, "JMP %s\n", label_name(end_label));
+            fprintf(f, "%s:\n", label_name(equal_label));
+            fprintf(f, "MOVQ %s, %s\n", scratch_name(e->left->reg), scratch_name(e->reg));
+            fprintf(f, "%s:\n", label_name(end_label));
+            scratch_free(e->left->reg);
+            scratch_free(e->mid->reg);
+            scratch_free(e->right->reg);
+            break;
+        case EXPR_LOGICAL_OR:
+            expr_logical_codegen(e, s, 0, 0, 1, f);
+            break;
+        case EXPR_LOGICAL_AND:
+            expr_logical_codegen(e, s, 1, 1, 0, f);
+            break;
+        case EXPR_LESS:
+            expr_compare_codegen(e, s, "JG", f);
+            break;
+        case EXPR_LE:
+            expr_compare_codegen(e, s, "JGE", f);
+            break;
+        case EXPR_GREATER:
+            expr_compare_codegen(e, s, "JL", f);
+            break;
+        case EXPR_GE:
+            expr_compare_codegen(e, s, "JLE", f);
+            break;
+        case EXPR_EQ:
+            expr_compare_codegen(e, s, "JE", f);
+            break;
+        case EXPR_NOT_EQ:
+            expr_compare_codegen(e, s, "JNE", f);
+            break;
+        case EXPR_ADD:
+            expr_linear_arithmetic_codegen(e, s, "ADDQ", f);
+            break;
+        case EXPR_SUB:
+            expr_linear_arithmetic_codegen(e, s, "SUBQ", f);
+            break;
+        case EXPR_MULT:
+            expr_poly_arithmetic_codegen(e, s, "IMUL", "%rax", f);
+            break;
+        case EXPR_DIV:
+            expr_poly_arithmetic_codegen(e, s, "IDIV", "%rax", f);
+            break;
+        case EXPR_MOD:
+            expr_poly_arithmetic_codegen(e, s, "IDIV", "%rdx", f);
+            break;
+        case EXPR_EXP: 
+            expr_codegen(e->left, s);
+            expr_codegen(e->right, s);
+            f = fopen(outf, "a");
+            int zero_label = label_create();
+            int pos_label = label_create();
+            int neg_label = label_create();
+            int end_exp_label = label_create();
+            e->reg = scratch_alloc();
+            fprintf(f, "MOVQ $1, \%rax\n");
+            fprintf(f, "CMPQ %s, $0\n", scratch_name(e->right->reg));
+            fprintf(f, "JE %s\n", label_name(zero_label));
+            fprintf(f, "JL %s\n", label_name(neg_label));
+            fprintf(f, "%s:\n", label_name(pos_label));
+            fprintf(f, "MOVQ \%rax, %s\n", scratch_name(e->reg));
+            fprintf(f, "CMPQ %s, $0\n", scratch_name(e->right->reg));
+            fprintf(f, "JE %s\n", label_name(end_exp_label));
+            fprintf(f, "SUBQ $1, %s\n", scratch_name(e->right->reg));
+            fprintf(f, "IMUL %s\n", scratch_name(e->left->reg));
+            fprintf(f, "JMP %s\n", label_name(pos_label));
+            fprintf(f, "%s:\n", label_name(zero_label));
+            fprintf(f, "MOVQ $1, %s\n", scratch_name(e->reg));
+            fprintf(f, "JMP %s\n", label_name(end_exp_label));
+            fprintf(f, "%s:\n", label_name(neg_label));
+            fprintf(f, "MOVQ $0, %s\n", scratch_name(e->reg));
+            fprintf(f, "%s\n", label_name(end_exp_label));
+            scratch_free(e->left->reg);
+            scratch_free(e->right->reg);
+            fclose(f);
+            break;
+        case EXPR_SINGLE_SUB:
+            expr_codegen(e->left, s);
+            f = fopen(outf, "a");
+            e->reg = scratch_alloc();
+            fprintf(f, "MOVQ $0, %s\n", scratch_name(e->reg));
+            fprintf(f, "SUBQ %s, %s\n", scratch_name(e->left->reg), scratch_name(e->reg));
+            scratch_free(e->left->reg);
+            fclose(f);
+            break;
+        case EXPR_LOGICAL_NOT:
+            expr_codegen(e->left, s);
+            f = fopen(outf, "a");
+            fprintf(f, "NOT %s\n", scratch_name(e->left->reg));
+            e->reg = e->left->reg;
+            fclose(f);
+            break; 
+        case EXPR_POST_INC:
+            expr_codegen(e->left, s);
+            f = fopen(outf, "a");
+            fprintf(f, "ADDQ $1, %s\n", scratch_name(e->left->reg));
+            e->reg = e->left->reg;
+            fclose(f);
+            break;
+        case EXPR_POST_DEC:
+            expr_codegen(e->left, s);
+            f = fopen(outf, "a");
+            fprintf(f, "SUBQ $1, %s\n", scratch_name(e->left->reg));
+            e->reg = e->left->reg;
+            fclose(f);
+            break;
+        case EXPR_CALL:
+            expr_codegen(e->right, s);
+            f = fopen(outf, "a");
+            int i = 0;
+            struct expr* tmp_arg = e->right;
+            
+            while (i < 6)
+            {   
+                if (tmp_arg)
+                {
+                    fprintf(f, "MOVQ %s, %s\n", scratch_name(tmp_arg->reg), argument_registers[i]);
+                    scratch_free(tmp_arg->reg);
+                    tmp_arg = tmp_arg->right;
+                }
+                else
+                    fprintf(f, "MOVQ $1, %s\n", argument_registers[i]);
+                ++i;
+            }
+            if (tmp_arg)
+            {
+                printf("codegen error: too many arguments\n");
+                exit(1);
+            }
+            fprintf(f, "PUSHQ \%r10\n");
+            fprintf(f, "PUSHQ \%r11\n");
+            fprintf(f, "CALL %s\n", e->left->name);
+            fprintf(f, "POPQ \%r11\n");
+            fprintf(f, "POPQ \%r10\n");
+            e->reg = scratch_alloc();
+            fprintf(f, "MOVQ \%rax, %s\n", scratch_name(e->reg));
+            fclose(f);
+            break;
+        case EXPR_SUBSCRIPT: //TODO
+            expr_codegen(e->right, s);
+            f = fopen(outf, "a");
+            e->reg = 1;
+            fprintf(f, "LEAQ %s, %s\n", symbol_codegen(e->left->symbol), "a");
+            fclose(f);
+            break;
+        case EXPR_GROUPING:
+            expr_codegen(e->left, s);
+            e->reg = e->left->reg;
+            break;
+    }
 }

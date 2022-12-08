@@ -1,9 +1,22 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "stmt.h"
+#include "scope.h"
+#include "codegen_helpers.h"
 
 extern int resolve_fail;
 extern int typecheck_fail;
+
+extern int pos_in_stack;
+
+extern int end_label_func;
+
+extern char* outf;
+
+extern char* register_arguments[];
+
+int in_print_stmt = 0;
 
 struct stmt* stmt_create(stmt_t kind, 
                         struct decl *decl, 
@@ -113,22 +126,22 @@ void stmt_resolve(struct stmt* s, int which)
     switch (s->kind)
     {
         case STMT_DECL:
-            decl_resolve(s->decl, which);
-            ++which;
+            decl_resolve(s->decl, pos_in_stack);
+            ++pos_in_stack;
             break;
         case STMT_EXPR:
             expr_resolve(s->expr);
             break;
         case STMT_IF_ELSE:
             expr_resolve(s->expr);
-            stmt_resolve(s->body, 0);
-            stmt_resolve(s->else_body, 0);
+            stmt_resolve(s->body, pos_in_stack);
+            stmt_resolve(s->else_body, pos_in_stack);
             break;
         case STMT_FOR:
             expr_resolve(s->init_expr);
             expr_resolve(s->expr);
             expr_resolve(s->next_expr);
-            stmt_resolve(s->body, 0);
+            stmt_resolve(s->body, pos_in_stack);
             break;
         case STMT_PRINT:
             expr_resolve(s->expr);
@@ -138,7 +151,7 @@ void stmt_resolve(struct stmt* s, int which)
             break;
         case STMT_BLOCK:
             scope_enter();
-            stmt_resolve(s->body, 0);
+            stmt_resolve(s->body, pos_in_stack);
             scope_exit();
             break;
     }
@@ -265,4 +278,107 @@ void stmt_typecheck(struct stmt* s, struct symbol* sym)
         break;
     } 
     stmt_typecheck(s->next, sym);
+}
+
+static int count_num_args(struct stmt* s)
+{
+    struct expr* tmp_e = s->expr;
+    int i = 0;
+    while (tmp_e)
+    {
+        ++i;
+        if (tmp_e->kind != EXPR_ARG)
+            break;
+        tmp_e = tmp_e->right;
+        
+    }
+    return i;
+}
+
+void stmt_codegen(struct stmt* s)
+{
+    if (!s)
+        return;
+
+    FILE* f;
+    struct expr* tmp_e;
+    struct expr* true_e;
+    struct type* true_e_type;
+    switch (s->kind)
+    {
+        case STMT_DECL:
+            decl_codegen(s->decl, SCOPE_LOCAL);
+            break;
+        case STMT_EXPR:
+            expr_codegen(s->expr, SCOPE_LOCAL);
+            scratch_free(s->expr->reg);
+            break;
+        case STMT_IF_ELSE:
+            expr_codegen(s->expr, SCOPE_LOCAL);
+            int else_label = label_create();
+            int done_label = label_create();
+            f = fopen(outf, "a");
+            fprintf(f, "cmp $0, %s\n", scratch_name(s->expr->reg));
+            scratch_free(s->expr->reg);
+            fprintf(f, "je %s\n", label_name(else_label));
+            fclose(f);
+            stmt_codegen(s->body);
+            f = fopen(outf, "a");
+            fprintf(f, "jmp %s\n", label_name(done_label));
+            fprintf(f, "%s:\n", label_name(else_label));
+            fclose(f);
+            stmt_codegen(s->else_body);
+            f = fopen(outf, "a");
+            fprintf(f, "%s:\n", label_name(done_label));
+            fclose(f);
+            break;
+        case STMT_FOR:
+            break;
+        case STMT_PRINT:
+            tmp_e = s->expr;
+            in_print_stmt = 1;
+            while (tmp_e)
+            {
+                if (tmp_e->kind == EXPR_ARG)
+                {
+                    true_e = tmp_e->left;
+                }
+                else
+                    true_e = tmp_e;
+                true_e_type = expr_typecheck(true_e);
+                expr_codegen(true_e, SCOPE_LOCAL);
+                f = fopen(outf, "a");
+                fprintf(f, "movq %s, \%rdi\n", scratch_name(true_e->reg));
+                scratch_free(true_e->reg);
+                char* help_func;
+                if (true_e_type->kind == TYPE_BOOLEAN)
+                    help_func = strdup("boolean");
+                else if (true_e_type->kind == TYPE_INTEGER)
+                    help_func = strdup("integer");
+                else if (true_e_type->kind == TYPE_STRING)
+                    help_func = strdup("string");
+                else if (true_e_type->kind == TYPE_CHARACTER)
+                    help_func = strdup("character");
+                fprintf(f, "pushq \%r10\npushq \%r11\ncall print_%s\npopq \%r11\npopq \%r10\n",help_func);
+                fclose(f);
+                if (tmp_e->kind == EXPR_ARG)
+                    tmp_e = tmp_e->right;
+                else
+                    break;
+            }
+            in_print_stmt = 0;
+            break;
+        case STMT_RETURN:
+            expr_codegen(s->expr, SCOPE_LOCAL);
+            f = fopen(outf, "a");
+            fprintf(f, "movq %s, \%rax\n", scratch_name(s->expr->reg));
+            fprintf(f, "jmp %s\n", label_name(end_label_func));
+            scratch_free(s->expr->reg);
+            fclose(f);
+            break;
+        case STMT_BLOCK:
+            stmt_codegen(s->body);
+            break;
+    }
+    stmt_codegen(s->next);
 }

@@ -23,4 +23,6 @@ struct symbol* symbol_copy(struct symbol* s);
 
 void symbol_delete(struct symbol* s);
 
+const char* symbol_codegen(struct symbol* s);
+
 #endif

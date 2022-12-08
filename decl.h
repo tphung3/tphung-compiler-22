@@ -25,6 +25,6 @@ void decl_resolve(struct decl* d, int which);
 
 void decl_typecheck(struct decl* d);
 
-void decl_codegen(struct decl* d);
+void decl_codegen(struct decl* d, scope_t s);
 
 #endif

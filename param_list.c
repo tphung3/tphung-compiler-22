@@ -8,6 +8,8 @@
 extern int resolve_fail;
 extern int typecheck_fail;
 
+extern int pos_in_stack;
+
 struct param_list* param_list_create(char* name, struct type* type, struct symbol* symbol, struct param_list* next)
 {
     struct param_list* pl = malloc(sizeof(*pl));
@@ -34,7 +36,10 @@ void param_list_print(struct param_list* a)
 void param_list_resolve(struct param_list* a, int which)
 {
     if (!a)
+    {
+        pos_in_stack = which;
         return;
+    }
 
     if (scope_lookup_current(a->name))
     {

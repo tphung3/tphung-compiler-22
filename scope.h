@@ -7,6 +7,12 @@
 #define MAX_SCOPES 127
 #define SCOPE_RATE 2
 
+typedef enum
+{
+    SCOPE_GLOBAL,
+    SCOPE_LOCAL
+} scope_t;
+
 void scope_enter();
 void scope_exit();
 int scope_level();

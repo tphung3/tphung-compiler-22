@@ -7,11 +7,23 @@ zz: array [1] array [1] integer;
 
 zzz: array [2] array[2] boolean = {{true, true}, {false, false}};
 
-main:function void ()=
+main:function void (aasdf: integer, fdsab: boolean)=
 {
     yy: array [1] array [1] integer;
 	x:integer = y * 10 + 15 - 4;
     z[0] = 1;
+    for (;;)
+    {
+        asfdvx: integer;
+        if (true)
+        {
+            bvds: boolean;
+        }
+        else
+        {
+            axxxx: char;
+        }
+    }
     if (1 < x)
         return;
     else
