@@ -1,0 +1,23 @@
+/*
+Correct: Test various function return types.
+*/
+
+A: function boolean(x: integer, y: integer);
+B: function integer(x: char);
+C: function char(a: string);
+
+main: function integer() = {
+    i: integer;
+    for (i = 0; i < 10; i++)
+        if (i % 2 == 0)
+            print i;
+        else
+            return i;
+
+    if (A(B('d') - 1, 10)) {
+        x: integer = 0;
+        return 2 * B('c') + x;
+    }
+
+    return B(C("hello")) % 3;
+}

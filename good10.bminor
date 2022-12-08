@@ -1,0 +1,8 @@
+main: function integer () = 
+{
+    x: integer = 3;
+    y: boolean = true;
+    if (true)
+{print "true";}
+    return 1;
+}

@@ -1,0 +1,12 @@
+X: integer = 1;
+main: function integer () = 
+{
+    x: integer = 3;
+    y: boolean = false;
+    z: string = "hah";
+    a: integer = x + 2;
+    b: boolean = false;
+    if (b)
+        return 0;
+    return 1;
+}

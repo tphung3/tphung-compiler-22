@@ -1,0 +1,5 @@
+main: function integer () = 
+{
+    y: boolean = true;
+    return 1;
+}
