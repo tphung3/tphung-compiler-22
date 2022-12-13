@@ -1,0 +1,9 @@
+main: function integer () = 
+{
+    x: integer = 3;
+    y: boolean = true;
+    if (y)
+{print y;}
+else{print x;}
+    return 1;
+}

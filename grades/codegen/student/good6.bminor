@@ -1,0 +1,8 @@
+X: integer = 1;
+main: function integer () = 
+{
+    x: integer = 3;
+    z: string = "hah";
+    a: integer = x + 2;
+    return 1;
+}

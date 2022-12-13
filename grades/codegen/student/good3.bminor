@@ -1,0 +1,6 @@
+main: function integer () = 
+{
+    x: integer = 3;
+    y: boolean = true;
+    return 1;
+}
